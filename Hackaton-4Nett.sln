@@ -11,9 +11,39 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		readme.md = readme.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1- Dominio", "1- Dominio", "{9793FA7F-9189-4871-B97A-DDC38CFFF16F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2- Infra", "2- Infra", "{2014A0C5-BE53-44C1-8FF3-5A8C75483A89}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3- Aplicacao", "3- Aplicacao", "{3908F5FE-3168-49D0-9FDE-A38E09305E9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4- Apresentacao", "4- Apresentacao", "{D940D489-2C93-4259-85F4-83EB9DA386CC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hackaton.Api", "src\Hackaton.Api\Hackaton.Api.csproj", "{8861A1F1-75BD-4447-8B12-EAE5A52616E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hackaton.Web", "src\Hackaton.Web\Hackaton.Web.csproj", "{B89B5721-EA95-4FA9-A7CE-730E645C201A}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8861A1F1-75BD-4447-8B12-EAE5A52616E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8861A1F1-75BD-4447-8B12-EAE5A52616E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8861A1F1-75BD-4447-8B12-EAE5A52616E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8861A1F1-75BD-4447-8B12-EAE5A52616E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B89B5721-EA95-4FA9-A7CE-730E645C201A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B89B5721-EA95-4FA9-A7CE-730E645C201A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B89B5721-EA95-4FA9-A7CE-730E645C201A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B89B5721-EA95-4FA9-A7CE-730E645C201A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8861A1F1-75BD-4447-8B12-EAE5A52616E5} = {D940D489-2C93-4259-85F4-83EB9DA386CC}
+		{B89B5721-EA95-4FA9-A7CE-730E645C201A} = {D940D489-2C93-4259-85F4-83EB9DA386CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E42251A9-B6D2-45EF-B58B-DA406C96CBAA}

@@ -1,0 +1,78 @@
+﻿@page "/login"
+@layout BlankLayout
+
+@using Hackaton.Web.Auth.Interfaces
+@using Hackaton.Web.Models
+
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="login-container">
+    <div class="login-box">
+        <h2 class="login-title">Acesse sua conta</h2>
+
+        <form class="login-form" @onsubmit="HandleLogin">
+            <!-- Seleção de perfil -->
+            <div class="profile-selector">
+                <input type="radio" id="medico" name="perfil" value="@PerfisDeUsuario.Medico"
+                       @onchange="@(() => loginModel.Perfil = PerfisDeUsuario.Medico)"
+                       checked="@(loginModel.Perfil == PerfisDeUsuario.Medico)">
+                <label for="medico">Médico</label>
+
+                <input type="radio" id="paciente" name="perfil" value="@PerfisDeUsuario.Paciente"
+                       @onchange="@(() => loginModel.Perfil = PerfisDeUsuario.Paciente)"
+                       checked="@(loginModel.Perfil == PerfisDeUsuario.Paciente)">
+                <label for="paciente">Paciente</label>
+            </div>
+
+            <!-- Campos de login específicos -->
+            @if (loginModel.Perfil == PerfisDeUsuario.Medico)
+            {
+                <label for="crm">CRM</label>
+                <input type="text" id="crm" @bind="@loginModel.CRM" placeholder="Digite seu CRM" required />
+            }
+            else
+            {
+                <label for="loginPaciente">E-mail ou CPF</label>
+                <input type="text" id="loginPaciente" @bind="@loginModel.EmailOuCPF" placeholder="Digite seu E-mail ou CPF" required />
+            }
+
+            <!-- Campo de Senha -->
+            <label for="password">Senha</label>
+            <input type="password" id="password" @bind="@loginModel.Senha" placeholder="Digite sua senha" required />
+
+            <!-- Botão de Login -->
+            <button type="submit" class="btn-login">Entrar</button>
+
+            <!-- Mensagem de erro -->
+            @if (!string.IsNullOrEmpty(mensagemErro))
+            {
+                <p class="erro-login">@mensagemErro</p>
+            }
+
+            <!-- Links -->
+            <div class="login-footer">
+                <a href="/cadastro">Criar conta</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code {
+    private LoginModel loginModel = new LoginModel();
+    private string mensagemErro = "";
+
+    private async Task HandleLogin(EventArgs e)
+    {
+        bool sucesso = await AuthService.LoginAsync(loginModel);
+
+        if (sucesso)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            mensagemErro = "Usuário ou senha inválidos!";
+        }
+    }
+}

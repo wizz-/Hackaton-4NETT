@@ -1,0 +1,21 @@
+﻿<header>
+
+    <h1 class="logo">Health&Med</h1>
+
+    <Menu />
+
+    <aside class="user-info">
+        @if(IsUserLogged){
+            <span>Bem-vindo, @UserName</span>
+        } else {
+            <a href="/login">Login</a>
+            <a href="/cadastro">Cadastro</a>
+        }
+    </aside>
+    
+</header>
+
+@code {
+    private bool IsUserLogged => false; // Simulação, depois pode integrar com autenticação
+    private string UserName => "Thiago Rosa";  // Simulação do nome do usuário logado
+}

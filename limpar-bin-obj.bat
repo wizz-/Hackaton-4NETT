@@ -1,8 +1,9 @@
 @echo off
-echo Excluindo todas as pastas 'bin' e 'obj' a partir do diretÛrio atual...
+chcp 65001 >nul
+echo Excluindo todas as pastas 'bin' e 'obj' a partir do diret√≥rio atual...
 echo.
 
-:: Procura e deleta todas as pastas 'bin' e 'obj' dentro da estrutura de diretÛrios
+:: Procura e deleta todas as pastas 'bin' e 'obj' dentro da estrutura de diret√≥rios
 for /d /r . %%d in (bin,obj) do (
     if exist "%%d" (
         echo Deletando: %%d
@@ -11,5 +12,5 @@ for /d /r . %%d in (bin,obj) do (
 )
 
 echo.
-echo Limpeza concluÌda!
+echo Limpeza conclu√≠da!
 pause
