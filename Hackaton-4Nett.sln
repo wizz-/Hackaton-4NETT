@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoC", "IoC", "{8CB03C8F-219
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.IoC", "src\Infra.IoC\Infra.IoC.csproj", "{77377DE2-FC3E-4155-A2C8-89032E3FB599}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{746C59FF-031D-4360-AECE-4FC83A9B6B01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{77377DE2-FC3E-4155-A2C8-89032E3FB599}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77377DE2-FC3E-4155-A2C8-89032E3FB599}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77377DE2-FC3E-4155-A2C8-89032E3FB599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{371ECC93-2B03-4053-9C7C-E20BC2223905} = {07254644-DD75-40CA-8F60-BFD0F4B3703A}
 		{8CB03C8F-2192-4FAB-8477-1E6FAA29FDC3} = {2014A0C5-BE53-44C1-8FF3-5A8C75483A89}
 		{77377DE2-FC3E-4155-A2C8-89032E3FB599} = {8CB03C8F-2192-4FAB-8477-1E6FAA29FDC3}
+		{746C59FF-031D-4360-AECE-4FC83A9B6B01} = {3908F5FE-3168-49D0-9FDE-A38E09305E9C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E42251A9-B6D2-45EF-B58B-DA406C96CBAA}

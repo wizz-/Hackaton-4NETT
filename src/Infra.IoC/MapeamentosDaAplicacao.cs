@@ -1,4 +1,6 @@
-﻿using Infra.Data.Context;
+﻿using Application.Services.Logins.Interfaces;
+using Application.Services.LoginsAppService;
+using Infra.Data.Context;
 using Infra.DatabaseInitializers;
 using Infra.DatabaseInitializers.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -18,6 +20,7 @@ namespace Infra.IoC
         }
         private static void MapearApplication(IServiceCollection services)
         {
+            services.AddScoped<ILoginAppService, LoginAppService>();
         }
 
         private static void MapearInfra(IServiceCollection services)

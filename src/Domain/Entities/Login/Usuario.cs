@@ -1,11 +1,7 @@
 ﻿using Domain.Enums;
 using Konscious.Security.Cryptography;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.Entities.Login
 {
@@ -19,7 +15,7 @@ namespace Domain.Entities.Login
 
         protected Usuario() { } // Para ORM
 
-        public Usuario(string email, string senha, TipoDeUsuario tipo)
+        public Usuario(string email, SecureString senha, TipoDeUsuario tipo)
         {
             Email = email;
             Tipo = tipo;
@@ -28,7 +24,7 @@ namespace Domain.Entities.Login
             SenhaHash = GerarHash(senha, Salt);
         }
 
-        public bool ValidarSenha(string senha)
+        public bool ValidarSenha(SecureString senha)
         {
             var hashTentativa = GerarHash(senha, Salt);
             return SenhaHash == hashTentativa;
@@ -41,9 +37,11 @@ namespace Domain.Entities.Login
             return Convert.ToBase64String(saltBytes);
         }
 
-        private string GerarHash(string senha, string salt)
+        private string GerarHash(SecureString senha, string salt)
         {
-            using (var argon2 = new Argon2id(Encoding.UTF8.GetBytes(senha)))
+            var senhaBytes = SecureStringParaBytes(senha);
+
+            using (var argon2 = new Argon2id(senhaBytes))
             {
                 argon2.Salt = Convert.FromBase64String(salt);
                 argon2.DegreeOfParallelism = 2;
@@ -51,6 +49,31 @@ namespace Domain.Entities.Login
                 argon2.Iterations = 6;
 
                 return Convert.ToBase64String(argon2.GetBytes(32));
+            }
+        }
+
+        private byte[] SecureStringParaBytes(SecureString secureString)
+        {
+            if (secureString == null) throw new ArgumentNullException(nameof(secureString));
+
+            var ptr = IntPtr.Zero;
+            try
+            {
+                ptr = System.Runtime.InteropServices.Marshal.SecureStringToBSTR(secureString);
+                var length = System.Runtime.InteropServices.Marshal.ReadInt32(ptr, -4);
+                var bytes = new byte[length];
+
+                for (int i = 0; i < length; i++)
+                {
+                    bytes[i] = System.Runtime.InteropServices.Marshal.ReadByte(ptr, i);
+                }
+
+                return bytes;
+            }
+            finally
+            {
+                if (ptr != IntPtr.Zero)
+                    System.Runtime.InteropServices.Marshal.ZeroFreeBSTR(ptr);
             }
         }
     }

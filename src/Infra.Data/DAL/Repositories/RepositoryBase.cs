@@ -1,5 +1,5 @@
 ﻿using DelegateDecompiler;
-using Domain.Interfaces.Infra.Data.DAL;
+using Domain.Interfaces.Infra.Data.DAL.Repositories;
 using Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -53,7 +53,7 @@ namespace Infra.Data.DAL.Repositories
             throw new InvalidOperationException("Não foi possível recuprar o Id após a inclusão.");
         }
 
-        public TEntity ObterPorId(int id)
+        public TEntity? ObterPorId(int id)
         {
             return DbSet.Find(id);
         }
