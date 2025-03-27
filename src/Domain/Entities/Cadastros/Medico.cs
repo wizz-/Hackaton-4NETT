@@ -7,6 +7,7 @@ namespace Domain.Entities.Cadastros
         public int Id { get; private set; }
         public string Nome { get; private set; }
         public virtual Crm Crm { get; private set; }
+        public int TempoDeConsulta { get; private set; }
         public virtual IList<Especialidade> Especialidades { get; private set; }
         public virtual IList<HorarioDisponivel> HorariosDisponiveis { get; private set; }
         public virtual Usuario Usuario { get; private set; }
@@ -15,12 +16,13 @@ namespace Domain.Entities.Cadastros
         {
         }
 
-        public Medico(string nome, Crm crm, IList<Especialidade> especialidades, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
+        public Medico(string nome, Crm crm, int tempodeConsulta, IList<Especialidade> especialidades, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
         {
             ValidarCampos(nome, crm, especialidades, horariosDisponiveis, usuario);
 
             Nome = nome;
             Crm = crm;
+            TempoDeConsulta = tempodeConsulta;
             Especialidades = especialidades;
             HorariosDisponiveis = horariosDisponiveis;
             Usuario = usuario;

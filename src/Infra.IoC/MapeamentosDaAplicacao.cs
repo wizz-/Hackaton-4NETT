@@ -1,6 +1,12 @@
-﻿using Application.Services.Logins.Interfaces;
+﻿using Application.Services.Cadastros;
+using Application.Services.Cadastros.Interfaces;
+using Application.Services.Logins.Interfaces;
 using Application.Services.LoginsAppService;
+using Domain.Interfaces.Infra.Data.DAL;
+using Domain.Interfaces.Infra.Data.DAL.Repositories;
 using Infra.Data.Context;
+using Infra.Data.DAL;
+using Infra.Data.DAL.Repositories;
 using Infra.DatabaseInitializers;
 using Infra.DatabaseInitializers.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -21,10 +27,24 @@ namespace Infra.IoC
         private static void MapearApplication(IServiceCollection services)
         {
             services.AddScoped<ILoginAppService, LoginAppService>();
+            services.AddScoped<ICadastroAppService, CadastroAppService>();
         }
 
         private static void MapearInfra(IServiceCollection services)
         {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            var tipos = typeof(RepositoryBase<>).Assembly.GetTypes().Where(x => x.BaseType?.Name == typeof(RepositoryBase<>).Name);
+
+            foreach (var item in tipos)
+            {
+                var serviceType = item
+                    .GetInterfaces()
+                    .Single(x => x.Name != typeof(IRepositoryBase<>).Name);
+
+                services.AddScoped(serviceType, item);
+            }
+
             var retryPolicy = Policy
                 .Handle<SqlException>()
                 .WaitAndRetryAsync(20, retryAttempt => TimeSpan.FromSeconds(5),

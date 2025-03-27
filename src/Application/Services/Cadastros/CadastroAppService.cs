@@ -29,11 +29,11 @@ namespace Application.Services.Cadastros
             var medicoDuplicado = unitOfWork.MedicoRepository.ObterPorCrm(crm.Numero, crm.Uf);//Faço a verificação depois de criar a classe para aplicar as regras de formatação no domínio
             if (medicoDuplicado != null) throw new InvalidOperationException("O CRM informado já está já foi cadastrado.");
 
-            var usuario = CriarUsuario(dto.Usuario, TipoDeUsuario.Paciente);
-            var especialidades = CriarEspecialidades(dto.Especialidades);
+            var usuario = CriarUsuario(dto.Usuario, TipoDeUsuario.Medico);
+            var especialidades = ObterEspecialidade(dto.Especialidades);
             var horarios = CriarHorarios(dto.HorariosDisponiveis);
 
-            var medico = new Medico(dto.Nome, crm, especialidades, horarios, usuario);
+            var medico = new Medico(dto.Nome, crm, dto.TempoDeConsulta, especialidades, horarios, usuario);
             unitOfWork.MedicoRepository.Inserir(medico);
             unitOfWork.SaveChanges();
         }
@@ -54,14 +54,14 @@ namespace Application.Services.Cadastros
             return horarios;
         }
 
-        private IList<Especialidade> CriarEspecialidades(IList<EspecialidadeAppDto> especialidadesDto)
+        private IList<Especialidade> ObterEspecialidade(IList<EspecialidadeAppDto> especialidadesDto)
         {
             var especialidades = new List<Especialidade>();
 
             foreach (var item in especialidadesDto)
             {
                 var especialidade = unitOfWork.EspecialidadeRepository.ObterPorId(item.Id);
-                if (especialidade != null) throw new InvalidOperationException($"Especialidade '{especialidade.Nome}' com id '{item.Id}' não foi localizada.");
+                if (especialidade == null) throw new InvalidOperationException($"Especialidade '{item.Nome}' com id '{item.Id}' não foi localizada.");
 
                 especialidades.Add(especialidade);
             }
