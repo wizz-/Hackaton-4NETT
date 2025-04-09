@@ -28,6 +28,11 @@ namespace Domain.Entities.Cadastros
             Usuario = usuario;
         }
 
+        public IList<TimeOnly> ObterHorasDiponiveis(DayOfWeek diaDaSemana, IList<Periodo> periodosOcupado)
+        {
+            return HorariosDisponiveis.Where(x => x.DiaDaSemana == diaDaSemana).SelectMany(x => x.ObterHoras(TempoDeConsulta, periodosOcupado)).ToList();
+        }
+
         private void ValidarCampos(string nome, Crm crm, IList<Especialidade> especialidades, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
         {
             ValidarNome(nome);

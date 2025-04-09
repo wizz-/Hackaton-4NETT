@@ -8,13 +8,16 @@ namespace Infra.Data.DAL
             IUsuarioRepository usuarioRepository,
             IPacienteRepository pacienteRepository,
             IEspecialidadeRepository especialidadeRepository,
-            IMedicoRepository medicoRepository) : IUnitOfWork
+            IMedicoRepository medicoRepository,
+            IConsultaRepository consultaRepository) : IUnitOfWork
     {
         public IUsuarioRepository UsuarioRepository { get; } = usuarioRepository;
 
         public IPacienteRepository PacienteRepository { get; } = pacienteRepository;
         public IEspecialidadeRepository EspecialidadeRepository { get; } = especialidadeRepository;
         public IMedicoRepository MedicoRepository { get; } = medicoRepository;
+
+        public IConsultaRepository ConsultaRepository { get; } = consultaRepository;
 
         public void SaveChanges() => contexto.SaveChanges();
     }

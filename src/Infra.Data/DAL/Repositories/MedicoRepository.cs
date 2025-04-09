@@ -15,5 +15,12 @@ namespace Infra.Data.DAL.Repositories
             return ObterQueryable()
                     .SingleOrDefault(x => x.Crm.Numero == crm && x.Crm.Uf == uf);
         }
+
+        public IList<Medico> ObterPorDisponibilidade(DayOfWeek dayOfWeek)
+        {
+            return ObterQueryable()
+                .Where(x => x.HorariosDisponiveis.Any(x => x.DiaDaSemana == dayOfWeek))
+                .ToList();
+        }
     }
 }

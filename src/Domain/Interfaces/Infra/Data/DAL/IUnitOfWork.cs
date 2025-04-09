@@ -8,6 +8,7 @@ namespace Domain.Interfaces.Infra.Data.DAL
         IPacienteRepository PacienteRepository { get; }
         IEspecialidadeRepository EspecialidadeRepository { get; }
         IMedicoRepository MedicoRepository { get; }
+        IConsultaRepository ConsultaRepository { get; }
 
         void SaveChanges();
     }
