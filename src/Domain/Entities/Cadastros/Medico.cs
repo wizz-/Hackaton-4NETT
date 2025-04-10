@@ -5,12 +5,12 @@ namespace Domain.Entities.Cadastros
     public class Medico
     {
         public int Id { get; private set; }
-        public string Nome { get; private set; }
-        public virtual Crm Crm { get; private set; }
+        public string? Nome { get; private set; }
+        public virtual Crm? Crm { get; private set; }
         public int TempoDeConsulta { get; private set; }
-        public virtual IList<Especialidade> Especialidades { get; private set; }
-        public virtual IList<HorarioDisponivel> HorariosDisponiveis { get; private set; }
-        public virtual Usuario Usuario { get; private set; }
+        public virtual IList<Especialidade>? Especialidades { get; private set; }
+        public virtual IList<HorarioDisponivel>? HorariosDisponiveis { get; private set; }
+        public virtual Usuario? Usuario { get; private set; }
 
         protected Medico()
         {
@@ -30,7 +30,7 @@ namespace Domain.Entities.Cadastros
 
         public IList<TimeOnly> ObterHorasDiponiveis(DayOfWeek diaDaSemana, IList<Periodo> periodosOcupado)
         {
-            return HorariosDisponiveis.Where(x => x.DiaDaSemana == diaDaSemana).SelectMany(x => x.ObterHoras(TempoDeConsulta, periodosOcupado)).ToList();
+            return HorariosDisponiveis!.Where(x => x.DiaDaSemana == diaDaSemana).SelectMany(x => x.ObterHoras(TempoDeConsulta, periodosOcupado)).ToList();
         }
 
         private void ValidarCampos(string nome, Crm crm, IList<Especialidade> especialidades, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)

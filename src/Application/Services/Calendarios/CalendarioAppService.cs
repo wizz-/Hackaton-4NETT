@@ -8,9 +8,9 @@ namespace Application.Services.Calendarios
 {
     public class CalendarioAppService(IUnitOfWork unitOfWork) : ICalendarioAppService
     {
-        public IList<MedicoAppDto> ObterCalendario(DateOnly dia)
+        public IList<MedicoAppDto> ObterCalendario(DateOnly dia, int especialidadeId)
         {
-            var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek);
+            var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId);
             var consultasDoDia = unitOfWork.ConsultaRepository.ObterDoDia(dia, medicosDiponiveis);
 
             return CruzarDisponibilidadesComConsultas(dia, medicosDiponiveis, consultasDoDia);
@@ -24,9 +24,9 @@ namespace Application.Services.Calendarios
                 var medico = new MedicoAppDto()
                 {
                     Id = item.Id,
-                    CrmNumero = item.Crm.Numero,
-                    CrmUf = item.Crm.Uf,
-                    Nome = item.Nome,
+                    CrmNumero = item.Crm!.Numero,
+                    CrmUf = item.Crm!.Uf,
+                    Nome = item.Nome!,
                     HorariosDisponiveis = item.ObterHorasDiponiveis(dia.DayOfWeek, consultasDoDia.Where(x => x.Medico.Id == item.Id).Select(x => x.Horario).ToList()),
                 };
 

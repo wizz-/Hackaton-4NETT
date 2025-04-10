@@ -13,7 +13,7 @@ namespace Application.Services.LoginsAppService
             var medico = unitOfWork.MedicoRepository.ObterPorCrm(crm, ufEnum);
             if (medico == null) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
 
-            if (!medico.Usuario.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
+            if (!medico.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
         }
 
         public void LoginPaciente(string cpf, SecureString senha)
@@ -21,7 +21,7 @@ namespace Application.Services.LoginsAppService
             var paciente = unitOfWork.PacienteRepository.ObterPorCpf(cpf);
             if (paciente == null) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
 
-            if (!paciente.Usuario.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
+            if (!paciente.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
         }
 
         private UnidadeFederativa ObterUf(string uf)

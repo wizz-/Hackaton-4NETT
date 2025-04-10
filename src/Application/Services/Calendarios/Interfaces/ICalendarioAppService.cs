@@ -4,6 +4,6 @@ namespace Application.Services.Calendarios.Interfaces
 {
     public interface ICalendarioAppService
     {
-        IList<MedicoAppDto> ObterCalendario(DateOnly dia);
+        IList<MedicoAppDto> ObterCalendario(DateOnly dia, int especialidadeId);
     }
 }
