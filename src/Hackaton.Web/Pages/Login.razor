@@ -7,68 +7,109 @@
 @inject IAuthService AuthService
 @inject NavigationManager Navigation
 
-<div class="login-container">
-    <div class="login-box">
-        <h2 class="login-title">Acesse sua conta</h2>
+<PageTitle>Login - Health&Med</PageTitle>
 
-        <form class="login-form" @onsubmit="HandleLogin">
-            <!-- Seleção de perfil -->
-            <div class="profile-selector">
-                <input type="radio" id="medico" name="perfil" value="@PerfisDeUsuario.Medico"
-                       @onchange="@(() => loginModel.Perfil = PerfisDeUsuario.Medico)"
-                       checked="@(loginModel.Perfil == PerfisDeUsuario.Medico)">
-                <label for="medico">Médico</label>
+<div class="text-center mb-4">
+    <img src="img/logo-100.png" alt="Health&Med" class="logo">
+</div>
 
-                <input type="radio" id="paciente" name="perfil" value="@PerfisDeUsuario.Paciente"
-                       @onchange="@(() => loginModel.Perfil = PerfisDeUsuario.Paciente)"
-                       checked="@(loginModel.Perfil == PerfisDeUsuario.Paciente)">
-                <label for="paciente">Paciente</label>
-            </div>
+<ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
+                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
+            Médico
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
+                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
+            Paciente
+        </button>
+    </li>
+</ul>
 
-            <!-- Campos de login específicos -->
+<div class="tab-content">
+    <div class="tab-pane fade show active">
+        <form @onsubmit="HandleLogin">
             @if (loginModel.Perfil == PerfisDeUsuario.Medico)
             {
-                <label for="crm">CRM</label>
-                <input type="text" id="crm" @bind="@loginModel.CRM" placeholder="Digite seu CRM" required />
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="crm" class="form-label">CRM</label>
+                        <input type="text" class="form-control" id="crm" @bind="loginModel.CRM" placeholder="Digite seu CRM" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="uf" class="form-label">UF</label>
+                        <select class="form-select" id="uf" @bind="loginModel.UF" required>
+                            <option value="">Selecione o estado</option>
+                            @foreach (var uf in Estados)
+                            {
+                                <option value="@uf">@uf</option>
+                            }
+                        </select>
+                    </div>
+                </div>
             }
             else
             {
-                <label for="loginPaciente">E-mail ou CPF</label>
-                <input type="text" id="loginPaciente" @bind="@loginModel.EmailOuCPF" placeholder="Digite seu E-mail ou CPF" required />
+                <div class="mb-3">
+                    <label for="cpf-email" class="form-label">CPF ou Email</label>
+                    <input type="text" class="form-control" id="cpf-email" @bind="loginModel.EmailOuCPF" placeholder="Digite seu CPF ou Email" required>
+                </div>
             }
 
-            <!-- Campo de Senha -->
-            <label for="password">Senha</label>
-            <input type="password" id="password" @bind="@loginModel.Senha" placeholder="Digite sua senha" required />
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="senha" @bind="loginModel.Senha" placeholder="Digite sua senha" required>
+            </div>
 
-            <!-- Botão de Login -->
-            <button type="submit" class="btn-login">Entrar</button>
+            <button type="submit" class="btn btn-primary w-100">
+                Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
+            </button>
 
-            <!-- Mensagem de erro -->
             @if (!string.IsNullOrEmpty(mensagemErro))
             {
-                <p class="erro-login">@mensagemErro</p>
+                <div class="alert alert-danger text-center py-2 px-3 mt-3 mb-3" role="alert">
+                    @mensagemErro
+                </div>
             }
-
-            <!-- Links -->
-            <div class="login-footer">
-                <a href="/cadastro">Criar conta</a>
-            </div>
         </form>
     </div>
 </div>
 
+<div class="text-center mt-3">
+    <a href="/cadastro" class="text-decoration-none">Primeiro acesso? Clique aqui</a>
+</div>
+
 @code {
-    private LoginModel loginModel = new LoginModel();
+    private LoginModel loginModel = new LoginModel { Perfil = PerfisDeUsuario.Medico };
     private string mensagemErro = "";
 
-    private async Task HandleLogin(EventArgs e)
+    private readonly List<string> Estados = new()
     {
+        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+        "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+        "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    };
+
+    private void SelecionarPerfil(PerfisDeUsuario perfil)
+    {
+        loginModel = new LoginModel
+            {
+                Perfil = perfil
+            };
+        mensagemErro = string.Empty;
+    }
+
+    private async Task HandleLogin()
+    {
+        mensagemErro = "";
+
         bool sucesso = await AuthService.LoginAsync(loginModel);
 
         if (sucesso)
         {
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo(loginModel.Perfil == PerfisDeUsuario.Medico ? "/medico" : "/paciente");
         }
         else
         {
