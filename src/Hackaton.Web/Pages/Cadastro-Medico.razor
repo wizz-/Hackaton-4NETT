@@ -26,7 +26,7 @@
     <div class="row mb-3">
         <div class="col-md-5">
             <label for="crm" class="form-label required-label">CRM</label>
-            <InputText id="crm" class="@ObterClasseCss(() => cadastroModel.CRM)" @bind-Value="cadastroModel.CRM" />
+            <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="cadastroModel.CRM" class="@ObterClasseCss(() => cadastroModel.CRM)" Style="width: 100%;" />
             <div class="invalid-feedback">
                 <ValidationMessage For="@(() => cadastroModel.CRM)" />
             </div>
@@ -81,7 +81,9 @@
         <div class="alert alert-danger text-center">@mensagemErro</div>
     }
 
-    <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+    <button type="submit" class="btn btn-primary w-100">
+        <i class="bi bi-floppy me-1"></i> Cadastrar
+    </button>
 
     <div class="d-flex justify-content-start mb-3 my-3">
         <a href="/login" class="btn btn-outline-primary w-100">

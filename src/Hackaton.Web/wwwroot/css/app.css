@@ -63,6 +63,11 @@ label {
     color: #a60000;
 }
 
+.radzen-input {
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

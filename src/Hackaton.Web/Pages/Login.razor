@@ -4,8 +4,10 @@
 @using Hackaton.Web.Auth.Interfaces
 @using Hackaton.Web.Models
 @using System.Linq.Expressions
+@using Hackaton.Web.Services.Ufs.Interfaces
 
 @inject IAuthService AuthService
+@inject IUfService UfService
 @inject NavigationManager Navigation
 
 <PageTitle>Login - Health&Med</PageTitle>
@@ -16,79 +18,83 @@
 
 <h1 class="mb-4 text-center">Login</h1>
 
-<EditForm EditContext="@editContext" OnValidSubmit="HandleLogin">
-    <DataAnnotationsValidator />
+@if (editContext != null)
+{
+    <EditForm EditContext="@editContext" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
 
-    <ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
-                    type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
-                Médico
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
-                    type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
-                Paciente
-            </button>
-        </li>
-    </ul>
+        <ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
+                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
+                    <i class="bi @(loginModel.Perfil == PerfisDeUsuario.Medico ? "bi-briefcase-fill" : "bi-briefcase") me-1"></i> Médico
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
+                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
+                    <i class="bi @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "bi-person-fill" : "bi-person") me-1"></i> Paciente
+                </button>
+            </li>
+        </ul>
 
-    @if (loginModel.Perfil == PerfisDeUsuario.Medico)
-    {
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="crm" class="form-label required-label">CRM</label>
-                <InputText id="crm" class="@ObterClasseCss(() => loginModel.CRM)" @bind-Value="loginModel.CRM" />
-                <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => loginModel.CRM)" />
+
+        @if (loginModel.Perfil == PerfisDeUsuario.Medico)
+        {
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="crm" class="form-label required-label">CRM</label>
+                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="loginModel.CRM" class="@ObterClasseCss(() => loginModel.CRM)" Style="width: 100%;" />
+                    <div class="invalid-feedback">
+                        <ValidationMessage For="@(() => loginModel.CRM)" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="uf" class="form-label required-label">UF</label>
+                    <InputSelect id="uf" class="@ObterClasseCss(() => loginModel.UF, "form-select")" @bind-Value="loginModel.UF">
+                        <option value="">Selecione o estado</option>
+                        @foreach (var uf in Ufs)
+                        {
+                            <option value="@uf">@uf</option>
+                        }
+                    </InputSelect>
+                    <div class="invalid-feedback">
+                        <ValidationMessage For="@(() => loginModel.UF)" />
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <label for="uf" class="form-label required-label">UF</label>
-                <InputSelect id="uf" class="@ObterClasseCss(() => loginModel.UF, "form-select")" @bind-Value="loginModel.UF">
-                    <option value="">Selecione o estado</option>
-                    @foreach (var uf in Estados)
-                    {
-                        <option value="@uf">@uf</option>
-                    }
-                </InputSelect>
+        }
+        else
+        {
+            <div class="mb-3">
+                <label for="cpf-email" class="form-label required-label">CPF ou Email</label>
+                <InputText id="cpf-email" class="@ObterClasseCss(() => loginModel.EmailOuCPF)" @bind-Value="loginModel.EmailOuCPF" />
                 <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => loginModel.UF)" />
+                    <ValidationMessage For="@(() => loginModel.EmailOuCPF)" />
                 </div>
             </div>
-        </div>
-    }
-    else
-    {
+        }
+
         <div class="mb-3">
-            <label for="cpf-email" class="form-label required-label">CPF ou Email</label>
-            <InputText id="cpf-email" class="@ObterClasseCss(() => loginModel.EmailOuCPF)" @bind-Value="loginModel.EmailOuCPF" />
+            <label for="senha" class="form-label required-label">Senha</label>
+            <InputText id="senha" type="password" class="@ObterClasseCss(() => loginModel.Senha)" @bind-Value="loginModel.Senha" />
             <div class="invalid-feedback">
-                <ValidationMessage For="@(() => loginModel.EmailOuCPF)" />
+                <ValidationMessage For="@(() => loginModel.Senha)" />
             </div>
         </div>
-    }
 
-    <div class="mb-3">
-        <label for="senha" class="form-label required-label">Senha</label>
-        <InputText id="senha" type="password" class="@ObterClasseCss(() => loginModel.Senha)" @bind-Value="loginModel.Senha" />
-        <div class="invalid-feedback">
-            <ValidationMessage For="@(() => loginModel.Senha)" />
-        </div>
-    </div>
+        @if (!string.IsNullOrEmpty(mensagemErro))
+        {
+            <div class="alert alert-danger text-center py-2 px-3 mt-3 mb-3" role="alert">
+                @mensagemErro
+            </div>
+        }
 
-    @if (!string.IsNullOrEmpty(mensagemErro))
-    {
-        <div class="alert alert-danger text-center py-2 px-3 mt-3 mb-3" role="alert">
-            @mensagemErro
-        </div>
-    }
-
-    <button type="submit" class="btn btn-primary w-100">
-        Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
-    </button>
-</EditForm>
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-key me-1"></i> Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")        
+        </button>
+    </EditForm>
+}
 
 <div class="text-center mt-3">
     <a href="@ObterLinkCadastro()" class="text-decoration-none">Primeiro acesso? Clique aqui</a>
@@ -96,18 +102,14 @@
 
 @code {
     private LoginModel loginModel = new LoginModel { Perfil = PerfisDeUsuario.Medico };
-    private EditContext editContext;
+    private EditContext? editContext;
     private string mensagemErro = "";
 
-    private readonly List<string> Estados = new()
-    {
-        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
-        "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
-        "RS", "RO", "RR", "SC", "SP", "SE", "TO"
-    };
+    private List<string> Ufs = [];
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        Ufs = await UfService.ObterUfAsync();
         editContext = new EditContext(loginModel);
     }
 
