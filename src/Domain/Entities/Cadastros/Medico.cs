@@ -7,8 +7,7 @@ namespace Domain.Entities.Cadastros
         public int Id { get; private set; }
         public string? Nome { get; private set; }
         public virtual Crm? Crm { get; private set; }
-        public int TempoDeConsulta { get; private set; }
-        public virtual IList<Especialidade>? Especialidades { get; private set; }
+        public Especialidade? Especialidade { get; private set; }
         public virtual IList<HorarioDisponivel>? HorariosDisponiveis { get; private set; }
         public virtual Usuario? Usuario { get; private set; }
 
@@ -16,28 +15,27 @@ namespace Domain.Entities.Cadastros
         {
         }
 
-        public Medico(string nome, Crm crm, int tempodeConsulta, IList<Especialidade> especialidades, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
+        public Medico(string nome, Crm crm, int tempodeConsulta, Especialidade especialidade, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
         {
-            ValidarCampos(nome, crm, especialidades, horariosDisponiveis, usuario);
+            ValidarCampos(nome, crm, especialidade, horariosDisponiveis, usuario);
 
             Nome = nome;
             Crm = crm;
-            TempoDeConsulta = tempodeConsulta;
-            Especialidades = especialidades;
+            Especialidade = especialidade;
             HorariosDisponiveis = horariosDisponiveis;
             Usuario = usuario;
         }
 
         public IList<TimeOnly> ObterHorasDiponiveis(DayOfWeek diaDaSemana, IList<Periodo> periodosOcupado)
         {
-            return HorariosDisponiveis!.Where(x => x.DiaDaSemana == diaDaSemana).SelectMany(x => x.ObterHoras(TempoDeConsulta, periodosOcupado)).ToList();
+            return HorariosDisponiveis!.Where(x => x.DiaDaSemana == diaDaSemana).SelectMany(x => x.ObterHoras(periodosOcupado)).ToList();
         }
 
-        private void ValidarCampos(string nome, Crm crm, IList<Especialidade> especialidades, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
+        private void ValidarCampos(string nome, Crm crm, Especialidade especialidade, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
         {
             ValidarNome(nome);
             ValidarCrm(crm);
-            ValidarEspecialidades(especialidades);
+            ValidarEspecialidade(especialidade);
             ValidarHorariosDisponiveis(horariosDisponiveis);
             ValidarUsuario(usuario);
         }
@@ -57,17 +55,9 @@ namespace Domain.Entities.Cadastros
             if (crm == null) throw new InvalidOperationException("CRM não pode ser nulo.");
         }
 
-        private void ValidarEspecialidades(IList<Especialidade> especialidades)
+        private void ValidarEspecialidade(Especialidade especialidade)
         {
-            if (especialidades == null) throw new InvalidOperationException("A lista de Especialidades não pode ser nula.");
-
-            //https://www.jusbrasil.com.br/artigos/quantas-especialidades-medicas-pode-um-medico-ter/2066715627
-            if (especialidades.Count > 2) throw new InvalidOperationException("Um médico não pode ter mais de duas especialidades.");
-
-            foreach (var item in especialidades)
-            {
-                if (item == null) throw new InvalidOperationException("Um das especialidades da lista é nula.");
-            }
+            if (especialidade == null) throw new InvalidOperationException("Especialidadeñão pode ser nula.");
         }
 
         private void ValidarNome(string nome)

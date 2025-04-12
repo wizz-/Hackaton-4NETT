@@ -3,6 +3,7 @@
     public class HorarioDisponivel
     {
         public int Id { get; private set; }
+        public int TempoDeConsulta { get; private set; } = 30;
         public virtual Especialidade? Especialidade { get; set; }
         public DayOfWeek DiaDaSemana { get; private set; }
         public virtual Periodo? Periodo { get; private set; }
@@ -18,9 +19,9 @@
             Periodo = periodo;
         }
 
-        public IList<TimeOnly> ObterHoras(int tempoDeConsulta, IList<Periodo> periodosOcupado)
+        public IList<TimeOnly> ObterHoras(IList<Periodo> periodosOcupado)
         {
-            return Periodo!.GerarHorarios(tempoDeConsulta, periodosOcupado);
+            return Periodo!.GerarHorarios(TempoDeConsulta, periodosOcupado);
         }
     }
 }

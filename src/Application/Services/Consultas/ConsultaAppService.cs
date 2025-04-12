@@ -16,12 +16,10 @@ namespace Application.Services.Consultas
             var medico = unitOfWork.MedicoRepository.ObterPorId(dto.MedicoId);
             if (medico == null) throw new InvalidOperationException($"Médico com id '{dto.MedicoId}' não localizado.");
 
-            var especialidade = medico.Especialidades!.FirstOrDefault(x => x.Id == dto.EspecialidadeId);
-            if (especialidade == null) throw new InvalidOperationException($"Especialidade com id '{dto.EspecialidadeId}' não pertence ao médico {medico.Id}.");
+            var especialidade = unitOfWork.EspecialidadeRepository.ObterPorId(dto.EspecialidadeId);
+            if (especialidade == null) throw new InvalidOperationException($"Especialidade com id '{dto.EspecialidadeId}' não existe.");
 
-            var horarioFim = dto.Inicio.AddMinutes(medico.TempoDeConsulta);
-
-            var periodo = new Periodo(dto.Inicio, horarioFim);
+            var periodo = new Periodo(dto.Inicio, dto.Fim);
 
             var consulta = new Consulta(dto.Dia, paciente, medico, especialidade, periodo);
 

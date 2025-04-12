@@ -30,15 +30,15 @@ namespace Application.Services.Cadastros
             if (medicoDuplicado != null) throw new InvalidOperationException("O CRM informado já está já foi cadastrado.");
 
             var usuario = CriarUsuario(dto.Usuario, TipoDeUsuario.Medico);
-            var especialidades = ObterEspecialidade(dto.Especialidades);
-            var horarios = CriarHorarios(dto.HorariosDisponiveis);
+            var especialidade = ObterEspecialidade(dto.Especialidade);
+            var horarios = CriarHorarios(dto.HorariosDisponiveis, especialidade);
 
-            var medico = new Medico(dto.Nome, crm, dto.TempoDeConsulta, especialidades, horarios, usuario);
+            var medico = new Medico(dto.Nome, crm, dto.TempoDeConsulta, especialidade, horarios, usuario);
             unitOfWork.MedicoRepository.Inserir(medico);
             unitOfWork.SaveChanges();
         }
 
-        private IList<HorarioDisponivel> CriarHorarios(IList<HorarioDisponivelAppDto> horariosDisponiveis)
+        private IList<HorarioDisponivel> CriarHorarios(IList<HorarioDisponivelAppDto> horariosDisponiveis, Especialidade especialidade)
         {
             var horarios = new List<HorarioDisponivel>();
 
@@ -46,7 +46,7 @@ namespace Application.Services.Cadastros
             {
                 var periodo = new Periodo(item.Periodo.Inicio, item.Periodo.Fim);
 
-                var horario = new HorarioDisponivel(item.DiaDaSemana, periodo);
+                var horario = new HorarioDisponivel(item.DiaDaSemana, especialidade, periodo);
 
                 horarios.Add(horario);
             }
@@ -54,19 +54,12 @@ namespace Application.Services.Cadastros
             return horarios;
         }
 
-        private IList<Especialidade> ObterEspecialidade(IList<EspecialidadeAppDto> especialidadesDto)
+        private Especialidade ObterEspecialidade(EspecialidadeAppDto especialidadeDto)
         {
-            var especialidades = new List<Especialidade>();
+            var especialidade = unitOfWork.EspecialidadeRepository.ObterPorId(especialidadeDto.Id);
+            if (especialidade == null) throw new InvalidOperationException($"Especialidade '{especialidadeDto.Nome}' com id '{especialidadeDto.Id}' não foi localizada.");
 
-            foreach (var item in especialidadesDto)
-            {
-                var especialidade = unitOfWork.EspecialidadeRepository.ObterPorId(item.Id);
-                if (especialidade == null) throw new InvalidOperationException($"Especialidade '{item.Nome}' com id '{item.Id}' não foi localizada.");
-
-                especialidades.Add(especialidade);
-            }
-
-            return especialidades;
+            return especialidade;
         }
 
         private Usuario CriarUsuario(UsuarioAppDto usuarioAppDto, TipoDeUsuario tipoDeUsuario)
