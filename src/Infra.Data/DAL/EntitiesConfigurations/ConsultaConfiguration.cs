@@ -8,6 +8,9 @@ namespace Infra.Data.DAL.EntitiesConfigurations
     {
         public void Configure(EntityTypeBuilder<Consulta> builder)
         {
+            builder.OwnsOne(x => x.Horario, (ownedBuilder) =>
+            {
+            });
         }
     }
 }

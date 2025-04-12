@@ -1,3 +1,8 @@
+using Carter;
+using Hackaton.Api.IoC;
+using Infra.DatabaseInitializers.Interfaces;
+using Prometheus;
+
 namespace Hackaton.Api
 {
     public class Program
@@ -5,38 +10,30 @@ namespace Hackaton.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddAuthorization();
-
+            builder.ConfigurarEMapearDependenciasDaAplicacao();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-
-            app.UseHttpsRedirection();
-
+            InicializarDatabase(app);
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseStatusCodePages();
+            app.UseHttpsRedirection();
+            app.MapCarter();
 
-            var summaries = new[]
-            {
-                "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            };
-
-            app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                    new WeatherForecast
-                    {
-                        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                        TemperatureC = Random.Shared.Next(-20, 55),
-                        Summary = summaries[Random.Shared.Next(summaries.Length)]
-                    })
-                    .ToArray();
-                return forecast;
-            });
+            app.MapMetrics();
 
             app.Run();
+        }
+
+        private static void InicializarDatabase(WebApplication app)
+        {
+            using var scopo = app.Services.CreateScope();
+            var dbInitializer = scopo.ServiceProvider.GetService<IDatabaseInitializer>();
+            if (dbInitializer == null) return;
+            dbInitializer.InicializarDatabase();
         }
     }
 }

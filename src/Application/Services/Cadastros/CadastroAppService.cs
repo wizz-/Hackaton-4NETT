@@ -10,7 +10,7 @@ namespace Application.Services.Cadastros
 {
     public class CadastroAppService(IUnitOfWork unitOfWork) : ICadastroAppService
     {
-        public void CadastrarPaciente(PacienteAppDto dto)
+        public void CadastrarPaciente(PacienteDto dto)
         {
             var usuario = CriarUsuario(dto.Usuario, TipoDeUsuario.Paciente);
             var paciente = new Paciente(dto.Cpf, dto.Email, dto.Nome, usuario);
@@ -22,7 +22,7 @@ namespace Application.Services.Cadastros
             unitOfWork.SaveChanges();
         }
 
-        public void CadastrarMedico(MedicoAppDto dto)
+        public void CadastrarMedico(MedicoDto dto)
         {
             var crm = new Crm(dto.CrmNumero, dto.CrmUf);
 
@@ -31,14 +31,25 @@ namespace Application.Services.Cadastros
 
             var usuario = CriarUsuario(dto.Usuario, TipoDeUsuario.Medico);
             var especialidade = ObterEspecialidade(dto.Especialidade);
-            var horarios = CriarHorarios(dto.HorariosDisponiveis, especialidade);
 
-            var medico = new Medico(dto.Nome, crm, dto.TempoDeConsulta, especialidade, horarios, usuario);
+            var medico = new Medico(dto.Nome, crm, especialidade, usuario);
             unitOfWork.MedicoRepository.Inserir(medico);
             unitOfWork.SaveChanges();
         }
 
-        private IList<HorarioDisponivel> CriarHorarios(IList<HorarioDisponivelAppDto> horariosDisponiveis, Especialidade especialidade)
+        public void CadastrarHorariosDisponiveis(int medicoId, IList<HorarioDisponivelDto> horarioDisponivelDto)
+        {
+            var medico = unitOfWork.MedicoRepository.ObterPorId(medicoId);
+            if (medico == null) throw new InvalidOperationException($"Médico com ID '{medicoId}' não existe.");
+
+            var horarios = CriarHorarios(horarioDisponivelDto, medico.Especialidade);
+
+            medico.CadastrarHorarios(horarios);
+            unitOfWork.MedicoRepository.Atualizar(medico);
+            unitOfWork.SaveChanges();
+        }
+
+        private IList<HorarioDisponivel> CriarHorarios(IList<HorarioDisponivelDto> horariosDisponiveis, Especialidade especialidade)
         {
             var horarios = new List<HorarioDisponivel>();
 
@@ -54,7 +65,7 @@ namespace Application.Services.Cadastros
             return horarios;
         }
 
-        private Especialidade ObterEspecialidade(EspecialidadeAppDto especialidadeDto)
+        private Especialidade ObterEspecialidade(EspecialidadeDto especialidadeDto)
         {
             var especialidade = unitOfWork.EspecialidadeRepository.ObterPorId(especialidadeDto.Id);
             if (especialidade == null) throw new InvalidOperationException($"Especialidade '{especialidadeDto.Nome}' com id '{especialidadeDto.Id}' não foi localizada.");
