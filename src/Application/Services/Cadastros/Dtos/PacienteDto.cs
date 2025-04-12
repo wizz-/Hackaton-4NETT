@@ -2,7 +2,7 @@
 
 namespace Application.Services.Cadastros.Dtos
 {
-    public class PacienteAppDto
+    public class PacienteDto
     {
         public int Id { get; set; }
         public string Cpf { get; set; }

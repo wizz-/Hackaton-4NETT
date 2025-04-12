@@ -4,7 +4,8 @@ namespace Application.Services.Cadastros.Interfaces
 {
     public interface ICadastroAppService
     {
-        void CadastrarPaciente(PacienteAppDto dto);
-        void CadastrarMedico(MedicoAppDto dto);
+        void CadastrarPaciente(PacienteDto dto);
+        void CadastrarMedico(MedicoDto dto);
+        void CadastrarHorariosDisponiveis(int medicoId, IList<HorarioDisponivelDto> horarioDisponivelDto);
     }
 }

@@ -58,16 +58,16 @@ namespace Infra.IoC
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var connectionStringTeste = configuration.GetConnectionString("TestConnection");
 
-            Task.Run(async () =>
-            {
-                await retryPolicy.ExecuteAsync(async () =>
-                {
-                    using var connection = new SqlConnection(connectionStringTeste);
-                    await connection.OpenAsync();
-                    Console.WriteLine("Conexão ao SQL Server estabelecida com sucesso.");
+            //Task.Run(async () =>
+            //{
+            //    await retryPolicy.ExecuteAsync(async () =>
+            //    {
+            //        using var connection = new SqlConnection(connectionString);
+            //        await connection.OpenAsync();
+            //        Console.WriteLine("Conexão ao SQL Server estabelecida com sucesso.");
 
-                });
-            }).GetAwaiter().GetResult();
+            //    });
+            //}).GetAwaiter().GetResult();
 
             services.AddDbContext<Contexto>(options =>
             {

@@ -3,15 +3,13 @@ using Domain.Enums;
 
 namespace Application.Services.Cadastros.Dtos
 {
-    public class MedicoAppDto
+    public class MedicoDto
     {
         public int Id { get; set; }
         public string Nome { get; set; }
         public string CrmNumero { get; set; }
         public UnidadeFederativa CrmUf { get; set; }
-        public int TempoDeConsulta { get; set; }
-        public virtual EspecialidadeAppDto Especialidade { get; set; }
-        public virtual IList<HorarioDisponivelAppDto> HorariosDisponiveis { get; set; }
+        public virtual EspecialidadeDto Especialidade { get; set; }
         public virtual UsuarioAppDto Usuario { get; set; }
     }
 }

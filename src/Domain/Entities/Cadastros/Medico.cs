@@ -15,15 +15,21 @@ namespace Domain.Entities.Cadastros
         {
         }
 
-        public Medico(string nome, Crm crm, int tempodeConsulta, Especialidade especialidade, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
+        public Medico(string nome, Crm crm, Especialidade especialidade, Usuario usuario)
         {
-            ValidarCampos(nome, crm, especialidade, horariosDisponiveis, usuario);
+            ValidarCampos(nome, crm, especialidade, usuario);
 
             Nome = nome;
             Crm = crm;
             Especialidade = especialidade;
-            HorariosDisponiveis = horariosDisponiveis;
             Usuario = usuario;
+        }
+
+        public void CadastrarHorarios(IList<HorarioDisponivel> horarios)
+        {
+            ValidarHorariosDisponiveis(horarios);
+
+            HorariosDisponiveis = horarios;
         }
 
         public IList<TimeOnly> ObterHorasDiponiveis(DayOfWeek diaDaSemana, IList<Periodo> periodosOcupado)
@@ -31,12 +37,11 @@ namespace Domain.Entities.Cadastros
             return HorariosDisponiveis!.Where(x => x.DiaDaSemana == diaDaSemana).SelectMany(x => x.ObterHoras(periodosOcupado)).ToList();
         }
 
-        private void ValidarCampos(string nome, Crm crm, Especialidade especialidade, IList<HorarioDisponivel> horariosDisponiveis, Usuario usuario)
+        private void ValidarCampos(string nome, Crm crm, Especialidade especialidade, Usuario usuario)
         {
             ValidarNome(nome);
             ValidarCrm(crm);
             ValidarEspecialidade(especialidade);
-            ValidarHorariosDisponiveis(horariosDisponiveis);
             ValidarUsuario(usuario);
         }
 

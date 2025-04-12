@@ -16,9 +16,9 @@ namespace Application.Services.LoginsAppService
             if (!medico.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
         }
 
-        public void LoginPaciente(string cpf, SecureString senha)
+        public void LoginPaciente(string cpfOuEmail, SecureString senha)
         {
-            var paciente = unitOfWork.PacienteRepository.ObterPorCpf(cpf);
+            var paciente = unitOfWork.PacienteRepository.ObterPorCpf(cpfOuEmail);
             if (paciente == null) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
 
             if (!paciente.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
