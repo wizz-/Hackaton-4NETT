@@ -15,5 +15,11 @@ namespace Infra.Data.DAL.Repositories
             return ObterQueryable()
                     .SingleOrDefault(x => x.Cpf == cpf);
         }
+
+        public Paciente? ObterPorEmail(string email)
+        {
+            return ObterQueryable()
+                    .SingleOrDefault(x => x.Email.ToLower() == email.ToLower());
+        }
     }
 }
