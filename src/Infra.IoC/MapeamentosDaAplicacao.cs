@@ -85,7 +85,9 @@ namespace Infra.IoC
 
             services.AddDbContext<Contexto>(options =>
             {
-                options.UseSqlServer(connectionString,
+                options
+                .UseLazyLoadingProxies()
+                .UseSqlServer(connectionString,
                     sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(
                         maxRetryCount: 10,
                         maxRetryDelay: TimeSpan.FromSeconds(10),
