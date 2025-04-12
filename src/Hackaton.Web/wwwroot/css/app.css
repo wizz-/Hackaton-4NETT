@@ -1,18 +1,18 @@
-:root {
+Ôªø:root {
     /* Cores principais */
-    --color-primary: #007BFF; /* Azul vibrante */
-    --color-primary-dark: #0056b3; /* Azul mais escuro */
-    --color-primary-light: #66b3ff; /* Azul mais claro */
-    /* Cores secund·rias */
-    --color-secondary: #6c757d; /* Cinza neutro */
-    --color-secondary-dark: #495057; /* Cinza mais escuro */
-    --color-secondary-light: #adb5bd; /* Cinza mais claro */
+    --color-primary: black;
+    --color-primary-dark: #0d6efd;
+    --color-primary-light: #66b3ff;
+    /* Cores secund√°rias */
+    --color-secondary: #6c757d;
+    --color-secondary-dark: #495057;
+    --color-secondary-light: #adb5bd;
     /* Cores neutras */
-    --color-background: #f8f9fa; /* Fundo geral */
-    --color-surface: #ffffff; /* Fundo de cartıes e elementos destacados */
-    --color-border: #dee2e6; /* Bordas e divisores */
-    --color-text: #212529; /* Texto principal */
-    --color-text-muted: #6c757d; /* Texto secund·rio */
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-border: #dee2e6;
+    --color-text: #212529;
+    --color-text-muted:
     /* Cores de status */
     --color-success: #28a745;
     --color-warning: #ffc107;
@@ -25,71 +25,31 @@
 
 /* Ajustes para funcionar com Bootstrap */
 body {
-    background-color: var(--color-background) ;
-    color: var(--color-text) ;
-    font-family: 'Arial', sans-serif;
+    color: var(--color-text);
+    font-family: Roboto,Arial,Helvetica,sans-serif;
+    background-image: url('../img/sala-espera.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
     margin: 0;
     padding: 0;
+    
 }
-
-/* Ajuste de botıes Bootstrap */
-.btn-primary {
-    background-color: var(--color-primary) ;
-    border-color: var(--color-primary-dark) ;
-}
-
-    .btn-primary:hover {
-        background-color: var(--color-primary-dark) ;
-        border-color: var(--color-primary-dark) ;
+    body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.6);
+        z-index: 0;
     }
 
-.btn-secondary {
-    background-color: var(--color-secondary) ;
-    border-color: var(--color-secondary-dark) ;
+label {
+    font-weight: 600;
 }
-
-    .btn-secondary:hover {
-        background-color: var(--color-secondary-dark) ;
-        border-color: var(--color-secondary-dark) ;
-    }
-
-/* Ajuste de containers Bootstrap */
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
-}
-
-/* Ajuste para cards do Bootstrap */
-.card {
-    background: var(--color-surface) ;
-    border-radius: var(--border-radius) ;
-    box-shadow: var(--box-shadow) ;
-    border: 1px solid var(--color-border) ;
-}
-
-/* Ajuste para inputs e selects do Bootstrap */
-.form-control {
-    border: 1px solid var(--color-border) ;
-    border-radius: var(--border-radius) ;
-    font-size: 16px;
-}
-
-    .form-control:focus {
-        outline: none ;
-        border-color: var(--color-primary) ;
-        box-shadow: 0 0 5px var(--color-primary-light) ;
-    }
-
-/* Ajuste para links */
-a {
-    color: var(--color-primary);
-    text-decoration: none;
-}
-
-    a:hover {
-        text-decoration: underline ;
-    }
 
 #blazor-error-ui {
     background: lightyellow;
@@ -117,40 +77,48 @@ a {
 }
 
     .blazor-error-boundary::after {
-        content: "An error has occurred."
+        content: "Aconteceu um erro."
     }
 
-.loading-progress {
-    position: relative;
-    display: block;
-    width: 8rem;
-    height: 8rem;
-    margin: 20vh auto 1rem auto;
+.loading-wrapper {
+    width: 150px;
+    height: 150px;
 }
 
-    .loading-progress circle {
-        fill: none;
-        stroke: #e0e0e0;
-        stroke-width: 0.6rem;
-        transform-origin: 50% 50%;
-        transform: rotate(-90deg);
-    }
+.circular-loader {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
 
-        .loading-progress circle:last-child {
-            stroke: #1b6ec2;
-            stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
-            transition: stroke-dasharray 0.05s ease-in-out;
-        }
+.loader-bg {
+    fill: none;
+    stroke: #e6e6e6;
+    stroke-width: 10;
+}
 
-.loading-progress-text {
+.loader-fg {
+    fill: none;
+    stroke: #0f60af;
+    stroke-width: 10;
+    stroke-linecap: round;
+    stroke-dasharray: 282.6;
+    stroke-dashoffset: calc(282.6 - (var(--blazor-load-percentage, 0) * 2.826));
+    transition: stroke-dashoffset 0.1s ease;
+}
+
+.loading-text {
     position: absolute;
-    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-weight: bold;
-    inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
+    font-size: 1.2rem;
+    color: #0f60af;
 }
 
-    .loading-progress-text:after {
-        content: var(--blazor-load-percentage-text, "Loading");
+    .loading-text::after {
+        content: var(--blazor-load-percentage-text);
     }
 
 code {
