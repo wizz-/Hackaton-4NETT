@@ -23,8 +23,8 @@ namespace Hackaton.Api.Controllers.Medicos
                 .RequireAuthorization();
 
             grupo.MapGet("{especialidadeId}", ObterMedicos)
-                 .WithSummary("Atualiza horários do médico")
-                 .WithDescription("Atualiza os horários do médico no banco de dados")
+                 .WithSummary("Obtém lista de médicos por especialidade")
+                 .WithDescription("Obtém lista de médicos por especialidade no banco de dados")
                  .RequireAuthorization();
         }
 

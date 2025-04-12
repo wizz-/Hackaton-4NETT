@@ -36,9 +36,10 @@ namespace Application.Services.LoginsAppService
 
         private UnidadeFederativa ObterUf(string uf)
         {
-            if (!Enum.IsDefined(typeof(UnidadeFederativa), uf)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
-
             if (!Enum.TryParse(uf, true, out UnidadeFederativa ufEnum)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
+
+            if (!Enum.IsDefined(typeof(UnidadeFederativa), ufEnum)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
+
 
             return ufEnum;
         }
