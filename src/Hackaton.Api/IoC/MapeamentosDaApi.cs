@@ -24,13 +24,14 @@ namespace Hackaton.Api.IoC
         public static void ConfigurarEMapearDependenciasDaAplicacao(this WebApplicationBuilder builder)
         {
             AdicionarAutenticacao(builder.Services, builder.Configuration);
+            AdicionarSwagger(builder.Services);
+            ConfigurarInterpretadorDeJsonDaApi(builder);
+            ConfigurarCorsParaView(builder);
+            
             builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            AdicionarSwagger(builder.Services);
-            ConfigurarInterpretadorDeJsonDaApi(builder);
             builder.Services.AddCarter();
-
             builder.Services.AddAuthorizationBuilder();
 
             MapearApi(builder.Services);
@@ -125,6 +126,18 @@ namespace Hackaton.Api.IoC
                 options.SerializerOptions.WriteIndented = true;
                 options.SerializerOptions.Converters.Add(new SecureStringJsonConverter());
                 options.SerializerOptions.Converters.Add(new JsonNullableStringEnumConverter());
+            });
+        }
+
+        private static void ConfigurarCorsParaView(WebApplicationBuilder builder)
+        {
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowBlazor",
+                    policy => policy
+                        .WithOrigins("https://localhost:7159") // porta do Blazor WebAssembly
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
             });
         }
     }

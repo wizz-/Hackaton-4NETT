@@ -7,8 +7,9 @@ namespace Hackaton.Web.Services.Ufs
     {
         public async Task<List<string>> ObterUfAsync()
         {
-            var estados = await Http.GetFromJsonAsync<List<string>>("/ufs");
-            return estados ?? [];
+            var a = Http.BaseAddress;
+            var ufs = await Http.GetFromJsonAsync<List<string>>("ufs");
+            return ufs ?? [];
         }
     }
 }
