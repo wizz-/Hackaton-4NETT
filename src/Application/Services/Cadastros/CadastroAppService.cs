@@ -59,7 +59,7 @@ namespace Application.Services.Cadastros
             {
                 var periodo = new Periodo(item.Periodo.Inicio, item.Periodo.Fim);
 
-                var horario = new HorarioDisponivel(item.DiaDaSemana, especialidade, periodo);
+                var horario = new HorarioDisponivel(item.DiaDaSemana, especialidade, periodo, item.ValorDaConsulta);
 
                 horarios.Add(horario);
             }
