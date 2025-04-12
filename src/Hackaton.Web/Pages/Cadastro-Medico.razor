@@ -1,0 +1,132 @@
+﻿@page "/cadastro-medico"
+@layout BlankLayout
+@using Hackaton.Web.Models
+@using System.Linq.Expressions
+@inject NavigationManager Navigation
+
+<PageTitle>Cadastro de Médico - Health&Med</PageTitle>
+
+<div class="text-center mb-4">
+    <img src="img/logo-100.png" alt="Health&Med" class="logo">
+</div>
+
+<h1 class="mb-4 text-center">Cadastro de Médico</h1>
+
+<EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="nome-completo" class="form-label required-label">Nome completo</label>
+        <InputText id="nome-completo" class="@ObterClasseCss(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
+        <div class="invalid-feedback">
+            <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-5">
+            <label for="crm" class="form-label required-label">CRM</label>
+            <InputText id="crm" class="@ObterClasseCss(() => cadastroModel.CRM)" @bind-Value="cadastroModel.CRM" />
+            <div class="invalid-feedback">
+                <ValidationMessage For="@(() => cadastroModel.CRM)" />
+            </div>
+        </div>
+        <div class="col-md-7">
+            <label for="uf" class="form-label required-label">UF</label>
+            <InputSelect id="uf" class="@ObterClasseCss(() => cadastroModel.UF, "form-select")" @bind-Value="cadastroModel.UF">
+                <option value="">Selecione o estado</option>
+                @foreach (var uf in Estados)
+                {
+                    <option value="@uf">@uf</option>
+                }
+            </InputSelect>
+            <div class="invalid-feedback">
+                <ValidationMessage For="@(() => cadastroModel.UF)" />
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="especialidade" class="form-label required-label">Especialidade</label>
+        <InputText id="especialidade" class="@ObterClasseCss(() => cadastroModel.Especialidade)" @bind-Value="cadastroModel.Especialidade" list="especialidades" />
+        <datalist id="especialidades">
+            @foreach (var item in Especialidades)
+            {
+                <option value="@item" />
+            }
+        </datalist>
+        <div class="invalid-feedback">
+            <ValidationMessage For="@(() => cadastroModel.Especialidade)" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="senha" class="form-label required-label">Senha</label>
+        <InputText id="senha" type="password" class="@ObterClasseCss(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
+        <div class="invalid-feedback">
+            <ValidationMessage For="@(() => cadastroModel.Senha)" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
+        <InputText id="repetir-senha" type="password" class="@ObterClasseCss(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
+        <div class="invalid-feedback">
+            <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensagemErro))
+    {
+        <div class="alert alert-danger text-center">@mensagemErro</div>
+    }
+
+    <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
+</EditForm>
+
+@code {
+    private CadastroMedicoModel cadastroModel = new();
+    private EditContext? editContext;
+    private string mensagemErro = "";
+
+    private readonly List<string> Estados = new()
+    {
+        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
+        "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
+        "RS", "RO", "RR", "SC", "SP", "SE", "TO"
+    };
+
+    private readonly List<string> Especialidades = new()
+    {
+        "Clínica Médica", "Pediatria", "Ginecologia e Obstetrícia", "Cardiologia", "Dermatologia",
+        "Ortopedia", "Oftalmologia", "Psiquiatria", "Neurologia", "Endocrinologia",
+        "Otorrinolaringologia", "Gastroenterologia", "Urologia", "Nefrologia", "Oncologia",
+        "Reumatologia", "Hematologia", "Infectologia", "Cirurgia Geral", "Medicina do Trabalho"
+    };
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(cadastroModel);
+    }
+
+    private async Task HandleCadastro()
+    {
+        mensagemErro = "";
+
+        if (cadastroModel.CRM == "000000")
+        {
+            mensagemErro = "Este CRM já está em uso.";
+            return;
+        }
+
+        Navigation.NavigateTo("/cadastro-sucesso");
+    }
+
+    private string ObterClasseCss(Expression<Func<object>> accessor, string baseClass = "form-control")
+    {
+        var field = FieldIdentifier.Create(accessor);
+        return editContext!.GetValidationMessages(field).Any()
+            ? $"{baseClass} is-invalid"
+            : baseClass;
+    }
+}

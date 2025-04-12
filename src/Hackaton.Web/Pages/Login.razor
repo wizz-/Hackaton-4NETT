@@ -3,6 +3,7 @@
 
 @using Hackaton.Web.Auth.Interfaces
 @using Hackaton.Web.Models
+@using System.Linq.Expressions
 
 @inject IAuthService AuthService
 @inject NavigationManager Navigation
@@ -13,76 +14,89 @@
     <img src="img/logo-100.png" alt="Health&Med" class="logo">
 </div>
 
-<ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
-                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
-            Médico
-        </button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
-                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
-            Paciente
-        </button>
-    </li>
-</ul>
+<h1 class="mb-4 text-center">Login</h1>
 
-<div class="tab-content">
-    <div class="tab-pane fade show active">
-        <form @onsubmit="HandleLogin">
-            @if (loginModel.Perfil == PerfisDeUsuario.Medico)
-            {
-                <div class="row mb-3">
-                    <div class="col-md-8">
-                        <label for="crm" class="form-label">CRM</label>
-                        <input type="text" class="form-control" id="crm" @bind="loginModel.CRM" placeholder="Digite seu CRM" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="uf" class="form-label">UF</label>
-                        <select class="form-select" id="uf" @bind="loginModel.UF" required>
-                            <option value="">Selecione o estado</option>
-                            @foreach (var uf in Estados)
-                            {
-                                <option value="@uf">@uf</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="mb-3">
-                    <label for="cpf-email" class="form-label">CPF ou Email</label>
-                    <input type="text" class="form-control" id="cpf-email" @bind="loginModel.EmailOuCPF" placeholder="Digite seu CPF ou Email" required>
-                </div>
-            }
+<EditForm EditContext="@editContext" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
 
-            <div class="mb-3">
-                <label for="senha" class="form-label">Senha</label>
-                <input type="password" class="form-control" id="senha" @bind="loginModel.Senha" placeholder="Digite sua senha" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
+    <ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
+                    type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
+                Médico
             </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
+                    type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
+                Paciente
+            </button>
+        </li>
+    </ul>
 
-            @if (!string.IsNullOrEmpty(mensagemErro))
-            {
-                <div class="alert alert-danger text-center py-2 px-3 mt-3 mb-3" role="alert">
-                    @mensagemErro
+    @if (loginModel.Perfil == PerfisDeUsuario.Medico)
+    {
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="crm" class="form-label required-label">CRM</label>
+                <InputText id="crm" class="@ObterClasseCss(() => loginModel.CRM)" @bind-Value="loginModel.CRM" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => loginModel.CRM)" />
                 </div>
-            }
-        </form>
+            </div>
+            <div class="col-md-6">
+                <label for="uf" class="form-label required-label">UF</label>
+                <InputSelect id="uf" class="@ObterClasseCss(() => loginModel.UF, "form-select")" @bind-Value="loginModel.UF">
+                    <option value="">Selecione o estado</option>
+                    @foreach (var uf in Estados)
+                    {
+                        <option value="@uf">@uf</option>
+                    }
+                </InputSelect>
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => loginModel.UF)" />
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="mb-3">
+            <label for="cpf-email" class="form-label required-label">CPF ou Email</label>
+            <InputText id="cpf-email" class="@ObterClasseCss(() => loginModel.EmailOuCPF)" @bind-Value="loginModel.EmailOuCPF" />
+            <div class="invalid-feedback">
+                <ValidationMessage For="@(() => loginModel.EmailOuCPF)" />
+            </div>
+        </div>
+    }
+
+    <div class="mb-3">
+        <label for="senha" class="form-label required-label">Senha</label>
+        <InputText id="senha" type="password" class="@ObterClasseCss(() => loginModel.Senha)" @bind-Value="loginModel.Senha" />
+        <div class="invalid-feedback">
+            <ValidationMessage For="@(() => loginModel.Senha)" />
+        </div>
     </div>
-</div>
+
+    @if (!string.IsNullOrEmpty(mensagemErro))
+    {
+        <div class="alert alert-danger text-center py-2 px-3 mt-3 mb-3" role="alert">
+            @mensagemErro
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary w-100">
+        Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
+    </button>
+</EditForm>
 
 <div class="text-center mt-3">
-    <a href="/cadastro" class="text-decoration-none">Primeiro acesso? Clique aqui</a>
+    <a href="@ObterLinkCadastro()" class="text-decoration-none">Primeiro acesso? Clique aqui</a>
 </div>
 
 @code {
     private LoginModel loginModel = new LoginModel { Perfil = PerfisDeUsuario.Medico };
+    private EditContext editContext;
     private string mensagemErro = "";
 
     private readonly List<string> Estados = new()
@@ -92,18 +106,26 @@
         "RS", "RO", "RR", "SC", "SP", "SE", "TO"
     };
 
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(loginModel);
+    }
+
     private void SelecionarPerfil(PerfisDeUsuario perfil)
     {
-        loginModel = new LoginModel
-            {
-                Perfil = perfil
-            };
+        loginModel = new LoginModel { Perfil = perfil };
+        editContext = new EditContext(loginModel);
         mensagemErro = string.Empty;
     }
 
     private async Task HandleLogin()
     {
         mensagemErro = "";
+
+        if (!editContext.Validate())
+        {
+            return;
+        }
 
         bool sucesso = await AuthService.LoginAsync(loginModel);
 
@@ -115,5 +137,20 @@
         {
             mensagemErro = "Usuário ou senha inválidos!";
         }
+    }
+
+    private string ObterClasseCss(Expression<Func<object>> accessor, string baseClass = "form-control")
+    {
+        var field = FieldIdentifier.Create(accessor);
+        return editContext.GetValidationMessages(field).Any()
+            ? $"{baseClass} is-invalid"
+            : baseClass;
+    }
+
+    private string ObterLinkCadastro()
+    {
+        return loginModel.Perfil == PerfisDeUsuario.Medico
+            ? "/cadastro-medico"
+            : "/cadastro-paciente";
     }
 }

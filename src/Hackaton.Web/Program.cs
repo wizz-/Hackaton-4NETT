@@ -5,7 +5,6 @@ using Hackaton.Web.Auth.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-
 namespace Hackaton.Web
 {
     public static class Program
@@ -20,7 +19,7 @@ namespace Hackaton.Web
 
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
-            
+
             builder.Services.AddScoped<CustomAuthStateProvider>();
             builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<CustomAuthStateProvider>());
             builder.Services.AddScoped<IAuthState, AuthStateService>();
