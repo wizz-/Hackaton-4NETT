@@ -124,7 +124,7 @@
     {
         mensagemErro = "";
 
-        if (!editContext.Validate())
+        if (!editContext!.Validate())
         {
             return;
         }
@@ -144,7 +144,7 @@
     private string ObterClasseCss(Expression<Func<object>> accessor, string baseClass = "form-control")
     {
         var field = FieldIdentifier.Create(accessor);
-        return editContext.GetValidationMessages(field).Any()
+        return editContext!.GetValidationMessages(field).Any()
             ? $"{baseClass} is-invalid"
             : baseClass;
     }
