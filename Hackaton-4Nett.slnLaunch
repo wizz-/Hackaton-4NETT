@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Ambos",
+    "Projects": [
+      {
+        "Path": "src\\Hackaton.Api\\Hackaton.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\Hackaton.Web\\Hackaton.Web.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
