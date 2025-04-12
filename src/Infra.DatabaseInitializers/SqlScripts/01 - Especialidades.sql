@@ -1,3 +1,4 @@
+--https://sistemas.cfm.org.br/normas/visualizar/resolucoes/BR/2023/2330
 SET IDENTITY_INSERT dbo.Especialidade ON
 
 INSERT INTO dbo.Especialidade (Id, Nome) VALUES (1, 'Acupuntura')

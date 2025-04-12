@@ -12,12 +12,12 @@ namespace Infra.Data.DAL.Repositories
         }
 
 
-        public IList<Consulta> ObterDoDia(DateOnly dia, IList<Medico> medicosDiponiveis)
+        public IList<Consulta> ObterConsultasNaoCanceladasDoDia(DateOnly dia, IList<Medico> medicosDiponiveis)
         {
             var medicoIds = medicosDiponiveis.Select(d => d.Id).ToList();
 
             return ObterQueryable()
-                    .Where(x => x.Dia == dia && medicoIds.Contains(x.Medico.Id))
+                    .Where(x => x.Dia == dia && medicoIds.Contains(x.Medico.Id) && !x.Cancelada && x.Confirmada != false)
                     .ToList();
         }
     }

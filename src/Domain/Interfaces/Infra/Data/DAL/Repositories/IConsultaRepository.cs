@@ -5,6 +5,6 @@ namespace Domain.Interfaces.Infra.Data.DAL.Repositories
 {
     public interface IConsultaRepository : IRepositoryBase<Consulta>
     {
-        IList<Consulta> ObterDoDia(DateOnly dia, IList<Medico> medicosDiponiveis);
+        IList<Consulta> ObterConsultasNaoCanceladasDoDia(DateOnly dia, IList<Medico> medicosDiponiveis);
     }
 }

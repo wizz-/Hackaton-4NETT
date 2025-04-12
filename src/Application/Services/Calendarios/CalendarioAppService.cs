@@ -11,7 +11,7 @@ namespace Application.Services.Calendarios
         public IList<MedicoAppDto> ObterCalendario(DateOnly dia, int especialidadeId)
         {
             var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId);
-            var consultasDoDia = unitOfWork.ConsultaRepository.ObterDoDia(dia, medicosDiponiveis);
+            var consultasDoDia = unitOfWork.ConsultaRepository.ObterConsultasNaoCanceladasDoDia(dia, medicosDiponiveis);
 
             return CruzarDisponibilidadesComConsultas(dia, medicosDiponiveis, consultasDoDia);
         }
