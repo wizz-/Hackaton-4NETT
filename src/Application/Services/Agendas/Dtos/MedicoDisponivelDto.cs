@@ -1,8 +1,8 @@
 ﻿using Domain.Enums;
 
-namespace Application.Services.Calendarios.Dtos
+namespace Application.Services.Agendas.Dtos
 {
-    public class MedicoAppDto
+    public class MedicoDisponivelDto
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;

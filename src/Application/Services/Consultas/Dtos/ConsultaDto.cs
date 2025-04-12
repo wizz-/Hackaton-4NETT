@@ -3,6 +3,7 @@ namespace Application.Services.Consultas.Dtos
 {
     public class ConsultaDto
     {
+        public int Id { get; set; }
         public int PacienteId { get; set; }
         public DateOnly Dia { get; set; }
         public int MedicoId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using Application.Services.Cadastros;
 using Application.Services.Cadastros.Interfaces;
-using Application.Services.Calendarios;
-using Application.Services.Calendarios.Interfaces;
+using Application.Services.Agendas;
+using Application.Services.Agendas.Interfaces;
 using Application.Services.Consultas;
 using Application.Services.Consultas.Interfaces;
 using Application.Services.Logins.Interfaces;
@@ -71,7 +71,7 @@ namespace Hackaton.Api.IoC
         private static void MapearApi(IServiceCollection services)
         {
             services.AddScoped<ICadastroAppService, CadastroAppService>();
-            services.AddScoped<ICalendarioAppService, CalendarioAppService>();
+            services.AddScoped<IAgendaAppService, AgendaAppService>();
             services.AddScoped<IConsultaAppService, ConsultaAppService>();
             services.AddScoped<ILoginAppService, LoginAppService>();
         }
