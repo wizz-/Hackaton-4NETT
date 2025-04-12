@@ -16,7 +16,8 @@ namespace Hackaton.Web.Models
         public string UF { get; set; } = "";
 
         [Required(ErrorMessage = "A especialidade é obrigatória.")]
-        public string Especialidade { get; set; } = "";
+        public int? EspecialidadeId { get; set; }
+        public string EspecialidadeNome { get; set; } = "";
 
         [Required(ErrorMessage = "A senha é obrigatória.")]
         [StringLength(10, MinimumLength = 3, ErrorMessage = "A senha deve ter entre 3 e 10 caracteres.")]

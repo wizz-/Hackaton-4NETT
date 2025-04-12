@@ -1,8 +1,14 @@
 ﻿@page "/cadastro-medico"
 @layout BlankLayout
+
 @using Hackaton.Web.Models
 @using System.Linq.Expressions
+@using Hackaton.Web.Services.Especialidades.Interfaces
+@using Hackaton.Web.Services.Ufs.Interfaces
+
 @inject NavigationManager Navigation
+@inject IUfService UfService
+@inject IEspecialidadeService EspecialidadeService
 
 <PageTitle>Cadastro de Médico - Health&Med</PageTitle>
 
@@ -12,108 +18,101 @@
 
 <h1 class="mb-4 text-center">Cadastro de Médico</h1>
 
-<EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
-    <DataAnnotationsValidator />
+@if (editContext != null)
+{
+    <EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
+        <DataAnnotationsValidator />
 
-    <div class="mb-3">
-        <label for="nome-completo" class="form-label required-label">Nome completo</label>
-        <InputText id="nome-completo" class="@ObterClasseCss(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
-        <div class="invalid-feedback">
-            <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-5">
-            <label for="crm" class="form-label required-label">CRM</label>
-            <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="cadastroModel.CRM" class="@ObterClasseCss(() => cadastroModel.CRM)" Style="width: 100%;" />
+        <div class="mb-3">
+            <label for="nome-completo" class="form-label required-label">Nome completo</label>
+            <InputText id="nome-completo" class="@ObterClasseCss(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
             <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.CRM)" />
+                <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
             </div>
         </div>
-        <div class="col-md-7">
-            <label for="uf" class="form-label required-label">UF</label>
-            <InputSelect id="uf" class="@ObterClasseCss(() => cadastroModel.UF, "form-select")" @bind-Value="cadastroModel.UF">
-                <option value="">Selecione o estado</option>
-                @foreach (var uf in Estados)
+
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <label for="crm" class="form-label required-label">CRM</label>
+                <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="cadastroModel.CRM" class="@ObterClasseCss(() => cadastroModel.CRM)" Style="width: 100%;" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.CRM)" />
+                </div>
+            </div>
+            <div class="col-md-7">
+                <label for="uf" class="form-label required-label">UF</label>
+                <InputSelect id="uf" class="@ObterClasseCss(() => cadastroModel.UF, "form-select")" @bind-Value="cadastroModel.UF">
+                    <option value="">Selecione o estado</option>
+                    @foreach (var uf in Ufs)
+                    {
+                        <option value="@uf">@uf</option>
+                    }
+                </InputSelect>
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.UF)" />
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="especialidade" class="form-label required-label">Especialidade</label>
+            <InputSelect id="especialidade"
+                         class="@ObterClasseCss(() => cadastroModel.EspecialidadeId!, "form-select")"
+                         @bind-Value="cadastroModel.EspecialidadeId">
+                <option value="">Selecione a especialidade</option>
+                @foreach (var esp in Especialidades)
                 {
-                    <option value="@uf">@uf</option>
+                    <option value="@esp.Id">@esp.Nome</option>
                 }
             </InputSelect>
             <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.UF)" />
+                <ValidationMessage For="@(() => cadastroModel.EspecialidadeId)" />
             </div>
         </div>
-    </div>
 
-    <div class="mb-3">
-        <label for="especialidade" class="form-label required-label">Especialidade</label>
-        <InputText id="especialidade" class="@ObterClasseCss(() => cadastroModel.Especialidade)" @bind-Value="cadastroModel.Especialidade" list="especialidades" />
-        <datalist id="especialidades">
-            @foreach (var item in Especialidades)
-            {
-                <option value="@item" />
-            }
-        </datalist>
-        <div class="invalid-feedback">
-            <ValidationMessage For="@(() => cadastroModel.Especialidade)" />
+        <div class="mb-3">
+            <label for="senha" class="form-label required-label">Senha</label>
+            <InputText id="senha" type="password" class="@ObterClasseCss(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
+            <div class="invalid-feedback">
+                <ValidationMessage For="@(() => cadastroModel.Senha)" />
+            </div>
         </div>
-    </div>
 
-    <div class="mb-3">
-        <label for="senha" class="form-label required-label">Senha</label>
-        <InputText id="senha" type="password" class="@ObterClasseCss(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
-        <div class="invalid-feedback">
-            <ValidationMessage For="@(() => cadastroModel.Senha)" />
+        <div class="mb-3">
+            <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
+            <InputText id="repetir-senha" type="password" class="@ObterClasseCss(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
+            <div class="invalid-feedback">
+                <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
+            </div>
         </div>
-    </div>
 
-    <div class="mb-3">
-        <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
-        <InputText id="repetir-senha" type="password" class="@ObterClasseCss(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
-        <div class="invalid-feedback">
-            <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
+        @if (!string.IsNullOrEmpty(mensagemErro))
+        {
+            <div class="alert alert-danger text-center">@mensagemErro</div>
+        }
+
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="bi bi-floppy me-1"></i> Cadastrar
+        </button>
+
+        <div class="text-center mt-3">
+            <a href="/login" class="text-decoration-none">Voltar</a>
         </div>
-    </div>
-
-    @if (!string.IsNullOrEmpty(mensagemErro))
-    {
-        <div class="alert alert-danger text-center">@mensagemErro</div>
-    }
-
-    <button type="submit" class="btn btn-primary w-100">
-        <i class="bi bi-floppy me-1"></i> Cadastrar
-    </button>
-
-    <div class="d-flex justify-content-start mb-3 my-3">
-        <a href="/login" class="btn btn-outline-primary w-100">
-            <i class="bi bi-arrow-left"></i> Voltar
-        </a>
-    </div>
-</EditForm>
+    </EditForm>
+}
 
 @code {
     private CadastroMedicoModel cadastroModel = new();
     private EditContext? editContext;
     private string mensagemErro = "";
 
-    private readonly List<string> Estados = new()
-    {
-        "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA",
-        "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN",
-        "RS", "RO", "RR", "SC", "SP", "SE", "TO"
-    };
+    private List<string> Ufs = [];
+    private List<EspecialidadeModel> Especialidades = [];
 
-    private readonly List<string> Especialidades = new()
+    protected override async Task OnInitializedAsync()
     {
-        "Clínica Médica", "Pediatria", "Ginecologia e Obstetrícia", "Cardiologia", "Dermatologia",
-        "Ortopedia", "Oftalmologia", "Psiquiatria", "Neurologia", "Endocrinologia",
-        "Otorrinolaringologia", "Gastroenterologia", "Urologia", "Nefrologia", "Oncologia",
-        "Reumatologia", "Hematologia", "Infectologia", "Cirurgia Geral", "Medicina do Trabalho"
-    };
-
-    protected override void OnInitialized()
-    {
+        Ufs = await UfService.ObterUfAsync();
+        Especialidades = await EspecialidadeService.ObterEspecialidadesAsync();
         editContext = new EditContext(cadastroModel);
     }
 
