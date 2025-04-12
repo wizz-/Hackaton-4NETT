@@ -8,8 +8,7 @@ namespace Hackaton.Api.Controllers.Pacientes
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            var grupo = app.MapGroup("/api/pacientes")
-                .RequireAuthorization("RouteAccessPolicy");
+            var grupo = app.MapGroup("/api/pacientes");
 
             grupo.MapPost("", Criar)
                 .WithSummary("Grava um novo paciente")
@@ -20,7 +19,7 @@ namespace Hackaton.Api.Controllers.Pacientes
         {
             service.CadastrarPaciente(dto);
 
-            return TypedResults.Created($"/{dto.Id}", dto);
+            return TypedResults.Created($"/{dto.Id}");
         }
     }
 }

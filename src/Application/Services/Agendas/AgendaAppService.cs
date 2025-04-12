@@ -1,14 +1,14 @@
-﻿using Application.Services.Calendarios.Dtos;
-using Application.Services.Calendarios.Interfaces;
+﻿using Application.Services.Agendas.Dtos;
+using Application.Services.Agendas.Interfaces;
 using Domain.Entities.Cadastros;
 using Domain.Entities.Consultas;
 using Domain.Interfaces.Infra.Data.DAL;
 
-namespace Application.Services.Calendarios
+namespace Application.Services.Agendas
 {
-    public class CalendarioAppService(IUnitOfWork unitOfWork) : ICalendarioAppService
+    public class AgendaAppService(IUnitOfWork unitOfWork) : IAgendaAppService
     {
-        public IList<MedicoAppDto> ObterCalendario(DateOnly dia, int especialidadeId)
+        public IList<MedicoDisponivelDto> ObterAgenda(DateOnly dia, int especialidadeId)
         {
             var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId);
             var consultasDoDia = unitOfWork.ConsultaRepository.ObterConsultasNaoCanceladasDoDia(dia, medicosDiponiveis);
@@ -16,12 +16,12 @@ namespace Application.Services.Calendarios
             return CruzarDisponibilidadesComConsultas(dia, medicosDiponiveis, consultasDoDia);
         }
 
-        private IList<MedicoAppDto> CruzarDisponibilidadesComConsultas(DateOnly dia, IList<Medico> medicosDiponiveis, IList<Consulta> consultasDoDia)
+        private IList<MedicoDisponivelDto> CruzarDisponibilidadesComConsultas(DateOnly dia, IList<Medico> medicosDiponiveis, IList<Consulta> consultasDoDia)
         {
-            var retorno = new List<MedicoAppDto>();
+            var retorno = new List<MedicoDisponivelDto>();
             foreach (var item in medicosDiponiveis)
             {
-                var medico = new MedicoAppDto()
+                var medico = new MedicoDisponivelDto()
                 {
                     Id = item.Id,
                     CrmNumero = item.Crm!.Numero,

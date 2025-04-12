@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Cadastros;
+using Domain.Enums;
 
 namespace Domain.Entities.Consultas
 {
@@ -10,8 +11,8 @@ namespace Domain.Entities.Consultas
         public virtual Medico Medico { get; private set; }
         public virtual Especialidade Especialidade { get; private set; }
         public virtual Periodo Horario { get; private set; }
-        public bool? Confirmada { get; private set; }
-        public bool Cancelada { get; private set; }
+        public StatusConsulta Status { get; private set; }
+        public string MotivoDeCancelamento { get; private set; }
 
         protected Consulta()
         {
@@ -24,26 +25,30 @@ namespace Domain.Entities.Consultas
             Medico = medico;
             Especialidade = especialidade;
             Horario = horario;
+            Status = StatusConsulta.Criada;
         }
 
         public void ConfirmarConsulta(Medico medico)
         {
             if (Medico.Crm.Numero != medico.Crm.Numero || Medico.Crm.Uf != medico.Crm.Uf) throw new InvalidOperationException($"Consulta não pode ser confirmada por outro médico.");
 
-            Confirmada = true;
+            Status = StatusConsulta.Confirmada;
         }
 
         public void RejeitarConsulta(Medico medico)
         {
             if (Medico.Crm.Numero != medico.Crm.Numero || Medico.Crm.Uf != medico.Crm.Uf) throw new InvalidOperationException($"Consulta não pode ser cancelada por outro médico.");
 
-            Confirmada = false;
+            Status = StatusConsulta.Recusada;
         }
 
-        public void CancelarConsulta(Paciente paciente)
+        public void CancelarConsulta(Paciente paciente, string motivo)
         {
             if (Paciente.Cpf != paciente.Cpf) throw new InvalidOperationException($"Consulta não pode ser cancelada por outro paciente");
-            Cancelada = true;
+            if (string.IsNullOrWhiteSpace(motivo)) throw new InvalidOperationException("Motivo não pode ser nulo");
+
+            Status = StatusConsulta.Cancelada;
+            MotivoDeCancelamento = motivo;
         }
     }
 }

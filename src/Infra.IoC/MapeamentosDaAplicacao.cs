@@ -1,7 +1,7 @@
-﻿using Application.Services.Cadastros;
+﻿using Application.Services.Agendas;
+using Application.Services.Agendas.Interfaces;
+using Application.Services.Cadastros;
 using Application.Services.Cadastros.Interfaces;
-using Application.Services.Calendarios;
-using Application.Services.Calendarios.Interfaces;
 using Application.Services.Consultas;
 using Application.Services.Consultas.Interfaces;
 using Application.Services.Especialidades;
@@ -16,12 +16,14 @@ using Infra.Data.Context;
 using Infra.Data.DAL;
 using Infra.Data.DAL.Repositories;
 using Infra.DatabaseInitializers;
+using Infra.DatabaseInitializers.DataImporters.Interfaces;
 using Infra.DatabaseInitializers.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using TechChallenge4.Infra.DatabaseInitializers.DataImporters;
 
 namespace Infra.IoC
 {
@@ -36,7 +38,7 @@ namespace Infra.IoC
         {
             services.AddScoped<ILoginAppService, LoginAppService>();
             services.AddScoped<ICadastroAppService, CadastroAppService>();
-            services.AddScoped<ICalendarioAppService, CalendarioAppService>();
+            services.AddScoped<IAgendaAppService, AgendaAppService>();
             services.AddScoped<IConsultaAppService, ConsultaAppService>();
             services.AddScoped<IEspecialidadesAppService, EspecialidadesAppService>();
             services.AddScoped<IUfAppService, UfAppService>();
@@ -92,6 +94,7 @@ namespace Infra.IoC
 
 
             services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+            services.AddScoped<IDataImporter, DataImporter>();
         }
     }
 }

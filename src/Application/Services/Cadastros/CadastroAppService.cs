@@ -81,8 +81,6 @@ namespace Application.Services.Cadastros
 
             var usuario = new Usuario(usuarioAppDto.Email, usuarioAppDto.Senha, tipoDeUsuario);
 
-            unitOfWork.UsuarioRepository.Inserir(usuario);
-
             return usuario;
         }
     }

@@ -19,4 +19,10 @@
     <Folder Include="SqlScripts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SqlScripts\01 - Especialidades.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

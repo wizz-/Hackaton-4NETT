@@ -9,7 +9,8 @@ namespace Hackaton.Api.Controllers.Especialidades
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            var grupo = app.MapGroup("/api/especialidades");
+            var grupo = app.MapGroup("/api/especialidades")
+                .RequireAuthorization();
 
             grupo.MapGet("", ObterEspecialidades)
                 .WithSummary("Obtém especialidades")
