@@ -10,6 +10,8 @@ namespace Domain.Entities.Consultas
         public virtual Medico Medico { get; private set; }
         public virtual Especialidade Especialidade { get; private set; }
         public virtual Periodo Horario { get; private set; }
+        public bool? Confirmada { get; private set; }
+        public bool Cancelada { get; private set; }
 
         protected Consulta()
         {
@@ -22,6 +24,26 @@ namespace Domain.Entities.Consultas
             Medico = medico;
             Especialidade = especialidade;
             Horario = horario;
+        }
+
+        public void ConfirmarConsulta(Medico medico)
+        {
+            if (Medico.Crm.Numero != medico.Crm.Numero || Medico.Crm.Uf != medico.Crm.Uf) throw new InvalidOperationException($"Consulta não pode ser confirmada por outro médico.");
+
+            Confirmada = true;
+        }
+
+        public void RejeitarConsulta(Medico medico)
+        {
+            if (Medico.Crm.Numero != medico.Crm.Numero || Medico.Crm.Uf != medico.Crm.Uf) throw new InvalidOperationException($"Consulta não pode ser cancelada por outro médico.");
+
+            Confirmada = false;
+        }
+
+        public void CancelarConsulta(Paciente paciente)
+        {
+            if (Paciente.Cpf != paciente.Cpf) throw new InvalidOperationException($"Consulta não pode ser cancelada por outro paciente");
+            Cancelada = true;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Application.Services.Especialidades.Dtos;
+﻿using Application.Services.Cadastros.Dtos;
 
 namespace Application.Services.Especialidades.Interfaces
 {

@@ -1,4 +1,4 @@
-﻿using Application.Services.Especialidades.Dtos;
+﻿using Application.Services.Cadastros.Dtos;
 using Application.Services.Especialidades.Interfaces;
 using Carter;
 using Microsoft.AspNetCore.Http.HttpResults;
