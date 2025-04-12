@@ -1,4 +1,5 @@
 ﻿using Application.Services.Logins.Interfaces;
+using Domain.Entities.Cadastros;
 using Domain.Enums;
 using Domain.Interfaces.Infra.Data.DAL;
 using System.Security;
@@ -18,10 +19,19 @@ namespace Application.Services.LoginsAppService
 
         public void LoginPaciente(string cpfOuEmail, SecureString senha)
         {
-            var paciente = unitOfWork.PacienteRepository.ObterPorCpf(cpfOuEmail);
+            var paciente = ObterPaciente(cpfOuEmail);
             if (paciente == null) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
 
             if (!paciente.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
+        }
+
+        private Paciente? ObterPaciente(string cpfOuEmail)
+        {
+            if (cpfOuEmail.Contains("@"))
+            {
+                return unitOfWork.PacienteRepository.ObterPorEmail(cpfOuEmail);
+            }
+            return unitOfWork.PacienteRepository.ObterPorCpf(cpfOuEmail);
         }
 
         private UnidadeFederativa ObterUf(string uf)

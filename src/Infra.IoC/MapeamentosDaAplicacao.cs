@@ -1,7 +1,15 @@
 ﻿using Application.Services.Cadastros;
 using Application.Services.Cadastros.Interfaces;
+using Application.Services.Calendarios;
+using Application.Services.Calendarios.Interfaces;
+using Application.Services.Consultas;
+using Application.Services.Consultas.Interfaces;
+using Application.Services.Especialidades;
+using Application.Services.Especialidades.Interfaces;
 using Application.Services.Logins.Interfaces;
 using Application.Services.LoginsAppService;
+using Application.Services.Ufs;
+using Application.Services.Ufs.Interfaces;
 using Domain.Interfaces.Infra.Data.DAL;
 using Domain.Interfaces.Infra.Data.DAL.Repositories;
 using Infra.Data.Context;
@@ -28,6 +36,10 @@ namespace Infra.IoC
         {
             services.AddScoped<ILoginAppService, LoginAppService>();
             services.AddScoped<ICadastroAppService, CadastroAppService>();
+            services.AddScoped<ICalendarioAppService, CalendarioAppService>();
+            services.AddScoped<IConsultaAppService, ConsultaAppService>();
+            services.AddScoped<IEspecialidadesAppService, EspecialidadesAppService>();
+            services.AddScoped<IUfAppService, UfAppService>();
         }
 
         private static void MapearInfra(IServiceCollection services)
