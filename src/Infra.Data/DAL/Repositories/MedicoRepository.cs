@@ -22,5 +22,12 @@ namespace Infra.Data.DAL.Repositories
                 .Where(x => x.HorariosDisponiveis.Any(x => x.DiaDaSemana == dayOfWeek && x.Especialidade.Id == especialidadeId))
                 .ToList();
         }
+
+        public IList<Medico> ObterPorEspecialidade(int especialidadeId)
+        {
+            return ObterQueryable()
+                .Where(x => x.Especialidade.Id == especialidadeId)
+                .ToList();
+        }
     }
 }

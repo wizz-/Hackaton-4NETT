@@ -8,6 +8,8 @@ using Application.Services.Especialidades;
 using Application.Services.Especialidades.Interfaces;
 using Application.Services.Logins.Interfaces;
 using Application.Services.LoginsAppService;
+using Application.Services.Medicos;
+using Application.Services.Medicos.Interfaces;
 using Application.Services.Ufs;
 using Application.Services.Ufs.Interfaces;
 using Domain.Interfaces.Infra.Data.DAL;
@@ -42,6 +44,7 @@ namespace Infra.IoC
             services.AddScoped<IConsultaAppService, ConsultaAppService>();
             services.AddScoped<IEspecialidadesAppService, EspecialidadesAppService>();
             services.AddScoped<IUfAppService, UfAppService>();
+            services.AddScoped<IMedicoAppService, MedicoAppService>();
         }
 
         private static void MapearInfra(IServiceCollection services)
