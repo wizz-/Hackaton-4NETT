@@ -7,7 +7,7 @@ namespace Domain.Entities.Cadastros
         public int Id { get; private set; }
         public string? Nome { get; private set; }
         public virtual Crm? Crm { get; private set; }
-        public Especialidade? Especialidade { get; private set; }
+        public virtual Especialidade? Especialidade { get; private set; }
         public virtual IList<HorarioDisponivel>? HorariosDisponiveis { get; private set; }
         public virtual Usuario? Usuario { get; private set; }
 

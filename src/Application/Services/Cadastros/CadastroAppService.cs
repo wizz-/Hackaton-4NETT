@@ -24,7 +24,8 @@ namespace Application.Services.Cadastros
 
         public void CadastrarMedico(MedicoDto dto)
         {
-            var crm = new Crm(dto.CrmNumero, dto.CrmUf);
+            var ufEnum = ObterUf(dto.CrmUf);
+            var crm = new Crm(dto.CrmNumero, ufEnum);
 
             var medicoDuplicado = unitOfWork.MedicoRepository.ObterPorCrm(crm.Numero, crm.Uf);//Faço a verificação depois de criar a classe para aplicar as regras de formatação no domínio
             if (medicoDuplicado != null) throw new InvalidOperationException("O CRM informado já está já foi cadastrado.");
@@ -82,6 +83,15 @@ namespace Application.Services.Cadastros
             var usuario = new Usuario(usuarioAppDto.Email, usuarioAppDto.Senha, tipoDeUsuario);
 
             return usuario;
+        }
+
+        private UnidadeFederativa ObterUf(string uf)
+        {
+            if (!Enum.TryParse(uf, true, out UnidadeFederativa ufEnum)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
+
+            if (!Enum.IsDefined(typeof(UnidadeFederativa), ufEnum)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
+
+            return ufEnum;
         }
     }
 }

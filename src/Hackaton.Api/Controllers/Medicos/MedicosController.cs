@@ -1,6 +1,9 @@
 ﻿using Application.Services.Cadastros.Dtos;
 using Application.Services.Cadastros.Interfaces;
+using Application.Services.Medicos.Dtos;
+using Application.Services.Medicos.Interfaces;
 using Carter;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hackaton.Api.Controllers.Medicos
 {
@@ -18,6 +21,11 @@ namespace Hackaton.Api.Controllers.Medicos
                 .WithSummary("Atualiza horários do médico")
                 .WithDescription("Atualiza os horários do médico no banco de dados")
                 .RequireAuthorization();
+
+            grupo.MapGet("{especialidadeId}", ObterMedicos)
+                 .WithSummary("Obtém lista de médicos por especialidade")
+                 .WithDescription("Obtém lista de médicos por especialidade no banco de dados")
+                 .RequireAuthorization();
         }
 
         private IResult Criar(MedicoDto dto, ICadastroAppService service)
@@ -32,6 +40,13 @@ namespace Hackaton.Api.Controllers.Medicos
             service.CadastrarHorariosDisponiveis(id, dtoList);
 
             return TypedResults.Ok(dtoList);
+        }
+
+        private Ok<IList<MedicoParaConsultaDto>> ObterMedicos(int especialidadeId, IMedicoAppService service)
+        {
+            var retorno = service.ObterMedicosPorEspecialidade(especialidadeId);
+
+            return TypedResults.Ok(retorno);
         }
     }
 }

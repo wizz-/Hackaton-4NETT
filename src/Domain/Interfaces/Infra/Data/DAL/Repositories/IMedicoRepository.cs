@@ -6,5 +6,6 @@ namespace Domain.Interfaces.Infra.Data.DAL.Repositories
     {
         Medico? ObterPorCrm(string crm, Enums.UnidadeFederativa uf);
         IList<Medico> ObterPorDisponibilidade(DayOfWeek dayOfWeek, int especialidadeId);
+        IList<Medico> ObterPorEspecialidade(int especialidadeId);
     }
 }
