@@ -49,6 +49,7 @@ namespace Application.Services.Cadastros
             unitOfWork.SaveChanges();
         }
 
+
         private IList<HorarioDisponivel> CriarHorarios(IList<HorarioDisponivelDto> horariosDisponiveis, Especialidade especialidade)
         {
             var horarios = new List<HorarioDisponivel>();
