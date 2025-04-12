@@ -8,6 +8,7 @@ namespace Domain.Entities.Cadastros
         public string? Nome { get; private set; }
         public virtual Crm? Crm { get; private set; }
         public virtual Especialidade? Especialidade { get; private set; }
+        public decimal? ValorDaConsulta { get; private set; }
         public virtual IList<HorarioDisponivel>? HorariosDisponiveis { get; private set; }
         public virtual Usuario? Usuario { get; private set; }
 
@@ -25,10 +26,11 @@ namespace Domain.Entities.Cadastros
             Usuario = usuario;
         }
 
-        public void CadastrarHorarios(IList<HorarioDisponivel> horarios)
+        public void CadastrarHorarios(decimal valorDaConsulta, IList<HorarioDisponivel> horarios)
         {
             ValidarHorariosDisponiveis(horarios);
 
+            ValorDaConsulta = valorDaConsulta;
             HorariosDisponiveis = horarios;
         }
 
