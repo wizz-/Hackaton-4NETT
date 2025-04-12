@@ -21,8 +21,8 @@ namespace Hackaton.Api
             app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.MapCarter();
-
             app.MapMetrics();
+            app.UseCors("AllowBlazor");
 
             app.Run();
         }
