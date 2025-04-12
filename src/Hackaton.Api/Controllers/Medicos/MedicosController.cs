@@ -8,8 +8,7 @@ namespace Hackaton.Api.Controllers.Medicos
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            var grupo = app.MapGroup("/api/medicos")
-                .RequireAuthorization("RouteAccessPolicy");
+            var grupo = app.MapGroup("/api/medicos");
 
             grupo.MapPost("", Criar)
                 .WithSummary("Grava um novo médico")
@@ -17,14 +16,15 @@ namespace Hackaton.Api.Controllers.Medicos
 
             grupo.MapPatch("{id}", AtualizarHorariosDisponiveis)
                 .WithSummary("Atualiza horários do médico")
-                .WithDescription("Atualiza os horários do médico no banco de dados");
+                .WithDescription("Atualiza os horários do médico no banco de dados")
+                .RequireAuthorization();
         }
 
         private IResult Criar(MedicoDto dto, ICadastroAppService service)
         {
             service.CadastrarMedico(dto);
 
-            return TypedResults.Created($"/{dto.Id}", dto);
+            return TypedResults.Created($"/{dto.Id}");
         }
 
         private IResult AtualizarHorariosDisponiveis(int id, IList<HorarioDisponivelDto> dtoList, ICadastroAppService service)

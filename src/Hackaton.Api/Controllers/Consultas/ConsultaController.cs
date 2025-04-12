@@ -10,7 +10,7 @@ namespace Hackaton.Api.Controllers.Consultas
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             var grupo = app.MapGroup("/api/consultas")
-                .RequireAuthorization("RouteAccessPolicy");
+                .RequireAuthorization();
 
             grupo.MapPost("", Criar)
                 .WithSummary("Grava uma nova consulta")

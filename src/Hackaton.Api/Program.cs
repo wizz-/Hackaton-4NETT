@@ -18,7 +18,6 @@ namespace Hackaton.Api
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseAuthorization();
-            app.UseAuthentication();
             app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.MapCarter();

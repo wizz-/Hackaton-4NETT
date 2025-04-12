@@ -11,9 +11,9 @@ namespace Hackaton.Api.Controllers.Agendas
         public void AddRoutes(IEndpointRouteBuilder app)
         {
             var grupo = app.MapGroup("/api/agenda")
-                .RequireAuthorization("RouteAccessPolicy");
+                .RequireAuthorization();
 
-            grupo.MapGet("", ObterDisponibilidade)
+            grupo.MapPost("", ObterDisponibilidade)
                 .WithSummary("Obtém horários disponíveis")
                 .WithDescription("Retorna os horários disponiveis cadastradas no banco de dados");
         }
