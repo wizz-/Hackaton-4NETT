@@ -16,12 +16,14 @@ using Infra.Data.Context;
 using Infra.Data.DAL;
 using Infra.Data.DAL.Repositories;
 using Infra.DatabaseInitializers;
+using Infra.DatabaseInitializers.DataImporters.Interfaces;
 using Infra.DatabaseInitializers.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using TechChallenge4.Infra.DatabaseInitializers.DataImporters;
 
 namespace Infra.IoC
 {
@@ -92,6 +94,7 @@ namespace Infra.IoC
 
 
             services.AddScoped<IDatabaseInitializer, DatabaseInitializer>();
+            services.AddScoped<IDataImporter, DataImporter>();
         }
     }
 }

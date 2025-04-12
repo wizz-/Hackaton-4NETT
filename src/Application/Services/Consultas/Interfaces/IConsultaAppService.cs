@@ -4,6 +4,6 @@ namespace Application.Services.Consultas.Interfaces
 {
     public interface IConsultaAppService
     {
-        void MarcarConsulta(ConsultaAppDto dto);
+        void MarcarConsulta(ConsultaDto dto);
     }
 }

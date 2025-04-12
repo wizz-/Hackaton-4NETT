@@ -8,7 +8,8 @@ namespace Hackaton.Api.Controllers.Ufs
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            var grupo = app.MapGroup("/api/ufs");
+            var grupo = app.MapGroup("/api/ufs")
+                .RequireAuthorization("RouteAccessPolicy");
 
             grupo.MapGet("", ObterUfs)
                 .WithSummary("Obtém UFs")

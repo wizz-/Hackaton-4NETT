@@ -1,7 +1,7 @@
 ﻿
 namespace Application.Services.Consultas.Dtos
 {
-    public class ConsultaAppDto
+    public class ConsultaDto
     {
         public int PacienteId { get; set; }
         public DateOnly Dia { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Infra.Data.Context;
 using Infra.DatabaseInitializers.DataImporters.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace TechChallenge4.Infra.DatabaseInitializers.DataImporters
 {
@@ -21,7 +22,7 @@ namespace TechChallenge4.Infra.DatabaseInitializers.DataImporters
 
             foreach (var sqlFile in allSqlFiles)
             {
-                Contexto.Database.ExecuteSqlRaw(File.ReadAllText(sqlFile));
+                Contexto.Database.ExecuteSqlRaw(File.ReadAllText(sqlFile, Encoding.UTF8));
             }
         }
 

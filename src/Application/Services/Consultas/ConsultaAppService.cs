@@ -8,7 +8,7 @@ namespace Application.Services.Consultas
 {
     public class ConsultaAppService(IUnitOfWork unitOfWork) : IConsultaAppService
     {
-        public void MarcarConsulta(ConsultaAppDto dto)
+        public void MarcarConsulta(ConsultaDto dto)
         {
             var paciente = unitOfWork.PacienteRepository.ObterPorId(dto.PacienteId);
             if (paciente == null) throw new InvalidOperationException($"Paciente com id '{dto.PacienteId}' não localizado.");
