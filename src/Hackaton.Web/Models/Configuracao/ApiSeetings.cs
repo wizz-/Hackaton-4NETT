@@ -1,4 +1,4 @@
-﻿namespace Hackaton.Web.Models
+﻿namespace Hackaton.Web.Models.Configuracao
 {
     public class ApiSettings
     {

@@ -1,4 +1,4 @@
-﻿using Hackaton.Web.Models;
+﻿using Hackaton.Web.Models.Especialidade;
 
 namespace Hackaton.Web.Services.Especialidades.Interfaces
 {

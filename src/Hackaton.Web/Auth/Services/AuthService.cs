@@ -1,7 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Hackaton.Web.Auth.Blazor;
 using Hackaton.Web.Auth.Interfaces;
-using Hackaton.Web.Models;
+using Hackaton.Web.Models.Configuracao;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

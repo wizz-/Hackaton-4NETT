@@ -32,14 +32,12 @@ namespace Hackaton.Api.Controllers.Medicos
         private IResult Criar(MedicoDto dto, ICadastroAppService service)
         {
             service.CadastrarMedico(dto);
-
             return TypedResults.Created($"/{dto.Id}");
         }
 
         private IResult AtualizarHorariosDisponiveis(int id, MedicoParaAtualizarDto dto, ICadastroAppService service)
         {
             service.CadastrarHorariosDisponiveis(id, dto.ValorDaConsulta, dto.Horarios);
-
             return TypedResults.Ok();
         }
 

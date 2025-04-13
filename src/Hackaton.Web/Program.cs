@@ -2,7 +2,6 @@ using Blazored.LocalStorage;
 using Hackaton.Web.Auth.Blazor;
 using Hackaton.Web.Auth.Interfaces;
 using Hackaton.Web.Auth.Services;
-using Hackaton.Web.Models;
 using Hackaton.Web.Services.Especialidades.Interfaces;
 using Hackaton.Web.Services.Especialidades;
 using Hackaton.Web.Services.Ufs;
@@ -12,6 +11,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
 using System.Text.Json;
+using Hackaton.Web.Models.Configuracao;
+using Hackaton.Web.Services.Medicos;
 
 namespace Hackaton.Web
 {
@@ -46,6 +47,7 @@ namespace Hackaton.Web
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IUfService, UfService>();
             builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
+            builder.Services.AddScoped<IMedicoService, MedicoService>();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

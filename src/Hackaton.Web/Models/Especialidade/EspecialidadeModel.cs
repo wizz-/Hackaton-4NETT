@@ -1,4 +1,4 @@
-﻿namespace Hackaton.Web.Models
+﻿namespace Hackaton.Web.Models.Especialidade
 {
     public class EspecialidadeModel
     {

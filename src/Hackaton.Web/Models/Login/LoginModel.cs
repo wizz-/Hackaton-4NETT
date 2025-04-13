@@ -1,4 +1,4 @@
-﻿using Hackaton.Web.Models;
+﻿using Hackaton.Web.Models.Configuracao;
 using System.ComponentModel.DataAnnotations;
 
 public class LoginModel

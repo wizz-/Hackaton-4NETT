@@ -1,8 +1,9 @@
 ﻿@page "/cadastro-paciente"
 @layout BlankLayout
 
-@using Hackaton.Web.Models
 @using System.Linq.Expressions
+@using Hackaton.Web.Models
+@using Hackaton.Web.Models.Paciente
 
 @inject NavigationManager Navigation
 
@@ -78,7 +79,7 @@
 }
 
 @code {
-    private CadastroPacienteModel cadastroModel = new();
+    private PacienteModel cadastroModel = new();
     private EditContext? editContext;
     private string mensagemErro = "";
 
