@@ -1,7 +1,7 @@
 ﻿@page "/cadastro-medico"
-@layout BlankLayout
 
 @using System.Linq.Expressions
+@using Hackaton.Web.Components.Shared
 @using Hackaton.Web.Exceptions
 @using Hackaton.Web.Models
 @using Hackaton.Web.Models.Especialidade
@@ -9,6 +9,7 @@
 @using Hackaton.Web.Models.Usuario
 @using Hackaton.Web.Services.Especialidades.Interfaces
 @using Hackaton.Web.Services.Medicos
+@using Hackaton.Web.Services.Medicos.Interfaces
 @using Hackaton.Web.Services.Ufs.Interfaces
 
 @inject NavigationManager Navigation
@@ -24,35 +25,56 @@
 
 <h1 class="mb-4 text-center">Cadastro de Médico</h1>
 
-@if (!string.IsNullOrEmpty(mensagemSucesso))
+<Spinner Exibir="carregando" />
+
+@if (!carregando)
 {
-    <div class="alert alert-success text-center">
-        <i class="bi bi-check-circle me-1"></i> @mensagemSucesso
+    if (!string.IsNullOrEmpty(mensagemSucesso))
+    {
+        <div class="alert alert-success text-center">
+            <i class="bi bi-check-circle me-1"></i> @mensagemSucesso
+        </div>
+    }
+    else
+    {
+        @DesenharFormulario()
+    }
+
+    <div class="text-center mt-3">
+        <a href="/login" class="text-decoration-none">Voltar</a>
     </div>
 }
-else
-{
-    @DesenharFormulario()
-}
-
-<div class="text-center mt-3">
-    <a href="/login" class="text-decoration-none">Voltar</a>
-</div>
 
 @code {
     private MedicoModel cadastroModel = new();
     private EditContext? editContext;
     private string mensagemErro = "";
     private string mensagemSucesso = "";
+    private bool carregando = true;
 
     private List<string> Ufs = [];
     private List<EspecialidadeModel> Especialidades = [];
 
     protected override async Task OnInitializedAsync()
     {
-        Ufs = await UfService.ObterUfAsync();
-        Especialidades = await EspecialidadeService.ObterEspecialidadesAsync();
-        editContext = new EditContext(cadastroModel);
+        carregando = true;
+
+        try
+        {
+            var tarefaUfs = UfService.ObterUfAsync();
+            var tarefaEspecialidades = EspecialidadeService.ObterEspecialidadesAsync();
+
+            await Task.WhenAll(tarefaUfs, tarefaEspecialidades);
+
+            Ufs = await tarefaUfs;
+            Especialidades = await tarefaEspecialidades;
+
+            editContext = new EditContext(cadastroModel);
+        }
+        finally
+        {
+            carregando = false;
+        }
     }
 
     private RenderFragment DesenharFormulario() => __builder =>
@@ -134,7 +156,9 @@ else
 
             @if (!string.IsNullOrEmpty(mensagemErro))
             {
-                <div class="alert alert-danger text-start">@mensagemErro</div>
+                <div class="alert alert-danger text-start">
+                    @((MarkupString)mensagemErro.Replace("\n", "<br>"))
+                </div>
             }
 
             <button type="submit" class="btn btn-primary w-100">

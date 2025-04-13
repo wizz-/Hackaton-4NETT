@@ -13,6 +13,9 @@ using Radzen;
 using System.Text.Json;
 using Hackaton.Web.Models.Configuracao;
 using Hackaton.Web.Services.Medicos;
+using Hackaton.Web.Services.Medicos.Interfaces;
+using Hackaton.Web.Services.Pacientes;
+using Hackaton.Web.Services.Pacientes.Interfaces;
 
 namespace Hackaton.Web
 {
@@ -48,6 +51,7 @@ namespace Hackaton.Web
             builder.Services.AddScoped<IUfService, UfService>();
             builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
             builder.Services.AddScoped<IMedicoService, MedicoService>();
+            builder.Services.AddScoped<IPacienteService, PacienteService>();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

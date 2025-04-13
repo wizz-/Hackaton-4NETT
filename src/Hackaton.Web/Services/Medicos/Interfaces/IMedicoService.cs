@@ -1,6 +1,6 @@
 ﻿using Hackaton.Web.Models.Medico;
 
-namespace Hackaton.Web.Services.Medicos
+namespace Hackaton.Web.Services.Medicos.Interfaces
 {
     public interface IMedicoService
     {

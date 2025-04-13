@@ -1,11 +1,13 @@
 ﻿@page "/cadastro-paciente"
-@layout BlankLayout
 
 @using System.Linq.Expressions
-@using Hackaton.Web.Models
+@using Hackaton.Web.Exceptions
 @using Hackaton.Web.Models.Paciente
+@using Hackaton.Web.Models.Usuario
+@using Hackaton.Web.Services.Pacientes.Interfaces
 
 @inject NavigationManager Navigation
+@inject IPacienteService PacienteService
 
 <PageTitle>Cadastro de Paciente - Health&Med</PageTitle>
 
@@ -15,95 +17,129 @@
 
 <h1 class="mb-4 text-center">Cadastro de Paciente</h1>
 
-@if (editContext != null)
+@if (!string.IsNullOrEmpty(mensagemSucesso))
 {
-    <EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
-        <DataAnnotationsValidator />
-
-        <div class="mb-3">
-            <label for="nome" class="form-label required-label">Nome completo</label>
-            <InputText id="nome" class="@ObterClasseCss(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
-            <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="cpf" class="form-label required-label">CPF</label>
-            <RadzenMask Mask="***********" CharacterPattern="[0-9]" Name="cpf" Placeholder="___________"
-                        @bind-Value="cadastroModel.CPF" class="@ObterClasseCss(() => cadastroModel.CPF)" Style="width: 100%;" />
-            <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.CPF)" />
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label required-label">E-mail</label>
-            <InputText id="email" class="@ObterClasseCss(() => cadastroModel.Email)" @bind-Value="cadastroModel.Email" />
-            <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.Email)" />
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="senha" class="form-label required-label">Senha</label>
-            <InputText id="senha" type="password" class="@ObterClasseCss(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
-            <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.Senha)" />
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
-            <InputText id="repetir-senha" type="password" class="@ObterClasseCss(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
-            <div class="invalid-feedback">
-                <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
-            </div>
-        </div>
-
-        @if (!string.IsNullOrEmpty(mensagemErro))
-        {
-            <div class="alert alert-danger text-center">@mensagemErro</div>
-        }
-
-        <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-floppy me-1"></i> Cadastrar
-        </button>
-
-        <div class="d-flex justify-content-start mb-3 my-3">
-            <a href="/login" class="btn btn-outline-primary w-100">
-                <i class="bi bi-arrow-left"></i> Voltar
-            </a>
-        </div>
-    </EditForm>
+    <div class="alert alert-success text-center">
+        <i class="bi bi-check-circle me-1"></i> @mensagemSucesso
+    </div>
 }
+else
+{
+    @DesenharFormulario()
+}
+
+<div class="text-center mt-3">
+    <a href="/login" class="text-decoration-none">Voltar</a>
+</div>
 
 @code {
     private PacienteModel cadastroModel = new();
     private EditContext? editContext;
     private string mensagemErro = "";
+    private string mensagemSucesso = "";
 
     protected override void OnInitialized()
     {
         editContext = new EditContext(cadastroModel);
     }
 
+    private RenderFragment DesenharFormulario() => __builder =>
+    {
+        <EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label for="nome" class="form-label required-label">Nome completo</label>
+                <InputText id="nome" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf" class="form-label required-label">CPF</label>
+                <RadzenMask Mask="***********" CharacterPattern="[0-9]" Name="cpf" Placeholder="___________"
+                            @bind-Value="cadastroModel.CPF" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.CPF)" Style="width: 100%;" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.CPF)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label required-label">E-mail</label>
+                <InputText id="email" type="email" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.Email)" @bind-Value="cadastroModel.Email" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.Email)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="senha" class="form-label required-label">Senha</label>
+                <InputText id="senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.Senha)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
+                <InputText id="repetir-senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(mensagemErro))
+            {
+                <div class="alert alert-danger text-start">
+                    @((MarkupString)mensagemErro.Replace("\n", "<br>"))
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-floppy me-1"></i> Cadastrar
+            </button>
+        </EditForm>
+        ;
+    };
+
     private async Task HandleCadastro()
     {
         mensagemErro = "";
+        mensagemSucesso = "";
 
-        if (cadastroModel.CPF == "00000000000")
+        if (!editContext!.Validate()) return;
+
+        var dto = new PacienteCadastroRequest
+            {
+                Nome = cadastroModel.NomeCompleto,
+                CPF = cadastroModel.CPF,
+                Email = cadastroModel.Email,
+                Usuario = new UsuarioRequest
+                {
+                    Email = cadastroModel.Email,
+                    Senha = cadastroModel.Senha
+                }
+            };
+
+        try
         {
-            mensagemErro = "Este CPF já está em uso.";
-            return;
+            await PacienteService.CadastrarPacienteAsync(dto);
+            mensagemSucesso = "Cadastro realizado com sucesso!";
         }
-
-        Navigation.NavigateTo("/cadastro-sucesso");
+        catch (ApiException ex)
+        {
+            mensagemErro = ex.ToString();
+        }
+        catch
+        {
+            mensagemErro = "Erro inesperado. Tente novamente mais tarde.";
+        }
     }
 
-    private string ObterClasseCss(Expression<Func<object>> accessor, string baseClass = "form-control")
+    private string ObterClasseCssComErroSeNecessario(Expression<Func<object>> AtributoDoModel, string baseClass = "form-control")
     {
-        var field = FieldIdentifier.Create(accessor);
+        var field = FieldIdentifier.Create(AtributoDoModel);
         return editContext!.GetValidationMessages(field).Any()
             ? $"{baseClass} is-invalid"
             : baseClass;
