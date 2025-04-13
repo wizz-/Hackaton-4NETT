@@ -3,6 +3,7 @@ using Application.Services.Cadastros.Interfaces;
 using Application.Services.Medicos.Dtos;
 using Application.Services.Medicos.Interfaces;
 using Carter;
+using Hackaton.Api.Controllers.Erros;
 using Hackaton.Api.Controllers.Medicos.Dtos;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -29,10 +30,22 @@ namespace Hackaton.Api.Controllers.Medicos
                  .RequireAuthorization();
         }
 
-        private IResult Criar(MedicoDto dto, ICadastroAppService service)
+        private Results<Created,BadRequest<ErroDto>> Criar(MedicoDto dto, ICadastroAppService service)
         {
-            service.CadastrarMedico(dto);
-            return TypedResults.Created($"/{dto.Id}");
+            if (dto.Id > 0)
+            {
+                return TypedResults.BadRequest(new ErroDto() { Mensagem = "Argumento inválido." });
+            }
+
+            try
+            {
+                service.CadastrarMedico(dto);
+                return TypedResults.Created($"/{dto.Id}");
+            }
+            catch (Exception erro)
+            {
+                return TypedResults.BadRequest(new ErroDto() { Mensagem = "Erro ao criar o Médico", Detalhes = erro.Message });
+            }
         }
 
         private IResult AtualizarHorariosDisponiveis(int id, MedicoParaAtualizarDto dto, ICadastroAppService service)

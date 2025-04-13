@@ -2,6 +2,7 @@
 @layout BlankLayout
 
 @using System.Linq.Expressions
+@using Hackaton.Web.Exceptions
 @using Hackaton.Web.Models
 @using Hackaton.Web.Models.Especialidade
 @using Hackaton.Web.Models.Medico
@@ -31,99 +32,12 @@
 }
 else
 {
-    @if (editContext is not null)
-    {
-        <EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
-            <DataAnnotationsValidator />
-
-            <div class="mb-3">
-                <label for="nome-completo" class="form-label required-label">Nome completo</label>
-                <InputText id="nome-completo" class="@ObterClasseCss(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
-                <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-5">
-                    <label for="crm" class="form-label required-label">CRM</label>
-                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______"
-                                @bind-Value="cadastroModel.CRM"
-                                class="@ObterClasseCss(() => cadastroModel.CRM)"
-                                Style="width: 100%;" />
-                    <div class="invalid-feedback">
-                        <ValidationMessage For="@(() => cadastroModel.CRM)" />
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <label for="uf" class="form-label required-label">UF</label>
-                    <InputSelect id="uf" class="@ObterClasseCss(() => cadastroModel.UF, "form-select")" @bind-Value="cadastroModel.UF">
-                        <option value="">Selecione o estado</option>
-                        @foreach (var uf in Ufs)
-                        {
-                            <option value="@uf">@uf</option>
-                        }
-                    </InputSelect>
-                    <div class="invalid-feedback">
-                        <ValidationMessage For="@(() => cadastroModel.UF)" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="especialidade" class="form-label required-label">Especialidade</label>
-                <InputSelect id="especialidade" class="@ObterClasseCss(() => cadastroModel.EspecialidadeId!, "form-select")" @bind-Value="cadastroModel.EspecialidadeId">
-                    <option value="">Selecione a especialidade</option>
-                    @foreach (var esp in Especialidades)
-                    {
-                        <option value="@esp.Id">@esp.Nome</option>
-                    }
-                </InputSelect>
-                <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => cadastroModel.EspecialidadeId)" />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="email" class="form-label required-label">E-mail</label>
-                <InputText id="email" type="email" class="@ObterClasseCss(() => cadastroModel.Email)" @bind-Value="cadastroModel.Email" />
-                <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => cadastroModel.Email)" />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="senha" class="form-label required-label">Senha</label>
-                <InputText id="senha" type="password" class="@ObterClasseCss(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
-                <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => cadastroModel.Senha)" />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
-                <InputText id="repetir-senha" type="password" class="@ObterClasseCss(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
-                <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
-                </div>
-            </div>
-
-            @if (!string.IsNullOrEmpty(mensagemErro))
-            {
-                <div class="alert alert-danger text-center">@mensagemErro</div>
-            }
-
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="bi bi-floppy me-1"></i> Cadastrar
-            </button>
-            
-        </EditForm>
-
-        <div class="text-center mt-3">
-            <a href="/login" class="text-decoration-none">Voltar</a>
-        </div>
-    }
+    @DesenharFormulario()
 }
+
+<div class="text-center mt-3">
+    <a href="/login" class="text-decoration-none">Voltar</a>
+</div>
 
 @code {
     private MedicoModel cadastroModel = new();
@@ -141,15 +55,121 @@ else
         editContext = new EditContext(cadastroModel);
     }
 
+    private RenderFragment DesenharFormulario() => __builder =>
+    {
+        <EditForm EditContext="@editContext" OnValidSubmit="HandleCadastro">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label for="nome-completo" class="form-label required-label">Nome completo</label>
+                <InputText id="nome-completo" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.NomeCompleto)" @bind-Value="cadastroModel.NomeCompleto" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.NomeCompleto)" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-5">
+                    <label for="crm" class="form-label required-label">CRM</label>
+                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______"
+                                @bind-Value="cadastroModel.CRM"
+                                class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.CRM)"
+                                Style="width: 100%;" />
+                    <div class="invalid-feedback">
+                        <ValidationMessage For="@(() => cadastroModel.CRM)" />
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <label for="uf" class="form-label required-label">UF</label>
+                    <InputSelect id="uf" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.UF, "form-select")" @bind-Value="cadastroModel.UF">
+                        <option value="">Selecione o estado</option>
+                        @foreach (var uf in Ufs)
+                        {
+                            <option value="@uf">@uf</option>
+                        }
+                    </InputSelect>
+                    <div class="invalid-feedback">
+                        <ValidationMessage For="@(() => cadastroModel.UF)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="especialidade" class="form-label required-label">Especialidade</label>
+                <InputSelect id="especialidade" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.EspecialidadeId!, "form-select")" @bind-Value="cadastroModel.EspecialidadeId">
+                    <option value="">Selecione a especialidade</option>
+                    @foreach (var esp in Especialidades)
+                    {
+                        <option value="@esp.Id">@esp.Nome</option>
+                    }
+                </InputSelect>
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.EspecialidadeId)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label required-label">E-mail</label>
+                <InputText id="email" type="email" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.Email)" @bind-Value="cadastroModel.Email" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.Email)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="senha" class="form-label required-label">Senha</label>
+                <InputText id="senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.Senha)" @bind-Value="cadastroModel.Senha" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.Senha)" />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="repetir-senha" class="form-label required-label">Repita a senha</label>
+                <InputText id="repetir-senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => cadastroModel.RepetirSenha)" @bind-Value="cadastroModel.RepetirSenha" />
+                <div class="invalid-feedback">
+                    <ValidationMessage For="@(() => cadastroModel.RepetirSenha)" />
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(mensagemErro))
+            {
+                <div class="alert alert-danger text-start">@mensagemErro</div>
+            }
+
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="bi bi-floppy me-1"></i> Cadastrar
+            </button>
+        </EditForm>
+        ;
+    };
+
     private async Task HandleCadastro()
     {
         mensagemErro = "";
         mensagemSucesso = "";
 
-        if (!editContext!.Validate())
-            return;
+        if (!editContext!.Validate()) return;
 
-        var dto = new MedicoCadastroRequest
+        var dto = ObterCadastroRequestDoModel();
+
+        try
+        {
+            await MedicoService.CadastrarMedicoAsync(dto);
+            mensagemSucesso = "Cadastro realizado com sucesso!";
+        }
+        catch (ApiException ex)
+        {
+            mensagemErro = ex.ToString();
+        }
+        catch
+        {
+            mensagemErro = "Erro inesperado. Tente novamente mais tarde.";
+        }
+    }
+
+    private MedicoCadastroRequest ObterCadastroRequestDoModel() =>
+        new()
             {
                 Nome = cadastroModel.NomeCompleto,
                 CrmNumero = cadastroModel.CRM,
@@ -166,22 +186,9 @@ else
                 }
             };
 
-        try
-        {
-            await MedicoService.CadastrarMedicoAsync(dto);
-            mensagemSucesso = "Cadastro realizado com sucesso!";
-        }
-        catch(Exception erro)
-        {
-            mensagemErro = $"Erro ao cadastrar médico. Detalhes: {erro.Message}";
-        }
-    }
-
-    private string ObterClasseCss(Expression<Func<object>> accessor, string baseClass = "form-control")
+    private string ObterClasseCssComErroSeNecessario(Expression<Func<object>> AtributoDoModel, string baseClass = "form-control")
     {
-        var field = FieldIdentifier.Create(accessor);
-        return editContext!.GetValidationMessages(field).Any()
-            ? $"{baseClass} is-invalid"
-            : baseClass;
+        var field = FieldIdentifier.Create(AtributoDoModel); // Identifica se existe erro no campo do model
+        return editContext!.GetValidationMessages(field).Any() ? $"{baseClass} is-invalid" : baseClass;
     }
 }
