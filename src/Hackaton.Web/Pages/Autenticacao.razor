@@ -1,57 +1,60 @@
-﻿@page "/login"
-
-@using System.Linq.Expressions
-@using Hackaton.Web.Auth.Interfaces
-@using Hackaton.Web.Models
+﻿@page "/autenticacao"
+@using System.ComponentModel.DataAnnotations
+@using Hackaton.Web.Components.Shared
+@using Hackaton.Web.Models.Autenticacao
 @using Hackaton.Web.Models.Configuracao
+@using Hackaton.Web.Services.Autenticacao.Interfaces
 @using Hackaton.Web.Services.Ufs.Interfaces
+@using System.Linq.Expressions
+@using Microsoft.AspNetCore.WebUtilities
 
 @inject NavigationManager Navigation
-@inject IAuthService AuthService
+@inject IAutenticacaoService AutenticacaoService
 @inject IUfService UfService
 
-<PageTitle>Login - Health&Med</PageTitle>
+<PageTitle>Autenticação - Health&Med</PageTitle>
 
 <div class="text-center mb-4">
     <img src="img/logo-100.png" alt="Health&Med" class="logo">
 </div>
 
-<h1 class="mb-4 text-center">Login</h1>
+<h1 class="mb-4 text-center">Autenticação</h1>
 
-@if (editContext != null)
+<Spinner Exibir="carregando" />
+
+@if (!carregando && editContext != null)
 {
-    <EditForm EditContext="@editContext" OnValidSubmit="HandleLogin">
+    <EditForm Model="@editContext" OnValidSubmit="HandleSubmit">
         <DataAnnotationsValidator />
 
         <ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
-                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
+                        type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
                     <i class="bi @(loginModel.Perfil == PerfisDeUsuario.Medico ? "bi-briefcase-fill" : "bi-briefcase") me-1"></i> Médico
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
-                type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
+                        type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
                     <i class="bi @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "bi-person-fill" : "bi-person") me-1"></i> Paciente
                 </button>
             </li>
         </ul>
-
 
         @if (loginModel.Perfil == PerfisDeUsuario.Medico)
         {
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="crm" class="form-label required-label">CRM</label>
-                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="loginModel.CRM" class="@ObterClasseCss(() => loginModel.CRM)" Style="width: 100%;" />
+                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="loginModel.CRM" class="@ObterClasseCssComErroSeNecessario(() => loginModel.CRM)" Style="width: 100%;" />
                     <div class="invalid-feedback">
                         <ValidationMessage For="@(() => loginModel.CRM)" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="uf" class="form-label required-label">UF</label>
-                    <InputSelect id="uf" class="@ObterClasseCss(() => loginModel.UF, "form-select")" @bind-Value="loginModel.UF">
+                    <InputSelect id="uf" class="@ObterClasseCssComErroSeNecessario(() => loginModel.UF, "form-select")" @bind-Value="loginModel.UF">
                         <option value="">Selecione o estado</option>
                         @foreach (var uf in Ufs)
                         {
@@ -68,7 +71,7 @@
         {
             <div class="mb-3">
                 <label for="cpf-email" class="form-label required-label">CPF ou Email</label>
-                <InputText id="cpf-email" class="@ObterClasseCss(() => loginModel.EmailOuCPF)" @bind-Value="loginModel.EmailOuCPF" />
+                <InputText id="cpf-email" class="@ObterClasseCssComErroSeNecessario(() => loginModel.EmailOuCPF)" @bind-Value="loginModel.EmailOuCPF" />
                 <div class="invalid-feedback">
                     <ValidationMessage For="@(() => loginModel.EmailOuCPF)" />
                 </div>
@@ -77,7 +80,7 @@
 
         <div class="mb-3">
             <label for="senha" class="form-label required-label">Senha</label>
-            <InputText id="senha" type="password" class="@ObterClasseCss(() => loginModel.Senha)" @bind-Value="loginModel.Senha" />
+            <InputText id="senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => loginModel.Senha)" @bind-Value="loginModel.Senha" />
             <div class="invalid-feedback">
                 <ValidationMessage For="@(() => loginModel.Senha)" />
             </div>
@@ -91,7 +94,7 @@
         }
 
         <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-key me-1"></i> Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")        
+            <i class="bi bi-key me-1"></i> Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
         </button>
     </EditForm>
 }
@@ -101,8 +104,9 @@
 </div>
 
 @code {
-    private LoginModel loginModel = new LoginModel { Perfil = PerfisDeUsuario.Medico };
+    private AutenticacaoModel loginModel = new AutenticacaoModel { Perfil = PerfisDeUsuario.Medico };
     private EditContext? editContext;
+    private bool carregando = false;
     private string mensagemErro = "";
 
     private List<string> Ufs = [];
@@ -110,30 +114,40 @@
     protected override async Task OnInitializedAsync()
     {
         Ufs = await UfService.ObterUfAsync();
+
         editContext = new EditContext(loginModel);
+        carregando = false;
     }
 
     private void SelecionarPerfil(PerfisDeUsuario perfil)
     {
-        loginModel = new LoginModel { Perfil = perfil };
-        editContext = new EditContext(loginModel);
+        loginModel.Perfil = perfil;
         mensagemErro = string.Empty;
     }
 
-    private async Task HandleLogin()
+    private async Task HandleSubmit()
     {
         mensagemErro = "";
 
         if (!editContext!.Validate())
-        {
             return;
-        }
 
-        bool sucesso = await AuthService.LoginAsync(loginModel);
+        bool sucesso = await AutenticacaoService.LoginAsync(loginModel);
 
         if (sucesso)
         {
-            Navigation.NavigateTo(loginModel.Perfil == PerfisDeUsuario.Medico ? "/medico" : "/paciente");
+            var uri = new Uri(Navigation.Uri);
+            var queryParams = QueryHelpers.ParseQuery(uri.Query);
+            var returnUrl = queryParams.TryGetValue("returnUrl", out var url) ? url.ToString() : null;
+
+            if (!string.IsNullOrWhiteSpace(returnUrl))
+            {
+                Navigation.NavigateTo(Uri.UnescapeDataString(returnUrl));
+            }
+            else
+            {
+                Navigation.NavigateTo(loginModel.Perfil == PerfisDeUsuario.Medico ? "/medico" : "/paciente");
+            }
         }
         else
         {
@@ -141,7 +155,7 @@
         }
     }
 
-    private string ObterClasseCss(Expression<Func<object>> accessor, string baseClass = "form-control")
+    private string ObterClasseCssComErroSeNecessario(Expression<Func<object>> accessor, string baseClass = "form-control")
     {
         var field = FieldIdentifier.Create(accessor);
         return editContext!.GetValidationMessages(field).Any()

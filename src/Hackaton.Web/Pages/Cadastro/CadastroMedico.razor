@@ -1,4 +1,4 @@
-﻿@page "/cadastro-medico"
+﻿@page "/cadastro/medico"
 
 @using System.Linq.Expressions
 @using Hackaton.Web.Components.Shared
@@ -41,7 +41,7 @@
     }
 
     <div class="text-center mt-3">
-        <a href="/login" class="text-decoration-none">Voltar</a>
+        <a href="/autenticacao" class="text-decoration-none">Voltar</a>
     </div>
 }
 
@@ -175,11 +175,9 @@
 
         if (!editContext!.Validate()) return;
 
-        var dto = ObterCadastroRequestDoModel();
-
         try
         {
-            await MedicoService.CadastrarMedicoAsync(dto);
+            await MedicoService.CadastrarMedicoAsync(cadastroModel);
             mensagemSucesso = "Cadastro realizado com sucesso!";
         }
         catch (ApiException ex)
@@ -190,25 +188,7 @@
         {
             mensagemErro = "Erro inesperado. Tente novamente mais tarde.";
         }
-    }
-
-    private MedicoCadastroRequest ObterCadastroRequestDoModel() =>
-        new()
-            {
-                Nome = cadastroModel.NomeCompleto,
-                CrmNumero = cadastroModel.CRM,
-                CrmUf = cadastroModel.UF,
-                Especialidade = new EspecialidadeModel
-                {
-                    Id = cadastroModel.EspecialidadeId!.Value,
-                    Nome = cadastroModel.EspecialidadeNome
-                },
-                Usuario = new UsuarioRequest
-                {
-                    Email = cadastroModel.Email,
-                    Senha = cadastroModel.Senha
-                }
-            };
+    }    
 
     private string ObterClasseCssComErroSeNecessario(Expression<Func<object>> AtributoDoModel, string baseClass = "form-control")
     {

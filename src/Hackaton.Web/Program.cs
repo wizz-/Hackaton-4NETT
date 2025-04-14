@@ -1,7 +1,4 @@
 using Blazored.LocalStorage;
-using Hackaton.Web.Auth.Blazor;
-using Hackaton.Web.Auth.Interfaces;
-using Hackaton.Web.Auth.Services;
 using Hackaton.Web.Services.Especialidades.Interfaces;
 using Hackaton.Web.Services.Especialidades;
 using Hackaton.Web.Services.Ufs;
@@ -16,6 +13,8 @@ using Hackaton.Web.Services.Medicos;
 using Hackaton.Web.Services.Medicos.Interfaces;
 using Hackaton.Web.Services.Pacientes;
 using Hackaton.Web.Services.Pacientes.Interfaces;
+using Hackaton.Web.Services.Autenticacao.Interfaces;
+using Hackaton.Web.Services.Autenticacao;
 
 namespace Hackaton.Web
 {
@@ -45,9 +44,9 @@ namespace Hackaton.Web
 
             builder.Services.AddScoped<CustomAuthStateProvider>();
             builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<CustomAuthStateProvider>());
-            builder.Services.AddScoped<IAuthState, AuthStateService>();
+            builder.Services.AddScoped<IConsultaAutenticacaoService, ConsultaAutenticacaoService>();
 
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
             builder.Services.AddScoped<IUfService, UfService>();
             builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
             builder.Services.AddScoped<IMedicoService, MedicoService>();

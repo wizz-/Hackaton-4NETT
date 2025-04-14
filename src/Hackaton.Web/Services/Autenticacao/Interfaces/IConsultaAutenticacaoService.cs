@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 
-namespace Hackaton.Web.Auth.Interfaces
+namespace Hackaton.Web.Services.Autenticacao.Interfaces
 {
-    public interface IAuthState
+    public interface IConsultaAutenticacaoService
     {
         Task<bool> IsAuthenticatedAsync();
         Task<string?> GetUserNameAsync();

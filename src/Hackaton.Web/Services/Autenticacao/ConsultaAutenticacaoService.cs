@@ -1,10 +1,10 @@
-﻿using Hackaton.Web.Auth.Interfaces;
+﻿using Hackaton.Web.Services.Autenticacao.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
-namespace Hackaton.Web.Auth.Services
+namespace Hackaton.Web.Services.Autenticacao
 {
-    public class AuthStateService(AuthenticationStateProvider _authProvider) : IAuthState
+    public class ConsultaAutenticacaoService(AuthenticationStateProvider _authProvider) : IConsultaAutenticacaoService
     {
         public async Task<bool> IsAuthenticatedAsync()
         {

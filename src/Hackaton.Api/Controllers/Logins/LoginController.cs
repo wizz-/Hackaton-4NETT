@@ -23,12 +23,21 @@ namespace Hackaton.Api.Controllers.Logins
 
         private IResult LoginPaciente(PacienteLoginDto dto, ILoginAppService service, ITokenService tokenService)
         {
-            service.LoginPaciente(dto.cpfEmail, dto.Senha);
+            var paciente = service.LoginPaciente(dto.cpfEmail, dto.Senha);
+
+            var request = new TokenRequest
+            {
+                Id = paciente!.Id.ToString(),
+                Nome = paciente!.Nome!,
+                Email = paciente!.Email!,
+                Perfil = "Paciente",
+                Identificador = paciente!.Cpf!
+            };
 
             var jwts = new LoginResponseDto()
             {
-                Token = tokenService.GerarToken(dto.cpfEmail),
-                RefreshToken = tokenService.GerarRefreshToken(dto.cpfEmail)
+                Token = tokenService.GerarToken(request),
+                RefreshToken = tokenService.GerarRefreshToken(request.Identificador)
             };
 
             return TypedResults.Ok(jwts);
@@ -36,12 +45,21 @@ namespace Hackaton.Api.Controllers.Logins
 
         private IResult LoginMedico(MedicoLoginDto dto, ILoginAppService service, ITokenService tokenService)
         {
-            service.LoginMedico(dto.Crm, dto.Uf, dto.Senha);
+            var medico = service.LoginMedico(dto.Crm, dto.Uf, dto.Senha); // deve retornar um objeto com ID, nome e email
 
-            var jwts = new LoginResponseDto()
+            var request = new TokenRequest
             {
-                Token = tokenService.GerarToken($"{dto.Crm}{dto.Uf}"),
-                RefreshToken = tokenService.GerarRefreshToken($"{dto.Crm}{dto.Uf}")
+                Id = medico.Id.ToString(),
+                Nome = medico.Nome,
+                Email = "",
+                Perfil = "Medico",
+                Identificador = $"{dto.Crm}{dto.Uf}"
+            };
+
+            var jwts = new LoginResponseDto
+            {
+                Token = tokenService.GerarToken(request),
+                RefreshToken = tokenService.GerarRefreshToken(request.Identificador)
             };
 
             return TypedResults.Ok(jwts);

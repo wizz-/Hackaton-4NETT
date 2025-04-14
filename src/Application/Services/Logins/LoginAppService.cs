@@ -8,38 +8,41 @@ namespace Application.Services.LoginsAppService
 {
     public class LoginAppService(IUnitOfWork unitOfWork) : ILoginAppService
     {
-        public void LoginMedico(string crm, string uf, SecureString senha)
+        public Medico LoginMedico(string crm, string uf, SecureString senha)
         {
             var ufEnum = ObterUf(uf);
             var medico = unitOfWork.MedicoRepository.ObterPorCrm(crm, ufEnum);
-            if (medico == null) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
+            
+            if (medico == null || medico.Usuario is null || !medico.Usuario.ValidarSenha(senha))
+                throw new UnauthorizedAccessException("Não foi possível fazer o login.");
 
-            if (!medico.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
+            return medico;
         }
 
-        public void LoginPaciente(string cpfOuEmail, SecureString senha)
+        public Paciente LoginPaciente(string cpfOuEmail, SecureString senha)
         {
             var paciente = ObterPaciente(cpfOuEmail);
-            if (paciente == null) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
 
-            if (!paciente.Usuario!.ValidarSenha(senha)) throw new UnauthorizedAccessException($"Não foi possível fazer o login.");
+            if (paciente == null || paciente.Usuario is null || !paciente.Usuario.ValidarSenha(senha))
+                throw new UnauthorizedAccessException("Não foi possível fazer o login.");
+
+            return paciente;
         }
 
         private Paciente? ObterPaciente(string cpfOuEmail)
         {
-            if (cpfOuEmail.Contains("@"))
-            {
-                return unitOfWork.PacienteRepository.ObterPorEmail(cpfOuEmail);
-            }
-            return unitOfWork.PacienteRepository.ObterPorCpf(cpfOuEmail);
+            return cpfOuEmail.Contains('@')
+            ? unitOfWork.PacienteRepository.ObterPorEmail(cpfOuEmail)
+            : unitOfWork.PacienteRepository.ObterPorCpf(cpfOuEmail);
         }
 
-        private UnidadeFederativa ObterUf(string uf)
+        private static UnidadeFederativa ObterUf(string uf)
         {
-            if (!Enum.TryParse(uf, true, out UnidadeFederativa ufEnum)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
-
-            if (!Enum.IsDefined(typeof(UnidadeFederativa), ufEnum)) throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
-
+            if(!Enum.TryParse(uf, true, out UnidadeFederativa ufEnum) ||
+                !Enum.IsDefined(typeof(UnidadeFederativa), ufEnum))
+            {
+                throw new InvalidOperationException($"O valor '{uf}' não é válido para o enum.");
+            }
 
             return ufEnum;
         }

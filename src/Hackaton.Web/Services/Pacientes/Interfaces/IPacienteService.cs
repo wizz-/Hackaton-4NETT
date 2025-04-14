@@ -4,6 +4,6 @@ namespace Hackaton.Web.Services.Pacientes.Interfaces
 {
     public interface IPacienteService
     {
-        Task CadastrarPacienteAsync(PacienteCadastroRequest paciente);
+        Task CadastrarPacienteAsync(PacienteModel paciente);
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/cadastro-paciente"
+﻿@page "/cadastro/paciente"
 
 @using System.Linq.Expressions
 @using Hackaton.Web.Exceptions
@@ -29,7 +29,7 @@ else
 }
 
 <div class="text-center mt-3">
-    <a href="/login" class="text-decoration-none">Voltar</a>
+    <a href="/autenticacao" class="text-decoration-none">Voltar</a>
 </div>
 
 @code {
@@ -110,21 +110,9 @@ else
 
         if (!editContext!.Validate()) return;
 
-        var dto = new PacienteCadastroRequest
-            {
-                Nome = cadastroModel.NomeCompleto,
-                CPF = cadastroModel.CPF,
-                Email = cadastroModel.Email,
-                Usuario = new UsuarioRequest
-                {
-                    Email = cadastroModel.Email,
-                    Senha = cadastroModel.Senha
-                }
-            };
-
         try
         {
-            await PacienteService.CadastrarPacienteAsync(dto);
+            await PacienteService.CadastrarPacienteAsync(cadastroModel);
             mensagemSucesso = "Cadastro realizado com sucesso!";
         }
         catch (ApiException ex)

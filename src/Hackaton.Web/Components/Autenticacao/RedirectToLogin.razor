@@ -1,0 +1,19 @@
+﻿@using Hackaton.Web.Services.Autenticacao.Interfaces
+@inject NavigationManager Navigation
+@inject IConsultaAutenticacaoService ConsultaAutenticacaoService
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var isAuthenticated = await ConsultaAutenticacaoService.IsAuthenticatedAsync();
+
+        if (isAuthenticated)
+        {            
+            Navigation.NavigateTo("/home", true);
+            return;
+        }
+
+        var returnUrl = Uri.EscapeDataString(Navigation.Uri.Replace(Navigation.BaseUri, ""));
+        Navigation.NavigateTo($"/autenticacao?returnUrl={returnUrl}", true);
+    }
+}

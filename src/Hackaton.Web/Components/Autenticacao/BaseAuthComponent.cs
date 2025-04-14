@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
-namespace Hackaton.Web.Auth.Blazor
+namespace Hackaton.Web.Components.Autenticacao
 {
     public class BaseAuthComponent : ComponentBase
     {
