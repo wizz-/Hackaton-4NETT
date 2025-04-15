@@ -26,37 +26,37 @@
 
 @if (!carregando && editContext != null)
 {
-    <EditForm Model="@editContext" OnValidSubmit="HandleSubmit">
+    <EditForm EditContext="@editContext" OnSubmit="HandleSubmit">
         <DataAnnotationsValidator />
 
         <ul class="nav nav-tabs mb-3" id="loginTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
+                <button class="nav-link @(autenticacaoModel.Perfil == PerfisDeUsuario.Medico ? "active" : "")"
                         type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Medico)">
-                    <i class="bi @(loginModel.Perfil == PerfisDeUsuario.Medico ? "bi-briefcase-fill" : "bi-briefcase") me-1"></i> Médico
+                    <i class="bi @(autenticacaoModel.Perfil == PerfisDeUsuario.Medico ? "bi-briefcase-fill" : "bi-briefcase") me-1"></i> Médico
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
+                <button class="nav-link @(autenticacaoModel.Perfil == PerfisDeUsuario.Paciente ? "active" : "")"
                         type="button" @onclick="() => SelecionarPerfil(PerfisDeUsuario.Paciente)">
-                    <i class="bi @(loginModel.Perfil == PerfisDeUsuario.Paciente ? "bi-person-fill" : "bi-person") me-1"></i> Paciente
+                    <i class="bi @(autenticacaoModel.Perfil == PerfisDeUsuario.Paciente ? "bi-person-fill" : "bi-person") me-1"></i> Paciente
                 </button>
             </li>
         </ul>
 
-        @if (loginModel.Perfil == PerfisDeUsuario.Medico)
+        @if (autenticacaoModel.Perfil == PerfisDeUsuario.Medico)
         {
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="crm" class="form-label required-label">CRM</label>
-                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="loginModel.CRM" class="@ObterClasseCssComErroSeNecessario(() => loginModel.CRM)" Style="width: 100%;" />
+                    <RadzenMask Mask="******" CharacterPattern="[0-9]" Name="crm" Placeholder="______" @bind-Value="autenticacaoModel.CRM" class="@ObterClasseCssComErroSeNecessario(() => autenticacaoModel.CRM)" Style="width: 100%;" />
                     <div class="invalid-feedback">
-                        <ValidationMessage For="@(() => loginModel.CRM)" />
+                        <ValidationMessage For="@(() => autenticacaoModel.CRM)" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label for="uf" class="form-label required-label">UF</label>
-                    <InputSelect id="uf" class="@ObterClasseCssComErroSeNecessario(() => loginModel.UF, "form-select")" @bind-Value="loginModel.UF">
+                    <InputSelect id="uf" class="@ObterClasseCssComErroSeNecessario(() => autenticacaoModel.UF, "form-select")" @bind-Value="autenticacaoModel.UF">
                         <option value="">Selecione o estado</option>
                         @foreach (var uf in Ufs)
                         {
@@ -64,7 +64,7 @@
                         }
                     </InputSelect>
                     <div class="invalid-feedback">
-                        <ValidationMessage For="@(() => loginModel.UF)" />
+                        <ValidationMessage For="@(() => autenticacaoModel.UF)" />
                     </div>
                 </div>
             </div>
@@ -73,18 +73,18 @@
         {
             <div class="mb-3">
                 <label for="cpf-email" class="form-label required-label">CPF ou Email</label>
-                <InputText id="cpf-email" class="@ObterClasseCssComErroSeNecessario(() => loginModel.EmailOuCPF)" @bind-Value="loginModel.EmailOuCPF" />
+                <InputText id="cpf-email" class="@ObterClasseCssComErroSeNecessario(() => autenticacaoModel.EmailOuCPF)" @bind-Value="autenticacaoModel.EmailOuCPF" />
                 <div class="invalid-feedback">
-                    <ValidationMessage For="@(() => loginModel.EmailOuCPF)" />
+                    <ValidationMessage For="@(() => autenticacaoModel.EmailOuCPF)" />
                 </div>
             </div>
         }
 
         <div class="mb-3">
             <label for="senha" class="form-label required-label">Senha</label>
-            <InputText id="senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => loginModel.Senha)" @bind-Value="loginModel.Senha" />
+            <InputText id="senha" type="password" class="@ObterClasseCssComErroSeNecessario(() => autenticacaoModel.Senha)" @bind-Value="autenticacaoModel.Senha" />
             <div class="invalid-feedback">
-                <ValidationMessage For="@(() => loginModel.Senha)" />
+                <ValidationMessage For="@(() => autenticacaoModel.Senha)" />
             </div>
         </div>
 
@@ -96,7 +96,7 @@
         }
 
         <button type="submit" class="btn btn-primary w-100">
-            <i class="bi bi-key me-1"></i> Entrar como @(loginModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
+            <i class="bi bi-key me-1"></i> Entrar como @(autenticacaoModel.Perfil == PerfisDeUsuario.Medico ? "Médico" : "Paciente")
         </button>
     </EditForm>
 }
@@ -106,7 +106,7 @@
 </div>
 
 @code {
-    private AutenticacaoModel loginModel = new AutenticacaoModel { Perfil = PerfisDeUsuario.Medico };
+    private AutenticacaoModel autenticacaoModel = new AutenticacaoModel { Perfil = PerfisDeUsuario.Medico };
     private EditContext? editContext;
     private bool carregando = false;
     private string mensagemErro = "";
@@ -117,13 +117,14 @@
     {
         Ufs = await UfService.ObterUfAsync();
 
-        editContext = new EditContext(loginModel);
+        editContext = new EditContext(autenticacaoModel);
         carregando = false;
     }
 
     private void SelecionarPerfil(PerfisDeUsuario perfil)
     {
-        loginModel.Perfil = perfil;
+        autenticacaoModel.Perfil = perfil;
+        editContext = new EditContext(autenticacaoModel);
         mensagemErro = string.Empty;
     }
 
@@ -131,10 +132,47 @@
     {
         mensagemErro = "";
 
-        if (!editContext!.Validate())
+        var mensagens = new ValidationMessageStore(editContext!);
+        mensagens.Clear();
+
+        bool formularioValido = true;
+
+        if (autenticacaoModel.Perfil == PerfisDeUsuario.Medico)
+        {
+            if (string.IsNullOrWhiteSpace(autenticacaoModel.CRM))
+            {
+                mensagens.Add(() => autenticacaoModel.CRM, "O CRM é obrigatório.");
+                formularioValido = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(autenticacaoModel.UF))
+            {
+                mensagens.Add(() => autenticacaoModel.UF, "A UF é obrigatória.");
+                formularioValido = false;
+            }
+        }
+        else // Paciente
+        {
+            if (string.IsNullOrWhiteSpace(autenticacaoModel.EmailOuCPF))
+            {
+                mensagens.Add(() => autenticacaoModel.EmailOuCPF, "O CPF ou Email é obrigatório.");
+                formularioValido = false;
+            }
+        }
+
+        // Senha é obrigatória para ambos
+        if (string.IsNullOrWhiteSpace(autenticacaoModel.Senha))
+        {
+            mensagens.Add(() => autenticacaoModel.Senha, "A senha é obrigatória.");
+            formularioValido = false;
+        }
+
+        editContext.NotifyValidationStateChanged();
+
+        if (!formularioValido)
             return;
 
-        bool sucesso = await AutenticacaoService.LoginAsync(loginModel);
+        bool sucesso = await AutenticacaoService.LoginAsync(autenticacaoModel);
 
         if (sucesso)
         {
@@ -148,7 +186,7 @@
             }
             else
             {
-                Navigation.NavigateTo(loginModel.Perfil == PerfisDeUsuario.Medico ? "/medico" : "/paciente");
+                Navigation.NavigateTo(autenticacaoModel.Perfil == PerfisDeUsuario.Medico ? "/medico" : "/paciente");
             }
         }
         else
@@ -167,7 +205,7 @@
 
     private string ObterLinkCadastro()
     {
-        return loginModel.Perfil == PerfisDeUsuario.Medico
+        return autenticacaoModel.Perfil == PerfisDeUsuario.Medico
             ? "/primeiro-acesso/medico"
             : "/primeiro-acesso/paciente";
     }
