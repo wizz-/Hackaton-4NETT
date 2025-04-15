@@ -2,7 +2,7 @@
 {
     public enum StatusConsulta
     {
-        Criada,
+        Pendente,
         Confirmada,
         Recusada,
         Cancelada

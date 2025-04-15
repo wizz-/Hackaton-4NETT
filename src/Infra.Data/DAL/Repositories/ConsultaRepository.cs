@@ -29,7 +29,7 @@ namespace Infra.Data.DAL.Repositories
             var medicoIds = medicosDiponiveis.Select(d => d.Id).ToList();
 
             return ObterQueryable()
-                    .Where(x => x.Dia == dia && medicoIds.Contains(x.Medico.Id) && (x.Status == StatusConsulta.Criada || x.Status == StatusConsulta.Confirmada))
+                    .Where(x => x.Dia == dia && medicoIds.Contains(x.Medico.Id) && (x.Status == StatusConsulta.Pendente || x.Status == StatusConsulta.Confirmada))
                     .ToList();
         }
     }

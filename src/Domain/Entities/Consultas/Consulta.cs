@@ -25,7 +25,7 @@ namespace Domain.Entities.Consultas
             Medico = medico;
             Especialidade = especialidade;
             Horario = horario;
-            Status = StatusConsulta.Criada;
+            Status = StatusConsulta.Pendente;
         }
 
         public void ConfirmarConsulta(Medico medico)
