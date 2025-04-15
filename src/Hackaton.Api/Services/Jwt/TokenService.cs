@@ -1,4 +1,5 @@
-﻿using Hackaton.Api.Services.Jwt.Interfaces;
+﻿using Hackaton.Api.Controllers.Logins.Dtos;
+using Hackaton.Api.Services.Jwt.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,12 +10,20 @@ namespace Hackaton.Api.Services.Jwt
 {
     public class TokenService(IConfiguration configuration) : ITokenService
     {
-        public string GerarToken(string usuario)
+        public string GerarToken(TokenRequest request)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = ObterArrayDeBytesdaChaveDaApi(configuration);
 
-            var claims = ObterClaims(usuario);
+            var claims = new ClaimsIdentity(
+            [
+                new Claim(ClaimTypes.NameIdentifier, request.Id),
+                new Claim(ClaimTypes.Name, request.Nome),
+                new Claim(ClaimTypes.Email, request.Email),
+                new Claim(ClaimTypes.Role, request.Perfil),
+                new Claim("perfil", request.Perfil),
+                new Claim("identificador", request.Identificador)
+            ]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -33,7 +42,7 @@ namespace Hackaton.Api.Services.Jwt
             var key = ObterArrayDeBytesdaChaveDaApi(configuration);
 
             var claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario));
+            claims.AddClaim(new Claim(ClaimTypes.Name, usuario));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -63,8 +72,7 @@ namespace Hackaton.Api.Services.Jwt
                     ValidateLifetime = true,
                     LifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters) =>
                     {
-                        return notBefore <= DateTime.UtcNow &&
-                        expires > DateTime.UtcNow;
+                        return notBefore <= DateTime.UtcNow && expires > DateTime.UtcNow;
                     },
                 }, out SecurityToken validatedToken);
 
@@ -81,15 +89,6 @@ namespace Hackaton.Api.Services.Jwt
             var chave = configuration["Jwt:Key"];
             ArgumentException.ThrowIfNullOrEmpty(chave);
             return Encoding.ASCII.GetBytes(chave);
-        }
-
-        private ClaimsIdentity ObterClaims(string usuario)
-        {
-            var claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim(ClaimTypes.NameIdentifier, usuario));
-            claims.AddClaim(new Claim("usuario", JsonSerializer.Serialize(usuario)));
-            return claims;
-
         }
     }
 }

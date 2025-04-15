@@ -1,9 +1,31 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
+@using Hackaton.Web.Services.Autenticacao
+@inject NavigationManager Navigation
+@inject CustomAuthStateProvider ProvedorDeAutenticacao
 
-<h3>Home</h3>
+<PageTitle>Redirecionando...</PageTitle>
+
+<p>Redirecionando...</p>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await ProvedorDeAutenticacao.GetAuthenticationStateAsync();
+        var user = authState.User;
 
+        if (!user.Identity?.IsAuthenticated ?? true)
+        {
+            Navigation.NavigateTo("/autenticacao");
+            return;
+        }
+
+        var perfil = user.FindFirst("perfil")?.Value?.ToLowerInvariant();
+
+        if (perfil == "medico")
+            Navigation.NavigateTo("/medico");
+        else if (perfil == "paciente")
+            Navigation.NavigateTo("/paciente");
+        else
+            Navigation.NavigateTo("/autenticacao");
+    }
 }

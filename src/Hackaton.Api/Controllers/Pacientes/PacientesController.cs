@@ -1,6 +1,8 @@
 ﻿using Application.Services.Cadastros.Dtos;
 using Application.Services.Cadastros.Interfaces;
 using Carter;
+using Hackaton.Api.Controllers.Erros;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hackaton.Api.Controllers.Pacientes
 {
@@ -15,11 +17,22 @@ namespace Hackaton.Api.Controllers.Pacientes
                 .WithDescription("Grava um novo paciente no banco de dados");
         }
 
-        private IResult Criar(PacienteDto dto, ICadastroAppService service)
+        private Results<Created, BadRequest<ErroDto>> Criar(PacienteDto dto, ICadastroAppService service)
         {
-            service.CadastrarPaciente(dto);
+            if (dto.Id > 0)
+            {
+                return TypedResults.BadRequest(new ErroDto() { Mensagem = "Argumento inválido." });
+            }
 
-            return TypedResults.Created($"/{dto.Id}");
+            try
+            {
+                service.CadastrarPaciente(dto);
+                return TypedResults.Created($"/{dto.Id}");
+            } 
+            catch(Exception erro)
+            {
+                return TypedResults.BadRequest(new ErroDto() { Mensagem = "Erro ao criar o Paciente", Detalhes = erro.Message });
+            }
         }
     }
 }

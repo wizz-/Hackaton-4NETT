@@ -1,4 +1,4 @@
-﻿using Hackaton.Web.Models;
+﻿using Hackaton.Web.Models.Especialidade;
 using Hackaton.Web.Services.Especialidades.Interfaces;
 using System.Net.Http.Json;
 

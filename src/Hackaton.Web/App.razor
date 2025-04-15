@@ -1,10 +1,17 @@
-﻿@using Hackaton.Web.Auth.Blazor
-@using Microsoft.AspNetCore.Components.Authorization
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Hackaton.Web.Components.Autenticacao
 
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(BlankLayout)">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <Authorizing>
+                    <div class="text-center mt-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                    </div>
+                </Authorizing>
                 <NotAuthorized>
                     <RedirectToLogin />
                 </NotAuthorized>
@@ -12,9 +19,9 @@
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
-            <PageTitle>Not found</PageTitle>
-            <LayoutView Layout="@typeof(BlankLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <h1>Página não encontrada</h1>
+                <p>Verifique o endereço digitado.</p>
             </LayoutView>
         </NotFound>
     </Router>

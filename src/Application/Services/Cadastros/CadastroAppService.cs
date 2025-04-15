@@ -28,7 +28,7 @@ namespace Application.Services.Cadastros
             var crm = new Crm(dto.CrmNumero, ufEnum);
 
             var medicoDuplicado = unitOfWork.MedicoRepository.ObterPorCrm(crm.Numero, crm.Uf);//Faço a verificação depois de criar a classe para aplicar as regras de formatação no domínio
-            if (medicoDuplicado != null) throw new InvalidOperationException("O CRM informado já está já foi cadastrado.");
+            if (medicoDuplicado != null) throw new InvalidOperationException("O CRM informado já está cadastrado.");
 
             var usuario = CriarUsuario(dto.Usuario, TipoDeUsuario.Medico);
             var especialidade = ObterEspecialidade(dto.Especialidade);
