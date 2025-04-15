@@ -38,14 +38,15 @@ namespace Application.Services.Cadastros
             unitOfWork.SaveChanges();
         }
 
-        public void CadastrarHorariosDisponiveis(int medicoId, decimal valorDaConsulta, IList<HorarioDisponivelDto> horarioDisponivelDto)
+        public void CadastrarHorariosDisponiveis(int medicoId, EspecialidadeDto especialidadeDto, decimal valorDaConsulta, IList<HorarioDisponivelDto> horarioDisponivelDto)
         {
             var medico = unitOfWork.MedicoRepository.ObterPorId(medicoId);
             if (medico == null) throw new InvalidOperationException($"Médico com ID '{medicoId}' não existe.");
+            var especialidade = ObterEspecialidade(especialidadeDto);
 
-            var horarios = CriarHorarios(horarioDisponivelDto, medico.Especialidade);
+            var horarios = CriarHorarios(horarioDisponivelDto, especialidade);
 
-            medico.CadastrarHorarios(valorDaConsulta, horarios);
+            medico.CadastrarHorarios(especialidade, valorDaConsulta, horarios);
             unitOfWork.MedicoRepository.Atualizar(medico);
             unitOfWork.SaveChanges();
         }

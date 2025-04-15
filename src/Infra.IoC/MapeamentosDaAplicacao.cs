@@ -4,6 +4,8 @@ using Application.Services.Cadastros;
 using Application.Services.Cadastros.Interfaces;
 using Application.Services.Consultas;
 using Application.Services.Consultas.Interfaces;
+using Application.Services.Consultas.Mappers;
+using Application.Services.Consultas.Mappers.Interfaces;
 using Application.Services.Especialidades;
 using Application.Services.Especialidades.Interfaces;
 using Application.Services.Logins.Interfaces;
@@ -45,6 +47,7 @@ namespace Infra.IoC
             services.AddScoped<IEspecialidadesAppService, EspecialidadesAppService>();
             services.AddScoped<IUfAppService, UfAppService>();
             services.AddScoped<IMedicoAppService, MedicoAppService>();
+            services.AddScoped<IMapperConsultaAppService, MapperConsultaAppService>();
         }
 
         private static void MapearInfra(IServiceCollection services)

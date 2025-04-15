@@ -26,10 +26,12 @@ namespace Domain.Entities.Cadastros
             Usuario = usuario;
         }
 
-        public void CadastrarHorarios(decimal valorDaConsulta, IList<HorarioDisponivel> horarios)
+        public void CadastrarHorarios(Especialidade especialidade, decimal valorDaConsulta, IList<HorarioDisponivel> horarios)
         {
             ValidarHorariosDisponiveis(horarios);
+            ValidarEspecialidade(especialidade);
 
+            Especialidade = especialidade;
             ValorDaConsulta = valorDaConsulta;
             HorariosDisponiveis = horarios;
         }
