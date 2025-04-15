@@ -2,6 +2,7 @@
 using Application.Services.Consultas.Interfaces;
 using Carter;
 using Hackaton.Api.Controllers.Consultas.Dtos;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hackaton.Api.Controllers.Consultas
 {
@@ -15,6 +16,10 @@ namespace Hackaton.Api.Controllers.Consultas
             grupo.MapPost("", Criar)
                 .WithSummary("Grava uma nova consulta")
                 .WithDescription("Grava uma nova consulta no banco de dados");
+
+            grupo.MapPost("futuras/{medicoId}", ObterConsultasFuturasPorMedico)
+                .WithSummary("Obtém consultas do médico")
+                .WithDescription("Obtém consultas futuras do médico");
 
             grupo.MapPost("confirmar/{id}", Confirmar)
                 .WithSummary("Confimar consulta")
@@ -43,6 +48,13 @@ namespace Hackaton.Api.Controllers.Consultas
             service.ConfirmarConsulta(id, crm, uf);
 
             return TypedResults.Ok();
+        }
+
+        private Ok<IList<ConsultaDto>> ObterConsultasFuturasPorMedico(int medicoId, IConsultaAppService service)
+        {
+            var retorno = service.ObterConsultasDoMedico(medicoId);
+
+            return TypedResults.Ok(retorno);
         }
 
         private IResult Recusar(int id, IConsultaAppService service, HttpContext context)
