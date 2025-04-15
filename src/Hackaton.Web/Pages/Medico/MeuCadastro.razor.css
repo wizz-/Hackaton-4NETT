@@ -1,0 +1,29 @@
+﻿.horario-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fafafa;
+    border: 1px solid #dee2e6;
+    border-radius: 1rem;
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.775rem;
+    color: #212529;
+}
+
+.texto-horario {
+    flex-grow: 1;
+}
+
+.btn-fechar {
+    background: transparent;
+    border: none;
+    color: #b02a37; /* vermelho escuro (bootstrap danger-800) */
+    padding: 0;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+    .btn-fechar:hover {
+        color: #dc3545;        
+    }

@@ -1,4 +1,6 @@
 ﻿@page "/autenticacao"
+@layout LayoutVertical
+
 @using System.ComponentModel.DataAnnotations
 @using Hackaton.Web.Components.Shared
 @using Hackaton.Web.Models.Autenticacao
@@ -166,7 +168,7 @@
     private string ObterLinkCadastro()
     {
         return loginModel.Perfil == PerfisDeUsuario.Medico
-            ? "/cadastro-medico"
-            : "/cadastro-paciente";
+            ? "/primeiro-acesso/medico"
+            : "/primeiro-acesso/paciente";
     }
 }

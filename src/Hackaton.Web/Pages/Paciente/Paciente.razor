@@ -1,19 +1,16 @@
-﻿@page "/medico"
+﻿@page "/paciente"
 
 @using Microsoft.AspNetCore.Authorization
-@inject NavigationManager Navigation
 @* @attribute [Authorize] *@
 
-<PageTitle>Médico - Health&Med</PageTitle>
+<PageTitle>Paciente - Health&Med</PageTitle>
 
 <div class="d-flex align-items-center px-3 py-2 header-bar">
     <div class="me-auto">
         <img src="img/logo-50.png" alt="Health&Med" class="logo-img">
     </div>
 
-    <div class="flex-grow-1 text-center">
-        <span class="fw-bold fs-4">Médico</span>
-    </div>
+    <div class="flex-grow-1 text-center fw-bold fs-4"></div>
 
     <div class="ms-auto d-flex align-items-center">
         <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
@@ -22,13 +19,13 @@
 </div>
 
 <div class="menu-sistema d-flex my-5">
-    <div class="item-menu" @onclick="@(() => Navigation.NavigateTo("/medico/meu-cadastro"))">
-        <i class="bi bi-person-vcard"></i>
-        <span>Meu Cadastro</span>
+    <div class="item-menu">
+        <i class="bi bi-search"></i>
+        <span>Consultar Médicos</span>
     </div>
-    <div class="item-menu" @onclick="@(() => Navigation.NavigateTo("/medico/agenda"))">
-        <i class="bi bi-calendar-check"></i>
-        <span>Agenda</span>
+    <div class="item-menu">
+        <i class="bi bi-journal-medical"></i>
+        <span>Minhas Consultas</span>
     </div>
 </div>
 
