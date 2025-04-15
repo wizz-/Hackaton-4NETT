@@ -1,5 +1,6 @@
 ﻿using Application.Services.Consultas.Dtos;
 using Application.Services.Consultas.Interfaces;
+using Application.Services.Consultas.Mappers.Interfaces;
 using Domain.Entities.Cadastros;
 using Domain.Entities.Consultas;
 using Domain.Enums;
@@ -7,8 +8,15 @@ using Domain.Interfaces.Infra.Data.DAL;
 
 namespace Application.Services.Consultas
 {
-    public class ConsultaAppService(IUnitOfWork unitOfWork) : IConsultaAppService
+    public class ConsultaAppService(IUnitOfWork unitOfWork, IMapperConsultaAppService mapper) : IConsultaAppService
     {
+        public IList<ConsultaDto> ObterConsultasDoMedico(int medicoId)
+        {
+            var consultas = unitOfWork.ConsultaRepository.ObterConsultasFuturasPorMedico(medicoId);
+
+            return mapper.Map(consultas);
+        }
+
         public void CancelarConsulta(int consultaId, string cpf, string motivo)
         {
             var consulta = ObterConsulta(consultaId);
@@ -43,7 +51,7 @@ namespace Application.Services.Consultas
             unitOfWork.SaveChanges();
         }
 
-        public void MarcarConsulta(ConsultaDto dto)
+        public void MarcarConsulta(ConsultaCadastroDto dto)
         {
             var paciente = unitOfWork.PacienteRepository.ObterPorId(dto.PacienteId);
             if (paciente == null) throw new InvalidOperationException($"Paciente com id '{dto.PacienteId}' não localizado.");

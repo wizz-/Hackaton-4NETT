@@ -29,7 +29,7 @@ namespace Hackaton.Api.Controllers.Consultas
                 .WithDescription("Cancela uma consulta no banco de dados");
         }
 
-        private IResult Criar(ConsultaDto dto, IConsultaAppService service)
+        private IResult Criar(ConsultaCadastroDto dto, IConsultaAppService service)
         {
             service.MarcarConsulta(dto);
 

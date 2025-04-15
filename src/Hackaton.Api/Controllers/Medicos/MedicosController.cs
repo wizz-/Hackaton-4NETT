@@ -38,7 +38,7 @@ namespace Hackaton.Api.Controllers.Medicos
 
         private IResult AtualizarHorariosDisponiveis(int id, MedicoParaAtualizarDto dto, ICadastroAppService service)
         {
-            service.CadastrarHorariosDisponiveis(id, dto.ValorDaConsulta, dto.Horarios);
+            service.CadastrarHorariosDisponiveis(id, dto.Especialidade, dto.ValorDaConsulta, dto.Horarios);
 
             return TypedResults.Ok();
         }

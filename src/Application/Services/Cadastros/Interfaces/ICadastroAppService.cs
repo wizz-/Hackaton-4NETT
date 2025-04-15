@@ -6,6 +6,6 @@ namespace Application.Services.Cadastros.Interfaces
     {
         void CadastrarPaciente(PacienteDto dto);
         void CadastrarMedico(MedicoDto dto);
-        void CadastrarHorariosDisponiveis(int medicoId, decimal valorDaConsulta, IList<HorarioDisponivelDto> horarioDisponivelDto);
+        void CadastrarHorariosDisponiveis(int medicoId, EspecialidadeDto especialidadeDto, decimal valorDaConsulta, IList<HorarioDisponivelDto> horarioDisponivelDto);
     }
 }
