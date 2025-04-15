@@ -68,6 +68,16 @@ label {
     font-size: 1rem;
 }
 
+.nome-sistema {
+    color: var(--color-primary-dark);
+    font-size: 1.2rem;
+}
+
+.icone-usuario-logado {
+    color: var(--color-primary-dark);
+    font-size: 2rem;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
