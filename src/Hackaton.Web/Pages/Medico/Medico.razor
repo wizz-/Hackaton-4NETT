@@ -48,7 +48,8 @@
     protected override async Task OnInitializedAsync()
     {
         var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
-        NomeDoMedico = claims["unique_name"];
+        var tokens = claims["unique_name"].Split(" ");
+        NomeDoMedico = $"{tokens[0]} {tokens[^1]}";
     }
 
     private async Task EncerrarSessao()
