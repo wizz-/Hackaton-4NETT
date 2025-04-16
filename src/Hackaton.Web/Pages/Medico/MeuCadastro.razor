@@ -8,7 +8,7 @@
 @using Hackaton.Web.Services.Especialidades.Interfaces
 @using Hackaton.Web.Services.Medicos.Interfaces
 
-@inject IConsultaAutenticacaoService ConsultaAutenticacaoService
+@inject IUsuarioLogadoService UsuarioLogadoService
 @inject NavigationManager Navigation
 @inject IEspecialidadeService EspecialidadeService
 @inject IMedicoService MedicoService
@@ -173,7 +173,7 @@
 
         try
         {
-            var claims = await ConsultaAutenticacaoService.ObterClaimsDoUsuarioLogadoAsync();
+            var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
 
             var id = claims.First(x => x.Key == "nameid").Value;
             var medico = MedicoService.ObterMedico(Convert.ToInt32(id));
