@@ -65,7 +65,8 @@ Isso iniciará um container com o **SQL Server 2022**, e você poderá rodar a A
 
 Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
 
-(colocar link swagger)
+https://localhost:7272/swagger/index.html
+
 ---
 ### 🔄 Rodando Todo o Projeto em Containers
 Se quiser rodar **todo o projeto no Docker**, incluindo a API, utilize:
@@ -113,7 +114,7 @@ Abaixo exemplificamos como a plataforma vai ser utilizada:
 
 ## Visão geral
 
-# Tela de Login 
+#### Tela de Login 
 
 Para dar início à utilização da plataforma Health&Med API, desenvolvemos uma tela de login intuitiva e funcional.
 Nessa etapa inicial, tanto pacientes quanto médicos interessados em aderir à plataforma deverão realizar um cadastro prévio, fornecendo as informações necessárias para criar um perfil no sistema.
@@ -127,7 +128,13 @@ A tela de login a nível do médico deve seguir o padrão abaixo exibido.
 A tela nível paciente deve seguir o padrão abaixo.
 ![image](https://github.com/user-attachments/assets/9cbf37a2-31fc-447a-a316-7eea8897c318)
 
-# Tela de Agendamento
+#### Tela de Agendamento Paciente
+
+#### Cadastro/Edição de horários Disponíveis
+
+
+
+
 
 
 
