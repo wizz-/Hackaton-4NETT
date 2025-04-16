@@ -65,7 +65,8 @@ Isso iniciará um container com o **SQL Server 2022**, e você poderá rodar a A
 
 Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
 
-(colocar link swagger)
+https://localhost:7272/swagger/index.html
+
 ---
 ### 🔄 Rodando Todo o Projeto em Containers
 Se quiser rodar **todo o projeto no Docker**, incluindo a API, utilize:
