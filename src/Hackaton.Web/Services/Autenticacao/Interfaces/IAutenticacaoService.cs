@@ -6,6 +6,6 @@ namespace Hackaton.Web.Services.Autenticacao.Interfaces
     public interface IAutenticacaoService
     {
         Task<bool> LoginAsync(AutenticacaoModel login);
-        Task LogoutAsync();
+        Task EncerrarSessaoAsync();
     }
 }

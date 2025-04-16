@@ -2,13 +2,15 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Components.Authorization;
 using Blazored.LocalStorage;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Hackaton.Web.Services.Autenticacao
 {
-    public class CustomAuthStateProvider(ILocalStorageService localStorage) : AuthenticationStateProvider
+    public class CustomAuthStateProvider(ILocalStorageService localStorage, HttpClient _httpClient) : AuthenticationStateProvider
     {
         private const string TokenKey = "authToken";
-        private ClaimsPrincipal _usuarioAtual = new(new ClaimsIdentity());
+        private ClaimsPrincipal _usuarioAtual = new(new ClaimsIdentity());        
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -32,6 +34,7 @@ namespace Hackaton.Web.Services.Autenticacao
         {
             await localStorage.SetItemAsStringAsync(TokenKey, token);
             _usuarioAtual = CriarUsuarioAutenticado(LerJwt(token));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             NotificarAlteracaoEstado();
         }
 
@@ -39,6 +42,7 @@ namespace Hackaton.Web.Services.Autenticacao
         {
             await RemoverTokenAsync();
             _usuarioAtual = new ClaimsPrincipal(new ClaimsIdentity());
+            _httpClient.DefaultRequestHeaders.Authorization = null;
             NotificarAlteracaoEstado();
         }
 

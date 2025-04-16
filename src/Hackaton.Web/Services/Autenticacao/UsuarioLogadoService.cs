@@ -4,27 +4,15 @@ using System.Security.Claims;
 
 namespace Hackaton.Web.Services.Autenticacao
 {
-    public class ConsultaAutenticacaoService(AuthenticationStateProvider _authProvider) : IConsultaAutenticacaoService
+    public class UsuarioLogadoService(AuthenticationStateProvider _authProvider) : IUsuarioLogadoService
     {
         public async Task<bool> IsAuthenticatedAsync()
         {
             var authState = await _authProvider.GetAuthenticationStateAsync();
             return authState.User.Identity?.IsAuthenticated ?? false;
-        }
+        }       
 
-        public async Task<string?> GetUserNameAsync()
-        {
-            var authState = await _authProvider.GetAuthenticationStateAsync();
-            return authState.User.Identity?.Name;
-        }
-
-        public async Task<ClaimsPrincipal> GetUserAsync()
-        {
-            var authState = await _authProvider.GetAuthenticationStateAsync();
-            return authState.User;
-        }
-
-        public async Task<IDictionary<string, string>> ObterClaimsDoUsuarioLogadoAsync()
+        public async Task<IDictionary<string, string>> ObterTodasAsClaimsAsync()
         {
             var authState = await _authProvider.GetAuthenticationStateAsync();
             var user = authState.User;

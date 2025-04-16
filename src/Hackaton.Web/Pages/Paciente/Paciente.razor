@@ -1,7 +1,11 @@
 ﻿@page "/paciente"
 
+@using Hackaton.Web.Services.Autenticacao.Interfaces
 @using Microsoft.AspNetCore.Authorization
-@* @attribute [Authorize] *@
+@inject NavigationManager Navigation
+@inject IUsuarioLogadoService UsuarioLogadoService
+@inject IAutenticacaoService AutenticacaoService
+@attribute [Authorize]
 
 <PageTitle>Paciente - Health&Med</PageTitle>
 
@@ -10,18 +14,20 @@
         <img src="img/logo-50.png" alt="Health&Med" class="logo-img">
     </div>
 
-    <div class="flex-grow-1 text-center fw-bold fs-4"></div>
+    <div class="flex-grow-1 text-center">
+        <span class="fw-bold fs-4">Paciente</span>
+    </div>
 
     <div class="ms-auto d-flex align-items-center">
         <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
-        <span class="user-name">Thiago Rosa</span>
+        <span class="user-name">@NomeDoPaciente</span>
     </div>
 </div>
 
 <div class="menu-sistema d-flex my-5">
-    <div class="item-menu">
-        <i class="bi bi-search"></i>
-        <span>Consultar Médicos</span>
+    <div class="item-menu" @onclick="@(() => Navigation.NavigateTo("/paciente/agendar-consulta"))">
+        <i class="bi bi-calendar-plus"></i>
+        <span>Agendar Consulta</span>
     </div>
     <div class="item-menu">
         <i class="bi bi-journal-medical"></i>
@@ -30,12 +36,25 @@
 </div>
 
 <div class="text-center mt-3">
-    <a href="/" class="btn btn-outline-danger">
+    <a href="/" class="btn btn-outline-danger" @onclick="EncerrarSessao">
         <i class="bi bi-box-arrow-right me-1"></i>
         Encerrar Sessão
     </a>
 </div>
 
 @code {
+    public string NomeDoPaciente { get; set; } = "";
 
+    protected override async Task OnInitializedAsync()
+    {
+        var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
+        var tokens = claims["unique_name"].Split(" ");
+        NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";        
+    }
+
+    private async Task EncerrarSessao()
+    {
+        await AutenticacaoService.EncerrarSessaoAsync();
+        Navigation.NavigateTo("/autenticacao", forceLoad: true);
+    }
 }

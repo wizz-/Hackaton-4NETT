@@ -44,7 +44,7 @@ namespace Hackaton.Web
 
             builder.Services.AddScoped<CustomAuthStateProvider>();
             builder.Services.AddScoped<AuthenticationStateProvider>(sp => sp.GetRequiredService<CustomAuthStateProvider>());
-            builder.Services.AddScoped<IConsultaAutenticacaoService, ConsultaAutenticacaoService>();
+            builder.Services.AddScoped<IUsuarioLogadoService, UsuarioLogadoService>();
 
             builder.Services.AddScoped<IAutenticacaoService, AutenticacaoService>();
             builder.Services.AddScoped<IUfService, UfService>();
