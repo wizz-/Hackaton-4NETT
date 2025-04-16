@@ -39,6 +39,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infra.IoC", "src\Infra.IoC\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\Application\Application.csproj", "{746C59FF-031D-4360-AECE-4FC83A9B6B01}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Teste", "5 - Teste", "{CE0644CB-C0D8-4816-898B-4CD21C100E45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hackaton.UnitTest", "Hackaton.UnitTest\Hackaton.UnitTest.csproj", "{20EFD260-720C-4DA2-924F-C1BA01C541D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +77,10 @@ Global
 		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{746C59FF-031D-4360-AECE-4FC83A9B6B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20EFD260-720C-4DA2-924F-C1BA01C541D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20EFD260-720C-4DA2-924F-C1BA01C541D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20EFD260-720C-4DA2-924F-C1BA01C541D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20EFD260-720C-4DA2-924F-C1BA01C541D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +96,7 @@ Global
 		{8CB03C8F-2192-4FAB-8477-1E6FAA29FDC3} = {2014A0C5-BE53-44C1-8FF3-5A8C75483A89}
 		{77377DE2-FC3E-4155-A2C8-89032E3FB599} = {8CB03C8F-2192-4FAB-8477-1E6FAA29FDC3}
 		{746C59FF-031D-4360-AECE-4FC83A9B6B01} = {3908F5FE-3168-49D0-9FDE-A38E09305E9C}
+		{20EFD260-720C-4DA2-924F-C1BA01C541D0} = {CE0644CB-C0D8-4816-898B-4CD21C100E45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E42251A9-B6D2-45EF-B58B-DA406C96CBAA}

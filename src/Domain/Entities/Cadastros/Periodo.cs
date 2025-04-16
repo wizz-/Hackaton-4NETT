@@ -16,8 +16,9 @@
             Inicio = inicio;
             Fim = fim;
         }
+       
 
-        internal List<TimeOnly> GerarHorarios(int tempoDeConsulta, IList<Periodo> periodosOcupado)
+        public List<TimeOnly> GerarHorarios(int tempoDeConsulta, IList<Periodo> periodosOcupado)
         {
             var timeSpan = TimeSpan.FromMinutes(tempoDeConsulta);
 

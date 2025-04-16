@@ -1,4 +1,5 @@
 ﻿using Domain.Entities.Login;
+using System.Text.RegularExpressions;
 
 namespace Domain.Entities.Cadastros
 {
@@ -46,7 +47,9 @@ namespace Domain.Entities.Cadastros
         {
             if (string.IsNullOrWhiteSpace(email)) throw new InvalidOperationException("E-mail Inválido.");
 
-            if (!email.Contains("@") && email.IndexOf(".", email.IndexOf("@")) > email.IndexOf("@")) throw new InvalidOperationException("E-mail Inválido.");
+            var padrao = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            
+            if (!Regex.IsMatch(email, padrao, RegexOptions.IgnoreCase)) throw new InvalidOperationException("E-mail Inválido.");
         }
 
         public static void ValidarCpf(string cpf)
