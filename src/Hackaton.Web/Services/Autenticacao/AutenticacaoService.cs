@@ -49,7 +49,7 @@ namespace Hackaton.Web.Services.Autenticacao
             throw new ArgumentException("Perfil de usuário inválido.");
         }
 
-        public async Task LogoutAsync()
+        public async Task EncerrarSessaoAsync()
         {
             await authProvider.MarcarComoDeslogadoAsync();
         }
