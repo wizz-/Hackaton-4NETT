@@ -7,5 +7,6 @@ namespace Hackaton.Web.Services.Autenticacao.Interfaces
         Task<bool> IsAuthenticatedAsync();
         Task<string?> GetUserNameAsync();
         Task<ClaimsPrincipal> GetUserAsync();
+        Task<IDictionary<string, string>> ObterClaimsDoUsuarioLogadoAsync();
     }
 }

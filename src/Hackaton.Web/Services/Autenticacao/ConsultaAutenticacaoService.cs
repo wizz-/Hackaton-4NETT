@@ -23,5 +23,13 @@ namespace Hackaton.Web.Services.Autenticacao
             var authState = await _authProvider.GetAuthenticationStateAsync();
             return authState.User;
         }
+
+        public async Task<IDictionary<string, string>> ObterClaimsDoUsuarioLogadoAsync()
+        {
+            var authState = await _authProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            return user.Claims.ToDictionary(c => c.Type, c => c.Value);
+        }
     }
 }
