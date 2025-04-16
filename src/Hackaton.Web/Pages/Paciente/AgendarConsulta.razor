@@ -1,0 +1,208 @@
+﻿@page "/paciente/agendar-consulta"
+@inject NavigationManager Navigation
+
+<PageTitle>Agendar Consulta - Health&Med</PageTitle>
+
+<div class="d-flex align-items-center px-3 py-2 header-bar">
+    <div class="me-auto">
+        <img src="img/logo-50.png" alt="Health&Med" class="logo-img">
+    </div>
+
+    <div class="flex-grow-1 text-center">
+        <span class="fw-bold fs-4">Agendar Consulta</span>
+    </div>
+
+    <div class="ms-auto d-flex align-items-center">
+        <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
+        <span class="user-name">Paciente Logado</span>
+    </div>
+</div>
+
+<div class="mt-4 mb-2">
+    <h5>1. Escolha uma especialidade</h5>
+    <EditForm Model="@filtro" OnValidSubmit="BuscarMedicos">
+        <DataAnnotationsValidator />
+        <div class="row mb-4">
+            <div class="col-md-10">
+                <InputText class="form-control" placeholder="Ex: Cardiologia, Dermatologia..." @bind-Value="filtro.Especialidade" />
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" type="submit">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+@if (medicos?.Any() == true)
+{
+    <h5 class="mb-3">2. Escolha um médico</h5>
+    <div class="list-group mb-4">
+        @foreach (var medico in medicos)
+        {
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@medico.Nome</strong><br />
+                    <small>@medico.Especialidade</small>
+                </div>
+                <button class="btn btn-outline-success" @onclick="() => SelecionarMedico(medico)">
+                    <i class="bi bi-calendar-week"></i> Ver Agenda
+                </button>
+            </div>
+        }
+    </div>
+}
+else if (jaBuscou)
+{
+    <div class="alert alert-warning text-center">
+        Nenhum médico encontrado para essa especialidade.
+    </div>
+}
+
+@if (medicoSelecionado is not null)
+{
+    <h5 class="mb-3">3. Escolha um horário</h5>
+
+    @if (agendaAgrupada?.Any() == true)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-light">
+                    <tr>
+                        @foreach (var dia in agendaAgrupada.Keys.Order())
+                        {
+                            <th>@dia.ToString("dddd, dd/MM", new System.Globalization.CultureInfo("pt-BR"))</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var horario in horariosPorDia)
+                    {
+                        <tr>
+                            @foreach (var dia in agendaAgrupada.Keys.Order())
+                            {
+                                var horarioCompleto = dia.Add(horario);
+                                bool disponivel = agendaAgrupada[dia].Contains(horarioCompleto);
+
+                                <td>
+                                    @if (disponivel)
+                                    {
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                @onclick="@(() => SelecionarHorario(horarioCompleto))">
+                                            @horarioCompleto.ToString("HH:mm")
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">Este médico ainda não possui horários disponíveis.</div>
+    }
+}
+
+@if (horarioSelecionado is not null)
+{
+    <div class="mt-4 text-center">
+        <h5>Confirmar agendamento</h5>
+        <p>Você está agendando com <strong>@medicoSelecionado?.Nome</strong> em <strong>@horarioSelecionado?.ToString("dd/MM/yyyy HH:mm")</strong></p>
+        <button class="btn btn-success" @onclick="ConfirmarAgendamento">
+            <i class="bi bi-check-circle me-1"></i> Confirmar Consulta
+        </button>
+    </div>
+}
+
+<div class="mt-5">
+    <button class="btn btn-outline-primary" @onclick="@(() => Navigation.NavigateTo("/paciente"))">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </button>
+</div>
+
+@code {
+    private FiltroBuscaMedico filtro = new();
+    private List<MedicoResumo>? medicos;
+    private MedicoResumo? medicoSelecionado;
+    private DateTime? horarioSelecionado;
+    private List<DateTime>? agenda;
+    private Dictionary<DateTime, List<DateTime>> agendaAgrupada = new();
+    private bool jaBuscou = false;
+
+    private List<TimeSpan> horariosPorDia = new()
+    {
+        new TimeSpan(9, 0, 0),
+        new TimeSpan(10, 0, 0),
+        new TimeSpan(11, 0, 0)
+    };
+
+    private async Task BuscarMedicos()
+    {
+        jaBuscou = true;
+        await Task.Delay(300);
+
+        var termo = filtro.Especialidade.Trim().ToLower();
+
+        medicos = new List<MedicoResumo>
+        {
+            new() { Id = Guid.NewGuid(), Nome = "Dra. Ana Cardoso", Especialidade = "Cardiologia" },
+            new() { Id = Guid.NewGuid(), Nome = "Dr. Bruno Lima", Especialidade = "Ortopedia" },
+            new() { Id = Guid.NewGuid(), Nome = "Dra. Carla Mendes", Especialidade = "Dermatologia" }
+        }
+        .Where(m => m.Especialidade.ToLower().Contains(termo))
+        .ToList();
+
+        medicoSelecionado = null;
+        agenda = null;
+        horarioSelecionado = null;
+    }
+
+    private async Task SelecionarMedico(MedicoResumo medico)
+    {
+        medicoSelecionado = medico;
+        await Task.Delay(300);
+
+        agenda = Enumerable.Range(0, 7)
+            .SelectMany(dia => horariosPorDia.Select(h => DateTime.Today.AddDays(dia).Add(h)))
+            .ToList();
+
+        agendaAgrupada = agenda
+            .GroupBy(a => a.Date)
+            .ToDictionary(g => g.Key, g => g.ToList());
+
+        horarioSelecionado = null;
+    }
+
+    private void SelecionarHorario(DateTime horario)
+    {
+        horarioSelecionado = horario;
+    }
+
+    private async Task ConfirmarAgendamento()
+    {
+        if (medicoSelecionado is null || horarioSelecionado is null) return;
+
+        await Task.Delay(400);
+        Navigation.NavigateTo("/paciente/consultas");
+    }
+
+    private class FiltroBuscaMedico
+    {
+        public string Especialidade { get; set; } = string.Empty;
+    }
+
+    private class MedicoResumo
+    {
+        public Guid Id { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Especialidade { get; set; } = string.Empty;
+    }
+}

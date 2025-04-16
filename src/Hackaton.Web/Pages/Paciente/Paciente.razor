@@ -25,9 +25,9 @@
 </div>
 
 <div class="menu-sistema d-flex my-5">
-    <div class="item-menu">
-        <i class="bi bi-search"></i>
-        <span>Consultar Médicos</span>
+    <div class="item-menu" @onclick="@(() => Navigation.NavigateTo("/paciente/agendar-consulta"))">
+        <i class="bi bi-calendar-plus"></i>
+        <span>Agendar Consulta</span>
     </div>
     <div class="item-menu">
         <i class="bi bi-journal-medical"></i>
@@ -49,8 +49,7 @@
     {
         var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
         var tokens = claims["unique_name"].Split(" ");
-        NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";
-        
+        NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";        
     }
 
     private async Task EncerrarSessao()
