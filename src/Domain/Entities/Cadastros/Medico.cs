@@ -77,6 +77,9 @@ namespace Domain.Entities.Cadastros
         private void ValidarUsuario(Usuario usuario)
         {
             if (usuario == null) throw new InvalidOperationException("Usuário Inválido.");
+            if (usuario.Tipo != Enums.TipoDeUsuario.Medico) throw new InvalidOperationException("O tipo de usuário não é invalido.");
         }
+
+
     }
 }

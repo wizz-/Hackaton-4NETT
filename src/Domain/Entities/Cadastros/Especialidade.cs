@@ -8,5 +8,10 @@
         protected Especialidade()
         {
         }
+
+        public Especialidade(string nome)
+        {
+            Nome = nome;
+        }
     }
 }
