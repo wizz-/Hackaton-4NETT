@@ -12,6 +12,8 @@ using Application.Services.Logins.Interfaces;
 using Application.Services.LoginsAppService;
 using Application.Services.Medicos;
 using Application.Services.Medicos.Interfaces;
+using Application.Services.Medicos.Mappers;
+using Application.Services.Medicos.Mappers.Interfaces;
 using Application.Services.Ufs;
 using Application.Services.Ufs.Interfaces;
 using Domain.Interfaces.Infra.Data.DAL;
@@ -48,6 +50,7 @@ namespace Infra.IoC
             services.AddScoped<IUfAppService, UfAppService>();
             services.AddScoped<IMedicoAppService, MedicoAppService>();
             services.AddScoped<IMapperConsultaAppService, MapperConsultaAppService>();
+            services.AddScoped<IMapperMedicoAppService, MapperMedicoAppService>();
         }
 
         private static void MapearInfra(IServiceCollection services)

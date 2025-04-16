@@ -13,6 +13,7 @@ namespace Application.Services.Especialidades
             return especialidades
                 .Select(x => new EspecialidadeDto { Id = x.Id, Nome = x.Nome })
                 .ToList();
+
         }
     }
 }

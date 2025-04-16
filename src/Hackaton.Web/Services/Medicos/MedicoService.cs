@@ -12,7 +12,30 @@ namespace Hackaton.Web.Services.Medicos
 {
     public class MedicoService(HttpClient http) : IMedicoService
     {
-        public async Task CadastrarMedicoAsync(MedicoModel medico)
+
+        public async Task<MeuCadastroMedicoModel> ObterMedico(int id)
+        {
+            //try
+            //{
+            var medico = await http.GetFromJsonAsync<MeuCadastroMedicoModel>($"medicos/{id}");
+
+            //var teste = medico.Content.ReadAsStringAsync();
+
+            //throw new NotImplementedException();
+            return medico!;
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    var teste = ex;
+            //}
+
+            //throw new NotImplementedException();
+
+            return null;
+        }
+
+        public async Task CadastrarMedicoAsync(PrimeiroAcessoMedicoModel medico)
         {
             ArgumentNullException.ThrowIfNull(medico);
             var parametroDaRequest = PreencherMedicoRequest(medico);
@@ -30,14 +53,14 @@ namespace Hackaton.Web.Services.Medicos
                     if (erro is not null)
                         throw new ApiException(erro.Mensagem, erro.Detalhes);
                 }
-                catch(JsonException)
+                catch (JsonException)
                 {
                     throw new ApiException("Erro inesperado ao processar resposta da API.");
                 }
             }
         }
 
-        private MedicoCadastroRequest PreencherMedicoRequest(MedicoModel model)
+        private MedicoCadastroRequest PreencherMedicoRequest(PrimeiroAcessoMedicoModel model)
         {
             return new MedicoCadastroRequest
             {

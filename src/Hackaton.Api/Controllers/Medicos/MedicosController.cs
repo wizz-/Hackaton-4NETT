@@ -24,13 +24,18 @@ namespace Hackaton.Api.Controllers.Medicos
                 .WithDescription("Atualiza os horários do médico no banco de dados")
                 .RequireAuthorization();
 
-            grupo.MapGet("{especialidadeId}", ObterMedicos)
+            grupo.MapGet("por-especialidade/{especialidadeId}", ObterMedicos)
                  .WithSummary("Obtém lista de médicos por especialidade")
                  .WithDescription("Obtém lista de médicos por especialidade no banco de dados")
                  .RequireAuthorization();
+
+            grupo.MapGet("{id}", ObterMedico)
+                 .WithSummary("Obtém médico por id")
+                 .WithDescription("Obtém médico por id do banco de dados")
+                 .RequireAuthorization();
         }
 
-        private Results<Created,BadRequest<ErroDto>> Criar(MedicoDto dto, ICadastroAppService service)
+        private Results<Created, BadRequest<ErroDto>> Criar(MedicoDto dto, ICadastroAppService service)
         {
             if (dto.Id > 0)
             {
@@ -58,6 +63,13 @@ namespace Hackaton.Api.Controllers.Medicos
         private Ok<IList<MedicoParaConsultaDto>> ObterMedicos(int especialidadeId, IMedicoAppService service)
         {
             var retorno = service.ObterMedicosPorEspecialidade(especialidadeId);
+
+            return TypedResults.Ok(retorno);
+        }
+
+        private Ok<CadastroMedicoDto> ObterMedico(int id, IMedicoAppService service)
+        {
+            var retorno = service.ObterDadosDoMedico(id);
 
             return TypedResults.Ok(retorno);
         }

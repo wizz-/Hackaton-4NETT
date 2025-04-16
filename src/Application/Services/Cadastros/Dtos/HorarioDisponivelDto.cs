@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public DayOfWeek DiaDaSemana { get; set; }
-        public virtual PeriodoDto? Periodo { get; set; }
+        public TimeOnly Inicio { get; set; }
+        public TimeOnly Fim { get; set; }
     }
 }

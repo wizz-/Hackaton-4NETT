@@ -2,7 +2,7 @@
 
 namespace Hackaton.Web.Models.Medico
 {
-    public class MedicoModel
+    public class PrimeiroAcessoMedicoModel
     {
         [Required(ErrorMessage = "O nome completo é obrigatório.")]
         [StringLength(80, ErrorMessage = "O nome deve ter no máximo 80 caracteres.")]

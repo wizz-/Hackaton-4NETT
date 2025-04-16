@@ -4,6 +4,7 @@ namespace Hackaton.Web.Services.Medicos.Interfaces
 {
     public interface IMedicoService
     {
-        Task CadastrarMedicoAsync(MedicoModel medico);
+        Task CadastrarMedicoAsync(PrimeiroAcessoMedicoModel medico);
+        Task<MeuCadastroMedicoModel> ObterMedico(int id);
     }
 }

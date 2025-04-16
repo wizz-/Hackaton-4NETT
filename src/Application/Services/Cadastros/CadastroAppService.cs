@@ -58,7 +58,7 @@ namespace Application.Services.Cadastros
 
             foreach (var item in horariosDisponiveis)
             {
-                var periodo = new Periodo(item.Periodo.Inicio, item.Periodo.Fim);
+                var periodo = new Periodo(item.Inicio, item.Fim);
 
                 var horario = new HorarioDisponivel(item.DiaDaSemana, especialidade, periodo);
 

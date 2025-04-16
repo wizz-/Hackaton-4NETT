@@ -12,17 +12,27 @@ namespace Hackaton.Api
             var builder = WebApplication.CreateBuilder(args);
             builder.ConfigurarEMapearDependenciasDaAplicacao();
 
+            //builder.Services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowBlazor", policy =>
+            //    {
+            //        policy.WithOrigins("https://localhost:7159")
+            //              .AllowAnyHeader()
+            //              .AllowAnyMethod();
+            //    });
+            //});
+
             var app = builder.Build();
 
             InicializarDatabase(app);
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseCors("AllowBlazor");
             app.UseAuthorization();
             app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.MapCarter();
             app.MapMetrics();
-            app.UseCors("AllowBlazor");
 
             app.Run();
         }
