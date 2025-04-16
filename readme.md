@@ -130,6 +130,16 @@ A tela nível paciente deve seguir o padrão abaixo.
 
 #### Tela de Agendamento Paciente
 
+Na tela de agendamento da plataforma Health&Med API, os usuários contam com uma interface prática e acessível, pensada para facilitar o gerenciamento de suas consultas médicas.
+Através dessa funcionalidade, os pacientes tem as opções de agendamento de forma rápida e prática.
+
+Além disso, para maior comodidade e controle, o sistema também permite o cancelamento de agendamentos já realizados, oferecendo flexibilidade caso surjam imprevistos ou mudanças na agenda.
+
+A tela de agendamento a nível do paciente deve seguir o padrão abaixo exibido
+
+![image](https://github.com/user-attachments/assets/b03fd1e1-d7bb-46a9-8978-9e18e4e5df06)
+
+
 #### Cadastro/Edição de horários Disponíveis
 
 

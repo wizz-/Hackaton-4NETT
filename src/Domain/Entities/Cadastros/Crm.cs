@@ -32,7 +32,7 @@ namespace Domain.Entities.Cadastros
         {
             if (string.IsNullOrWhiteSpace(numero)) throw new InvalidCastException($"CRM não pode ser nulo.");
 
-            if (!numero.All(char.IsDigit) && numero.Length != 6) throw new InvalidCastException($"CRM '{numero}' não é válido.");
+            if (!numero.All(char.IsDigit) || numero.Length != 6) throw new InvalidCastException($"CRM '{numero}' não é válido.");
         }
     }
 }
