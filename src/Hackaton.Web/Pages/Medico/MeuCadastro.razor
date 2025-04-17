@@ -38,29 +38,29 @@
         <div class="row mb-4">
             <div class="col-md-6">
                 <label class="form-label">Nome do Médico</label>
-                <InputText @bind-Value="cadastroModel.Nome" class="form-control" disabled />
+                <InputText @bind-Value="CadastroMedicoModel.Nome" class="form-control" disabled />
             </div>
             <div class="col-md-3">
                 <label class="form-label">CRM</label>
-                <InputText @bind-Value="cadastroModel.CrmNumero" class="form-control" disabled />
+                <InputText @bind-Value="CadastroMedicoModel.CrmNumero" class="form-control" disabled />
             </div>
             <div class="col-md-3">
                 <label class="form-label">Estado (UF)</label>
-                <InputText @bind-Value="cadastroModel.CrmUf" class="form-control" disabled />
+                <InputText @bind-Value="CadastroMedicoModel.CrmUf" class="form-control" disabled />
             </div>
         </div>
 
-        <EditForm Model="@cadastroModel" OnValidSubmit="SalvarCadastro">
+        <EditForm Model="@CadastroMedicoModel" OnValidSubmit="SalvarCadastro">
             <DataAnnotationsValidator />
 
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label class="form-label">Especialidade</label>
-                    <InputSelect class="form-select" @bind-Value="cadastroModel.Especialidade">
+                    <InputSelect class="form-select" @bind-Value="CadastroMedicoModel.EspecialidadeId">
                         <option value="">Selecione...</option>
                         @foreach (var esp in Especialidades)
                         {
-                            <option value="@esp">@esp</option>
+                            <option value="@esp.Id">@esp.Nome</option>
                         }
                     </InputSelect>
                 </div>            
@@ -131,7 +131,7 @@
                             @foreach (var dia in Enumerable.Range(1, 7))
                             {
                                 <td>
-                                    @foreach (var h in cadastroModel.Horarios.Where(h => h.DiaDaSemana == dia))
+                                    @foreach (var h in CadastroMedicoModel.Horarios.Where(h => h.DiaDaSemana == dia))
                                     {
                                         <div class="horario-badge">
                                             <span>@h.Inicio - @h.Fim</span>
@@ -165,6 +165,7 @@
     private bool carregando = true;
     private List<EspecialidadeModel> Especialidades = [];
     private EditContext? editContext;
+    private MeuCadastroMedicoModel CadastroMedicoModel; 
 
 
     protected override async Task OnInitializedAsync()
@@ -183,6 +184,7 @@
             await Task.WhenAll(medico, tarefaEspecialidades);
 
             Especialidades = await tarefaEspecialidades;
+            CadastroMedicoModel = await medico;
 
             editContext = new EditContext(medico);
         }
@@ -196,13 +198,6 @@
     {
         HorariosFimDisponiveis = new List<string>(HorariosDisponiveis);
     }
-
-    private MeuCadastroMedicoModel cadastroModel = new()
-    {
-        Nome = "Thiago Rosa",
-        CrmNumero = "123456",
-        CrmUf = "SP"
-    };
 
     private MeuCadastroNovoHorarioModel novoHorario = new();
 
@@ -224,12 +219,12 @@
             valorFormatado = valorDecimal.ToString("C", new CultureInfo("pt-BR"));
 
             // Armazena no modelo em decimal
-            cadastroModel.ValorDaConsulta = valorDecimal;
+            CadastroMedicoModel.ValorDaConsulta = valorDecimal;
         }
         else
         {
             valorFormatado = "R$ 0,00";
-            cadastroModel.ValorDaConsulta = 0;
+            CadastroMedicoModel.ValorDaConsulta = 0;
         }
     }
 
@@ -296,7 +291,7 @@
     {
         if (!string.IsNullOrEmpty(novoHorario.Inicio) && !string.IsNullOrEmpty(novoHorario.Fim) && novoHorario.DiaDaSemana > 0)
         {
-            cadastroModel.Horarios.Add(new MeuCadastroHorarioModel
+            CadastroMedicoModel.Horarios.Add(new MeuCadastroHorarioModel
             {
                 DiaDaSemana = novoHorario.DiaDaSemana,
                 Inicio =novoHorario.Inicio, //TimeOnly.Parse(novoHorario.Inicio),
@@ -309,7 +304,7 @@
 
     void RemoverHorario(MeuCadastroHorarioModel horario)
     {
-        cadastroModel.Horarios.Remove(horario);
+        CadastroMedicoModel.Horarios.Remove(horario);
     }
 
     string ObterNomeDoDia(int dia)

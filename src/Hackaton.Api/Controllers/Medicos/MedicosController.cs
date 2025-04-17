@@ -20,8 +20,8 @@ namespace Hackaton.Api.Controllers.Medicos
                 .WithDescription("Grava um novo médico no banco de dados");
 
             grupo.MapPatch("{id}", AtualizarHorariosDisponiveis)
-                .WithSummary("Atualiza horários do médico")
-                .WithDescription("Atualiza os horários do médico no banco de dados")
+                .WithSummary("Atualiza dados e horários do médico")
+                .WithDescription("Atualiza valor da consulta, especialidade e horários do médico no banco de dados")
                 .RequireAuthorization();
 
             grupo.MapGet("por-especialidade/{especialidadeId}", ObterMedicos)
