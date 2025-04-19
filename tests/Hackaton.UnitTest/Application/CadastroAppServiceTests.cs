@@ -50,6 +50,17 @@ namespace Hackaton.UnitTest.Application
 
             return securitySenha;
         }
+        private static Medico GetMedico()
+        {
+            var crm = new Crm("123456", UnidadeFederativa.SP);
+            var especialidade = new Especialidade("Cardiologia");
+            var senha = "123456";
+
+            var usuario = new Usuario("joaosilva", GetSecureUsuario(senha), TipoDeUsuario.Medico);
+            var nome = "Dr. João Silva";
+
+            return new Medico(nome, crm, especialidade, usuario);
+        }
 
         [Fact]
         public void CadastrarPaciente_EmailJaCadastrado_DeveLancarInvalidOperationException()
@@ -282,6 +293,82 @@ namespace Hackaton.UnitTest.Application
                 m.Especialidade.Id == dto.Especialidade.Id &&
                 m.Usuario.Email == dto.Usuario.Email
             )), Times.Once);
+            _mockUow.Verify(u => u.SaveChanges(), Times.Once);
+        }
+
+        [Fact]
+        public void CadastrarHorariosDisponiveis_MedicoNaoExiste_DeveLancarInvalidOperationException()
+        {
+            // Arrange
+            var medicoId = 42;
+            var dtoEsp = new EspecialidadeDto { Id = 1, Nome = "Cardio" };
+            var listaHorarios = new List<HorarioDisponivelDto>();
+
+            _mockMedRepo
+                .Setup(r => r.ObterPorId(medicoId))
+                .Returns((Medico?)null);
+
+            // Act & Assert
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+                _service.CadastrarHorariosDisponiveis(medicoId, dtoEsp, 150m, listaHorarios));
+            Assert.Equal($"Médico com ID '{medicoId}' não existe.", ex.Message);
+        }
+
+        [Fact]
+        public void CadastrarHorariosDisponiveis_EspecialidadeNaoLocalizada_DeveLancarInvalidOperationException()
+        {
+            // Arrange
+            var medicoId = 1;
+            var dtoEsp = new EspecialidadeDto { Id = 99, Nome = "Inexistente" };
+            var listaHorarios = new List<HorarioDisponivelDto>();
+            var medico = GetMedico();
+
+            _mockMedRepo
+                .Setup(r => r.ObterPorId(medicoId))
+                .Returns(medico);
+            _mockEspecialidadeRepo
+                .Setup(r => r.ObterPorId(dtoEsp.Id))
+                .Returns((Especialidade?)null);
+
+            // Act & Assert
+            var ex = Assert.Throws<InvalidOperationException>(() =>
+                _service.CadastrarHorariosDisponiveis(medicoId, dtoEsp, 150m, listaHorarios));
+            Assert.Equal(
+                $"Especialidade '{dtoEsp.Nome}' com id '{dtoEsp.Id}' não foi localizada.",
+                ex.Message);
+        }
+
+        [Fact]
+        public void CadastrarHorariosDisponiveis_Sucesso_DeveAtualizarMedicoEChamarSaveChanges()
+        {
+            // Arrange
+            var medicoId = 1;
+            var dtoEsp = new EspecialidadeDto { Id = 0, Nome = "Dermato" };
+            var listaHorarios = new List<HorarioDisponivelDto>
+        {
+            new HorarioDisponivelDto
+            {
+                DiaDaSemana = DayOfWeek.Monday,
+                Inicio = new TimeOnly(8,0),
+                Fim = new TimeOnly(9,0)
+            }
+        };
+            // criar instâncias reais de entidade para simular
+            var especialidade = new Especialidade(dtoEsp.Nome);
+            var medico = GetMedico();
+
+            _mockMedRepo
+                .Setup(r => r.ObterPorId(medicoId))
+                .Returns(medico);
+            _mockEspecialidadeRepo
+                .Setup(r => r.ObterPorId(dtoEsp.Id))
+                .Returns(especialidade);
+
+            // Act
+            _service.CadastrarHorariosDisponiveis(medicoId, dtoEsp, 200m, listaHorarios);
+
+            // Assert
+            _mockMedRepo.Verify(r => r.Atualizar(medico), Times.Once);
             _mockUow.Verify(u => u.SaveChanges(), Times.Once);
         }
     }
