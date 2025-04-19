@@ -2,6 +2,7 @@
 using Application.Services.Agendas.Interfaces;
 using Domain.Entities.Cadastros;
 using Domain.Entities.Consultas;
+using Domain.Exceptions;
 using Domain.Interfaces.Infra.Data.DAL;
 
 namespace Application.Services.Agendas
@@ -11,7 +12,12 @@ namespace Application.Services.Agendas
         public IList<MedicoDisponivelDto> ObterAgenda(DateOnly dia, int especialidadeId)
         {
             var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId);
+            if (medicosDiponiveis == null || medicosDiponiveis.Count == 0)
+                throw new NotFoundException("Médico disponível");
+
             var consultasDoDia = unitOfWork.ConsultaRepository.ObterConsultasNaoCanceladasDoDia(dia, medicosDiponiveis);
+            if (consultasDoDia == null || consultasDoDia.Count == 0)
+                throw new NotFoundException("Consultas para o dia");
 
             return CruzarDisponibilidadesComConsultas(dia, medicosDiponiveis, consultasDoDia);
         }
