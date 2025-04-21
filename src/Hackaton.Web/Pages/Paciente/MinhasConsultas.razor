@@ -1,0 +1,115 @@
+﻿@page "/paciente/minhas-consultas"
+
+@using System.Globalization
+@using Hackaton.Web.Services.Autenticacao.Interfaces
+
+@inject IUsuarioLogadoService UsuarioLogadoService
+@inject NavigationManager Navigation
+
+<PageTitle>Minhas Consultas - Health&Med</PageTitle>
+
+<div class="d-flex align-items-center px-3 py-2 header-bar">
+    <div class="me-auto">
+        <img src="img/logo-50.png" alt="Health&Med" class="logo-img">
+    </div>
+
+    <div class="flex-grow-1 text-center">
+        <span class="fw-bold fs-4">Minhas Consultas</span>
+    </div>
+
+    <div class="ms-auto d-flex align-items-center">
+        <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
+        <span class="user-name">@NomeDoPaciente</span>
+    </div>
+</div>
+
+<div class="container mt-4">    
+
+    @if (consultas?.Any() == true)
+    {
+        <table class="table table-hover table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th><i class="bi bi-calendar-event"></i> Data</th>
+                    <th><i class="bi bi-clock"></i> Hora</th>
+                    <th><i class="bi bi-person-vcard"></i> Médico</th>
+                    <th><i class="bi bi-heart-pulse"></i> Especialidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var consulta in consultas)
+                {
+                    <tr>
+                        <td>@consulta.Data.ToString("dd/MM/yyyy")</td>
+                        <td>@consulta.Data.ToString("HH:mm")</td>
+                        <td>@consulta.Medico</td>
+                        <td>@consulta.Especialidade</td>                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info">Nenhuma consulta encontrada.</div>
+    }
+
+    <button class="btn btn-outline-primary mt-3" @onclick="Voltar">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </button>
+</div>
+
+@code {
+    public string NomeDoPaciente { get; set; } = "";
+    private List<ConsultaPacienteResumo> consultas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        consultas = ObterConsultasMockadas();
+
+        var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
+        var tokens = claims["unique_name"].Split(" ");
+        NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";
+    }
+
+    private List<ConsultaPacienteResumo> ObterConsultasMockadas()
+    {
+        return new List<ConsultaPacienteResumo>
+        {
+            new ConsultaPacienteResumo
+            {
+                Medico = "Dra. Ana Souza",
+                Especialidade = "Dermatologia",
+                Data = DateTime.Today.AddDays(2).AddHours(14),
+                Local = "Clínica Central - Sala 203"
+            },
+            new ConsultaPacienteResumo
+            {
+                Medico = "Dr. Carlos Mendes",
+                Especialidade = "Cardiologia",
+                Data = DateTime.Today.AddDays(5).AddHours(9),
+                Local = "Hospital São Lucas - Consultório 12"
+            },
+            new ConsultaPacienteResumo
+            {
+                Medico = "Dra. Juliana Lima",
+                Especialidade = "Pediatria",
+                Data = DateTime.Today.AddDays(10).AddHours(11),
+                Local = "Unidade Sul - Sala 07"
+            }
+        };
+    }
+
+    private void Voltar()
+    {
+        Navigation.NavigateTo("/");
+    }
+
+    private class ConsultaPacienteResumo
+    {
+        public string Medico { get; set; }
+        public string Especialidade { get; set; }
+        public DateTime Data { get; set; }
+        public string Local { get; set; }
+    }
+}

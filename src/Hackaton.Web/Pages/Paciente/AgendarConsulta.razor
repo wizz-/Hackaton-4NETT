@@ -1,5 +1,9 @@
 ﻿@page "/paciente/agendar-consulta"
+
+@using Hackaton.Web.Services.Autenticacao.Interfaces
+
 @inject NavigationManager Navigation
+@inject IUsuarioLogadoService UsuarioLogadoService
 
 <PageTitle>Agendar Consulta - Health&Med</PageTitle>
 
@@ -14,7 +18,7 @@
 
     <div class="ms-auto d-flex align-items-center">
         <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
-        <span class="user-name">Paciente Logado</span>
+        <span class="user-name">@NomeDoPaciente</span>
     </div>
 </div>
 
@@ -23,7 +27,7 @@
 <div class="row mb-4">
     <!-- Especialidade -->
     <div class="col-md-6 mb-3 position-relative">
-        <label class="form-label fw-semibold">Especialidade</label>
+        <label class="form-label fw-semibold"><i class="bi bi-heart-pulse"></i> Especialidade</label>
         <InputText class="form-control"
             placeholder="Ex: Cardiologia"
             @bind-Value="filtro.Especialidade"
@@ -47,7 +51,7 @@
 
     <!-- Médico -->
     <div class="col-md-6 mb-3 position-relative">
-        <label class="form-label fw-semibold">Nome do Médico</label>
+        <label class="form-label fw-semibold"><i class="bi bi-person-vcard"></i> Nome do Médico</label>
         <InputText class="form-control"
             placeholder="Ex: Ana, Bruno..."
             @bind-Value="filtro.NomeMedico"
@@ -172,7 +176,7 @@
     private bool agendaCarregada = false;
     private bool focoEspecialidade = false;
     private bool focoMedico = false;
-
+    public string NomeDoPaciente { get; set; } = "";
     private List<DateTime>? agenda;
     private Dictionary<DateTime, List<DateTime>> agendaAgrupada = new();
 
@@ -188,6 +192,13 @@
 
     private List<string> todosNomesMedicos = new() { "Dra. Ana Cardoso", "Dr. Bruno Lima", "Dra. Carla Mendes" };
     private List<string> sugestoesMedico = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
+        var tokens = claims["unique_name"].Split(" ");
+        NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";
+    }
 
     private List<MedicoResumo> todosMedicos = new()
     {
