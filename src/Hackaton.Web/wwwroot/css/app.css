@@ -28,7 +28,7 @@ body {
     color: var(--color-text);
     font-family: Roboto,Arial,Helvetica,sans-serif;
     font-size: 16px;
-    background-image: url('../img/sala-espera.png');
+    background-image: url('/img/sala-espera.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

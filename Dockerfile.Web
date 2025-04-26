@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Etapa 1: copiar apenas o .csproj para restaurar dependências
+COPY src/Hackaton.Web/Hackaton.Web.csproj Hackaton.Web/
+RUN dotnet restore Hackaton.Web/Hackaton.Web.csproj
+
+# Etapa 2: copiar TODO o projeto Blazor e libs compartilhadas
+COPY src/ ./
+
+WORKDIR /src/Hackaton.Web
+RUN dotnet publish -c Release -o /app/publish
+
+# Etapa final: usar NGINX para servir os arquivos estáticos
+FROM nginx:alpine
+COPY --from=build /app/publish/wwwroot /usr/share/nginx/html
+COPY src/Hackaton.Web/nginx.conf /etc/nginx/nginx.conf

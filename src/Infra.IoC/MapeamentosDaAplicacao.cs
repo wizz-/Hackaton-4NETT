@@ -35,10 +35,10 @@ namespace Infra.IoC
 {
     public static class MapeamentosDaAplicacao
     {
-        public static void Mapear(IServiceCollection services)
+        public static void Mapear(IServiceCollection services, IConfiguration configuration)
         {
             MapearApplication(services);
-            MapearInfra(services);
+            MapearInfra(services,configuration);
         }
         private static void MapearApplication(IServiceCollection services)
         {
@@ -53,11 +53,12 @@ namespace Infra.IoC
             services.AddScoped<IMapperMedicoAppService, MapperMedicoAppService>();
         }
 
-        private static void MapearInfra(IServiceCollection services)
+        private static void MapearInfra(IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            var tipos = typeof(RepositoryBase<>).Assembly.GetTypes().Where(x => x.BaseType?.Name == typeof(RepositoryBase<>).Name);
+            var tipos = typeof(RepositoryBase<>).Assembly.GetTypes()
+                .Where(x => x.BaseType?.Name == typeof(RepositoryBase<>).Name);
 
             foreach (var item in tipos)
             {
@@ -76,8 +77,7 @@ namespace Infra.IoC
                         Console.WriteLine($"SQL: Tentativa {retryCount} de conexão ao SQL Server falhou: {exception.Message}. Tentando novamente em {timeSpan.Seconds} segundos.");
                     });
 
-            var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var serviceProvider = services.BuildServiceProvider();            
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var connectionStringTeste = configuration.GetConnectionString("TestConnection");
 

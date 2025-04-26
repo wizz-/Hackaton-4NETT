@@ -10,18 +10,7 @@ namespace Hackaton.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.ConfigurarEMapearDependenciasDaAplicacao();
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowBlazor", policy =>
-                {
-                    policy.WithOrigins("https://localhost:7159")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials(); // caso use autenticação via cookie ou header
-                });
-            });
+            builder.ConfigurarEMapearDependenciasDaAplicacao();            
 
             var app = builder.Build();
 

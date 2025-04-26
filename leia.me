@@ -1,0 +1,19 @@
+Para executar o projeto
+	Rodar deploy.bat que ele builda e sobe os containeres com docker e kubernetes
+
+Para matar o kubernetes
+	kubectl delete -f deploy.yaml
+
+Qdo o container fica pause e não aparece nada no log dele
+	kubectl get pods -n healthmed
+	kubectl describe pod <nome-do-pod> -n healthmed
+	kubectl logs -f api-xxxx -n healthmed
+
+Para entrar no container web
+	kubectl get pods -n healthmed
+	kubectl exec -it pod/<nome-do-pod> -n healthmed -- sh
+	listar o conteudo do nginx
+	ls -l /usr/share/nginx/html
+
+Para descobrir o IP da aplicação
+	kubectl get svc -n healthmed

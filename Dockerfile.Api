@@ -1,0 +1,27 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+EXPOSE 80
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Etapa 1: Copia apenas os arquivos .csproj para restaurar dependências
+COPY src/Hackaton.Api/Hackaton.Api.csproj Hackaton.Api/
+COPY src/Application/Application.csproj Application/
+COPY src/Infra.IoC/Infra.IoC.csproj Infra.IoC/
+COPY src/Infra.Data/Infra.Data.csproj Infra.Data/
+COPY src/Infra.DatabaseInitializers/Infra.DatabaseInitializers.csproj Infra.DatabaseInitializers/
+COPY src/Domain/Domain.csproj Domain/
+
+RUN dotnet restore Hackaton.Api/Hackaton.Api.csproj
+
+# Etapa 2: Copia TODO o conteúdo da src (agora com Program.cs, arquivos de config, etc.)
+COPY src/ ./ 
+
+WORKDIR /src/Hackaton.Api
+RUN dotnet publish -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "Hackaton.Api.dll"]

@@ -35,7 +35,7 @@ namespace Hackaton.Api.IoC
             builder.Services.AddAuthorizationBuilder();
 
             MapearApi(builder.Services);
-            MapeamentosDaAplicacao.Mapear(builder.Services);
+            MapeamentosDaAplicacao.Mapear(builder.Services, builder.Configuration);
         }
 
         private static void AdicionarAutenticacao(IServiceCollection services, ConfigurationManager configuration)
@@ -135,7 +135,10 @@ namespace Hackaton.Api.IoC
             {
                 options.AddPolicy("AllowBlazor",
                     policy => policy
-                        .WithOrigins("https://localhost:7159") // porta do Blazor WebAssembly
+                        .WithOrigins(
+                            "https://localhost:7159",
+                            "http://localhost:30881"
+                        )
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
