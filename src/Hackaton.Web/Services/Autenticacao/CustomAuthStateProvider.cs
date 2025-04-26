@@ -10,7 +10,7 @@ namespace Hackaton.Web.Services.Autenticacao
     public class CustomAuthStateProvider(ILocalStorageService localStorage, HttpClient _httpClient) : AuthenticationStateProvider
     {
         private const string TokenKey = "authToken";
-        private ClaimsPrincipal _usuarioAtual = new(new ClaimsIdentity());        
+        private ClaimsPrincipal _usuarioAtual = new(new ClaimsIdentity());
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -25,6 +25,8 @@ namespace Hackaton.Web.Services.Autenticacao
                 await RemoverTokenAsync();
                 return CriarEstadoNaoAutenticado();
             }
+            
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             _usuarioAtual = CriarUsuarioAutenticado(jwt);
             return new AuthenticationState(_usuarioAtual);
