@@ -15,24 +15,31 @@ namespace Hackaton.Web.Services.Medicos
 
         public async Task<MeuCadastroMedicoModel> ObterMedico(int id)
         {
-            //try
-            //{
-            var medico = await http.GetFromJsonAsync<MeuCadastroMedicoModel>($"medicos/{id}");
+            try
+            {
+                var medico = await http.GetFromJsonAsync<MeuCadastroMedicoModel>($"medicos/{id}");
+                return medico!;
 
-            //var teste = medico.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException("Erro inesperado ao processar resposta da API.");
+            }
+        }
 
-            //throw new NotImplementedException();
-            return medico!;
+        public async Task<IList<MedicoParaConsultaModel>> ObterTodosMedicos()
+        {
+            try
+            {
+                var medicos = await http.GetFromJsonAsync<IList<MedicoParaConsultaModel>>($"medicos");
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    var teste = ex;
-            //}
+                return medicos!;
 
-            //throw new NotImplementedException();
-
-            return null;
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException("Erro inesperado ao processar resposta da API.");
+            }
         }
 
         public async Task CadastrarMedicoAsync(PrimeiroAcessoMedicoModel medico)

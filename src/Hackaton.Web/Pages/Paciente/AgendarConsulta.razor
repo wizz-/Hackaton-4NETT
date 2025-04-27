@@ -1,9 +1,17 @@
 ﻿@page "/paciente/agendar-consulta"
 
+@using FuzzySharp
+@using Hackaton.Web.Models.Especialidade
+@using Hackaton.Web.Models.Medico
 @using Hackaton.Web.Services.Autenticacao.Interfaces
+@using Hackaton.Web.Services.Especialidades.Interfaces
+@using Hackaton.Web.Services.Medicos.Interfaces
 
 @inject NavigationManager Navigation
 @inject IUsuarioLogadoService UsuarioLogadoService
+@inject IEspecialidadeService EspecialidadeService
+@inject IMedicoService MedicoService;
+
 
 <PageTitle>Agendar Consulta - Health&Med</PageTitle>
 
@@ -29,19 +37,19 @@
     <div class="col-md-6 mb-3 position-relative">
         <label class="form-label fw-semibold"><i class="bi bi-heart-pulse"></i> Especialidade</label>
         <InputText class="form-control"
-            placeholder="Ex: Cardiologia"
-            @bind-Value="filtro.Especialidade"
-            @oninput="OnInputEspecialidade"
-            @onfocus="OnFocusEspecialidade"
-            @onblur="OnBlurEspecialidade" />
+        placeholder="Ex: Cardiologia"
+        @bind-Value="filtro.Especialidade"
+        @oninput="OnInputEspecialidade"
+        @onfocus="OnFocusEspecialidade"
+        @onblur="OnBlurEspecialidade" />
         @if (sugestoesEspecialidade?.Any() == true && focoEspecialidade)
         {
             <ul class="list-group position-absolute w-100 z-index-3">
                 @foreach (var item in sugestoesEspecialidade)
                 {
                     <li class="list-group-item list-group-item-action"
-                        style="cursor:pointer"
-                        @onmousedown="() => SelecionarEspecialidade(item)">
+                    style="cursor:pointer"
+                    @onmousedown="() => SelecionarEspecialidade(item)">
                         @item
                     </li>
                 }
@@ -53,19 +61,19 @@
     <div class="col-md-6 mb-3 position-relative">
         <label class="form-label fw-semibold"><i class="bi bi-person-vcard"></i> Nome do Médico</label>
         <InputText class="form-control"
-            placeholder="Ex: Ana, Bruno..."
-            @bind-Value="filtro.NomeMedico"
-            @oninput="OnInputMedico"
-            @onfocus="OnFocusMedico"
-            @onblur="OnBlurMedico" />
+        placeholder="Ex: Ana, Bruno..."
+        @bind-Value="filtro.NomeMedico"
+        @oninput="OnInputMedico"
+        @onfocus="OnFocusMedico"
+        @onblur="OnBlurMedico" />
         @if (sugestoesMedico?.Any() == true && focoMedico)
         {
             <ul class="list-group position-absolute w-100 z-index-3">
                 @foreach (var item in sugestoesMedico)
                 {
                     <li class="list-group-item list-group-item-action"
-                        style="cursor:pointer"
-                        @onmousedown="() => SelecionarMedicoPorNome(item)">
+                    style="cursor:pointer"
+                    @onmousedown="() => SelecionarMedicoPorNome(item)">
                         @item
                     </li>
                 }
@@ -79,7 +87,7 @@
     <div class="row mb-4">
         <div class="col-md-4">
             <label class="form-label fw-semibold">Data de início da agenda</label>
-            <InputDate class="form-control" @bind-Value="dataInicio" />
+            <InputDate class="form-control" @bind-Value="dataInicio" min="@DateTime.Today.ToString("yyyy-MM-dd")" />
         </div>
         <div class="col-md-4 d-flex align-items-end">
             <button class="btn btn-primary" @onclick="BuscarAgenda">
@@ -123,7 +131,7 @@
                                     @if (disponivel)
                                     {
                                         <button class="btn btn-sm btn-outline-primary"
-                                                @onclick="@(() => SelecionarHorario(horarioCompleto))">
+                                        @onclick="@(() => SelecionarHorario(horarioCompleto))">
                                             @horarioCompleto.ToString("HH:mm")
                                         </button>
                                     }
@@ -170,15 +178,17 @@
 
 @code {
     private FiltroBuscaMedico filtro = new();
-    private MedicoResumo? medicoSelecionado;
+    private MedicoParaConsultaModel? medicoSelecionado;
     private DateTime? horarioSelecionado;
     private DateTime dataInicio = DateTime.Today;
     private bool agendaCarregada = false;
     private bool focoEspecialidade = false;
     private bool focoMedico = false;
     public string NomeDoPaciente { get; set; } = "";
-    private List<DateTime>? agenda;
+    private IList<DateTime>? agenda;
     private Dictionary<DateTime, List<DateTime>> agendaAgrupada = new();
+    private IList<EspecialidadeModel> Especialidades = [];
+    private IList<MedicoParaConsultaModel> TodosMedicos = [];
 
     private List<TimeSpan> horariosPorDia = new()
     {
@@ -187,33 +197,40 @@
         new TimeSpan(11, 0, 0)
     };
 
-    private List<string> todasEspecialidades = new() { "Cardiologia", "Ortopedia", "Dermatologia" };
     private List<string> sugestoesEspecialidade = new();
 
-    private List<string> todosNomesMedicos = new() { "Dra. Ana Cardoso", "Dr. Bruno Lima", "Dra. Carla Mendes" };
     private List<string> sugestoesMedico = new();
 
     protected override async Task OnInitializedAsync()
     {
-        var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
+        var tarefaEspecialidades = EspecialidadeService.ObterEspecialidadesAsync();
+        var tarefaUsuarioLogado = UsuarioLogadoService.ObterTodasAsClaimsAsync();
+        var tarefaMedicos = MedicoService.ObterTodosMedicos();
+
+        await Task.WhenAll(tarefaUsuarioLogado, tarefaMedicos, tarefaEspecialidades);
+
+        var claims = await tarefaUsuarioLogado;
+
+        TodosMedicos = await tarefaMedicos;
+        Especialidades = await tarefaEspecialidades;
         var tokens = claims["unique_name"].Split(" ");
         NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";
     }
 
-    private List<MedicoResumo> todosMedicos = new()
-    {
-        new() { Id = Guid.NewGuid(), Nome = "Dra. Ana Cardoso", Especialidade = "Cardiologia" },
-        new() { Id = Guid.NewGuid(), Nome = "Dr. Bruno Lima", Especialidade = "Ortopedia" },
-        new() { Id = Guid.NewGuid(), Nome = "Dra. Carla Mendes", Especialidade = "Dermatologia" }
-    };
-
     private void OnInputEspecialidade(ChangeEventArgs e)
     {
         var texto = e.Value?.ToString() ?? string.Empty;
-        sugestoesEspecialidade = todasEspecialidades
-            .Where(e => e.StartsWith(texto, StringComparison.InvariantCultureIgnoreCase))
-            .Take(5)
-            .ToList();
+
+        sugestoesEspecialidade = Process.ExtractAll(
+            texto,
+            Especialidades.Select(x => x.Nome),
+            cutoff: 0 
+        )
+        .OrderByDescending(x => x.Score) 
+        .Take(5) 
+        .Select(x => x.Value)
+        .ToList();
+
     }
 
     private void OnFocusEspecialidade(FocusEventArgs e)
@@ -224,7 +241,7 @@
 
     private void MostrarTodasEspecialidades(FocusEventArgs e)
     {
-        sugestoesEspecialidade = todasEspecialidades.ToList();
+        sugestoesEspecialidade = Especialidades.Select(x => x.Nome).Take(5).ToList();
     }
 
     private void OnBlurEspecialidade(FocusEventArgs e)
@@ -251,8 +268,8 @@
 
         // Se houver especialidade selecionada, filtra só os médicos dessa especialidade
         var medicosFiltrados = string.IsNullOrWhiteSpace(filtro.Especialidade)
-            ? todosMedicos
-            : todosMedicos.Where(m => m.Especialidade.Equals(filtro.Especialidade, StringComparison.InvariantCultureIgnoreCase));
+            ? TodosMedicos
+            : TodosMedicos.Where(m => m.Especialidade.Equals(filtro.Especialidade, StringComparison.InvariantCultureIgnoreCase));
 
         sugestoesMedico = medicosFiltrados
             .Where(m => m.Nome.Contains(texto, StringComparison.InvariantCultureIgnoreCase))
@@ -269,7 +286,7 @@
 
     private void MostrarTodosMedicos(FocusEventArgs e)
     {
-        sugestoesMedico = todosNomesMedicos.ToList();
+        sugestoesMedico = TodosMedicos.Select(x => x.Nome).Take(5).ToList();
     }
 
     private void SelecionarMedicoPorNome(string nome)
@@ -277,7 +294,8 @@
         filtro.NomeMedico = nome;
         sugestoesMedico.Clear();
 
-        medicoSelecionado = todosMedicos.FirstOrDefault(m => m.Nome == nome);
+        medicoSelecionado = TodosMedicos.FirstOrDefault(m => m.Nome == nome);
+        filtro.Especialidade = medicoSelecionado?.Especialidade;
         agendaCarregada = false;
         agendaAgrupada.Clear();
         horarioSelecionado = null;
@@ -327,12 +345,5 @@
     {
         public string Especialidade { get; set; } = string.Empty;
         public string NomeMedico { get; set; } = string.Empty;
-    }
-
-    private class MedicoResumo
-    {
-        public Guid Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Especialidade { get; set; } = string.Empty;
     }
 }

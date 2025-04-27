@@ -4,6 +4,8 @@ namespace Application.Services.Agendas.Interfaces
 {
     public interface IAgendaAppService
     {
-        IList<MedicoDisponivelDto> ObterAgenda(DateOnly dia, int especialidadeId);
+        IList<MedicoDisponivelDto> ObterAgendaPorEspecialidade(DateOnly dia, int especialidadeId);
+        IList<AgendaAppDto> ObterAgendaPorMedico(DateOnly diaInicial, int quantidadeDeDias, int medicoId);
+
     }
 }

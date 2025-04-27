@@ -13,14 +13,25 @@ namespace Hackaton.Api.Controllers.Agendas
             var grupo = app.MapGroup("/api/agenda")
                 .RequireAuthorization();
 
-            grupo.MapPost("", ObterDisponibilidade)
+            grupo.MapPost("especialidade", ObterDisponibilidadePorEspecialidade)
                 .WithSummary("Obtém horários disponíveis")
-                .WithDescription("Retorna os horários disponiveis cadastradas no banco de dados");
+                .WithDescription("Retorna os horários disponiveis por especialidade cadastradas no banco de dados");
+
+            grupo.MapPost("medico", ObterDisponibilidadePorMedico)
+                .WithSummary("Obtém horários disponíveis")
+                .WithDescription("Retorna os horários disponiveis por médico cadastradas no banco de dados");
         }
 
-        private Ok<IList<MedicoDisponivelDto>> ObterDisponibilidade(ParametroDto parametros, IAgendaAppService service)
+        private Ok<IList<MedicoDisponivelDto>> ObterDisponibilidadePorEspecialidade(ParametroPorEspecialidadeDto parametros, IAgendaAppService service)
         {
-            var retorno = service.ObterAgenda(parametros.Dia, parametros.EspecialidadeId);
+            var retorno = service.ObterAgendaPorEspecialidade(parametros.Dia, parametros.EspecialidadeId);
+
+            return TypedResults.Ok(retorno);
+        }
+
+        private Ok<IList<AgendaAppDto>> ObterDisponibilidadePorMedico(ParametroPorMedicoDto parametros, IAgendaAppService service)
+        {
+            var retorno = service.ObterAgendaPorMedico(parametros.DataInicial, parametros.QuantidadeDeDias, parametros.MedicoId);
 
             return TypedResults.Ok(retorno);
         }

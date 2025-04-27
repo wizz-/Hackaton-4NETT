@@ -29,6 +29,12 @@ namespace Hackaton.Api.Controllers.Medicos
                  .WithDescription("Obtém lista de médicos por especialidade no banco de dados")
                  .RequireAuthorization();
 
+            grupo.MapGet("", ObterTodosMedicos)
+                 .WithSummary("Obtém lista de todos médicos")
+                 .WithDescription("Obtém lista de todos os médicos no banco de dados")
+                 .RequireAuthorization();
+
+
             grupo.MapGet("{id}", ObterMedico)
                  .WithSummary("Obtém médico por id")
                  .WithDescription("Obtém médico por id do banco de dados")
@@ -63,6 +69,13 @@ namespace Hackaton.Api.Controllers.Medicos
         private Ok<IList<MedicoParaConsultaDto>> ObterMedicos(int especialidadeId, IMedicoAppService service)
         {
             var retorno = service.ObterMedicosPorEspecialidade(especialidadeId);
+
+            return TypedResults.Ok(retorno);
+        }
+
+        private Ok<IList<MedicoParaConsultaDto>> ObterTodosMedicos(IMedicoAppService service)
+        {
+            var retorno = service.ObterTodosMedicos();
 
             return TypedResults.Ok(retorno);
         }

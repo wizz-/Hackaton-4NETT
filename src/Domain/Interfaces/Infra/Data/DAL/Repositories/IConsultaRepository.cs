@@ -7,5 +7,6 @@ namespace Domain.Interfaces.Infra.Data.DAL.Repositories
     {
         IList<Consulta> ObterConsultasFuturasPorMedico(int medicoId);
         IList<Consulta> ObterConsultasNaoCanceladasDoDia(DateOnly dia, IList<Medico> medicosDiponiveis);
+        IList<Consulta> ObterConsultasNaoCanceladasNoPeriodo(DateOnly diaInicial, DateOnly dataFinal, Medico medico);
     }
 }

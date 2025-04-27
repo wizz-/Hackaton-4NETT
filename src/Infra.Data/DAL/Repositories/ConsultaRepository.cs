@@ -32,5 +32,17 @@ namespace Infra.Data.DAL.Repositories
                     .Where(x => x.Dia == dia && medicoIds.Contains(x.Medico.Id) && (x.Status == StatusConsulta.Pendente || x.Status == StatusConsulta.Confirmada))
                     .ToList();
         }
+
+        public IList<Consulta> ObterConsultasNaoCanceladasNoPeriodo(DateOnly dataInicial, DateOnly dataFinal, Medico medico)
+        {
+            return ObterQueryable()
+                    .Where(x =>
+                            x.Dia >= dataInicial &&
+                            x.Dia <= dataFinal &&
+                            x.Medico.Id == medico.Id &&
+                            (x.Status == StatusConsulta.Pendente || x.Status == StatusConsulta.Confirmada)
+                        )
+                    .ToList();
+        }
     }
 }
