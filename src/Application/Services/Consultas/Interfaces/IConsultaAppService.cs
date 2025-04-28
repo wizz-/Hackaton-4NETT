@@ -9,5 +9,6 @@ namespace Application.Services.Consultas.Interfaces
         void RejeitarConsulta(int consultaId, string crm, string uf);
         void CancelarConsulta(int consultaId, string cpf, string motivo);
         IList<ConsultaDto> ObterConsultasDoMedico(int medicoId);
+        IList<ConsultaDto> ObterConsultasDoPaciente(int pacienteId);
     }
 }

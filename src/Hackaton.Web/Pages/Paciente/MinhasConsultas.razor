@@ -1,10 +1,13 @@
 ﻿@page "/paciente/minhas-consultas"
 
 @using System.Globalization
+@using Hackaton.Web.Models.Paciente
 @using Hackaton.Web.Services.Autenticacao.Interfaces
+@using Hackaton.Web.Services.Consultas.Interfaces
 
 @inject IUsuarioLogadoService UsuarioLogadoService
 @inject NavigationManager Navigation
+@inject IConsultaService ConsultaService
 
 <PageTitle>Minhas Consultas - Health&Med</PageTitle>
 
@@ -40,9 +43,9 @@
                 @foreach (var consulta in consultas)
                 {
                     <tr>
-                        <td>@consulta.Data.ToString("dd/MM/yyyy")</td>
-                        <td>@consulta.Data.ToString("HH:mm")</td>
-                        <td>@consulta.Medico</td>
+                        <td>@consulta.Dia.ToString("dd/MM/yyyy")</td>
+                        <td>@consulta.HoraInicial.ToString("HH:mm")</td>
+                        <td>@consulta.NomeDoMedico</td>
                         <td>@consulta.Especialidade</td>                        
                     </tr>
                 }
@@ -61,55 +64,23 @@
 
 @code {
     public string NomeDoPaciente { get; set; } = "";
-    private List<ConsultaPacienteResumo> consultas;
+    private IList<ConsultaPacienteModel> consultas;
 
     protected override async Task OnInitializedAsync()
     {
-        consultas = ObterConsultasMockadas();
-
         var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
         var tokens = claims["unique_name"].Split(" ");
         NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";
-    }
 
-    private List<ConsultaPacienteResumo> ObterConsultasMockadas()
-    {
-        return new List<ConsultaPacienteResumo>
-        {
-            new ConsultaPacienteResumo
-            {
-                Medico = "Dra. Ana Souza",
-                Especialidade = "Dermatologia",
-                Data = DateTime.Today.AddDays(2).AddHours(14),
-                Local = "Clínica Central - Sala 203"
-            },
-            new ConsultaPacienteResumo
-            {
-                Medico = "Dr. Carlos Mendes",
-                Especialidade = "Cardiologia",
-                Data = DateTime.Today.AddDays(5).AddHours(9),
-                Local = "Hospital São Lucas - Consultório 12"
-            },
-            new ConsultaPacienteResumo
-            {
-                Medico = "Dra. Juliana Lima",
-                Especialidade = "Pediatria",
-                Data = DateTime.Today.AddDays(10).AddHours(11),
-                Local = "Unidade Sul - Sala 07"
-            }
-        };
+        var id = claims["nameid"];
+
+        consultas = await ConsultaService.ObterConsultasFuturasDoPaciente(Convert.ToInt32(id));
+
+
     }
 
     private void Voltar()
     {
         Navigation.NavigateTo("/");
-    }
-
-    private class ConsultaPacienteResumo
-    {
-        public string Medico { get; set; }
-        public string Especialidade { get; set; }
-        public DateTime Data { get; set; }
-        public string Local { get; set; }
     }
 }

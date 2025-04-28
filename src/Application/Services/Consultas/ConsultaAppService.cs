@@ -17,6 +17,13 @@ namespace Application.Services.Consultas
             return mapper.Map(consultas);
         }
 
+        public IList<ConsultaDto> ObterConsultasDoPaciente(int pacienteId)
+        {
+            var consultas = unitOfWork.ConsultaRepository.ObterConsultasFuturasPorPaciente(pacienteId);
+
+            return mapper.Map(consultas);
+        }
+
         public void CancelarConsulta(int consultaId, string cpf, string motivo)
         {
             var consulta = ObterConsulta(consultaId);

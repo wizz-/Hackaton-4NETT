@@ -24,6 +24,18 @@ namespace Infra.Data.DAL.Repositories
                 .ToList();
         }
 
+        public IList<Consulta> ObterConsultasFuturasPorPaciente(int pacienteId)
+        {
+            var diaAtual = DateTime.Now;
+
+            var dia = DateOnly.FromDateTime(diaAtual);
+            var hora = TimeOnly.FromDateTime(diaAtual);
+
+            return ObterQueryable()
+                .Where(x => x.Paciente.Id == pacienteId && x.Dia == dia && x.Horario.Inicio >= hora)
+                .ToList();
+        }
+
         public IList<Consulta> ObterConsultasNaoCanceladasDoDia(DateOnly dia, IList<Medico> medicosDiponiveis)
         {
             var medicoIds = medicosDiponiveis.Select(d => d.Id).ToList();
