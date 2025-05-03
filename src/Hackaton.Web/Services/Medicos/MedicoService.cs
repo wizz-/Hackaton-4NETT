@@ -79,5 +79,10 @@ namespace Hackaton.Web.Services.Medicos
                 }
             };
         }
+
+        public Task AlterarCadastro(MeuCadastroMedicoModel medico)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

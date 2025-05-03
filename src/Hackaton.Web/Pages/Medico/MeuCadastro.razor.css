@@ -1,29 +1,20 @@
-﻿.horario-badge {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #fafafa;
-    border: 1px solid #dee2e6;
-    border-radius: 1rem;
-    padding: 0.25rem 0.75rem;
-    margin-bottom: 0.4rem;
-    font-size: 0.775rem;
-    color: #212529;
+﻿.tabela-horarios {
+    table-layout: fixed;
 }
 
-.texto-horario {
-    flex-grow: 1;
+.tabela-horarios th i {
+    margin-right: 10px;
 }
 
-.btn-fechar {
-    background: transparent;
-    border: none;
-    color: #b02a37; /* vermelho escuro (bootstrap danger-800) */
-    padding: 0;
-    margin-left: 0.5rem;
-    cursor: pointer;
+.horario-badge span {
+    font-size: 0.778rem;
+    background-color: #fff;
 }
 
-    .btn-fechar:hover {
-        color: #dc3545;        
-    }
+.horario-badge:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.horario-badge button {
+    font-size: .6rem;
+}

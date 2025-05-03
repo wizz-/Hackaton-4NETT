@@ -24,12 +24,12 @@
         </div>
 
         <div class="flex-grow-1 text-center">
-            <span class="fw-bold fs-4">Meu Cadastro</span>
+            <span class="fw-bold fs-4">Médico - Meu Cadastro</span>
         </div>
 
         <div class="ms-auto d-flex align-items-center">
             <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
-            <span class="user-name">Thiago Rosa</span>
+            <span class="user-name">@NomeDoMedico</span>
         </div>
     </div>
 
@@ -76,8 +76,12 @@
             <div class="row g-3 align-items-end mb-3">
                 <div class="col-md-4">
                     <label class="form-label">Dia da Semana</label>
-                    <InputSelect class="form-select" @bind-Value="novoHorario.DiaDaSemana">
-                        <option value="">Selecione</option>
+                    <InputSelect TValue="int?" 
+                    class="form-select"
+                    Value="@novoHorario.DiaDaSemana"
+                    ValueChanged="EventCallback.Factory.Create<int?>(this, OnDiaDaSemanaChanged)"
+                    ValueExpression="() => novoHorario.DiaDaSemana">
+                        <option value="">Selecione...</option>
                         @foreach (var dia in Enumerable.Range(1, 7))
                         {
                             <option value="@dia">@ObterNomeDoDia(dia)</option>
@@ -86,13 +90,9 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Início</label>
-                    <InputSelect class="form-select"
-                    TValue="string"
-                    Value="@novoHorario.Inicio"
-                    ValueChanged="@OnInicioChanged"
-                    ValueExpression="() => novoHorario.Inicio">
-                        <option value="">Selecione</option>
-                        @foreach (var h in HorariosDisponiveis)
+                    <InputSelect class="form-select" TValue="string" Value="@novoHorario.Inicio" ValueChanged="@OnInicioChanged" ValueExpression="() => novoHorario.Inicio" disabled="@inicioEstaDesabilitado">
+                        <option value="">Selecione...</option>
+                        @foreach (var h in HorariosInicioDisponiveis)
                         {
                             <option value="@h">@h</option>
                         }
@@ -101,8 +101,8 @@
 
                 <div class="col-md-3">
                     <label class="form-label">Fim</label>
-                    <InputSelect class="form-select" @bind-Value="novoHorario.Fim">
-                        <option value="">Selecione</option>
+                    <InputSelect class="form-select" @bind-Value="novoHorario.Fim" disabled="@fimEstaDesabilitado">
+                        <option value="">Selecione...</option>
                         @foreach (var h in HorariosFimDisponiveis)
                         {
                             <option value="@h">@h</option>
@@ -117,12 +117,12 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-bordered mt-3">
+                <table class="table table-sm table-bordered mt-3 tabela-horarios">
                     <thead class="table-light">
                         <tr>
                             @foreach (var dia in Enumerable.Range(1, 7))
                             {
-                                <th class="text-center">@ObterNomeDoDia(dia)</th>
+                                <th class="text-center"><i class="bi bi-calendar-check"></i>@ObterNomeDoDia(dia)</th>
                             }
                         </tr>
                     </thead>
@@ -133,15 +133,12 @@
                                 <td>
                                     @foreach (var h in CadastroMedicoModel.Horarios.Where(h => h.DiaDaSemana == dia))
                                     {
-                                        <div class="horario-badge">
-                                            <span>@h.Inicio - @h.Fim</span>
-                                            <button type="button"
-                                            class="btn-fechar"
-                                            title="Remover horário"
-                                            @onclick="() => RemoverHorario(h)">
+                                        <div class="input-group input-group-sm horario-badge">
+                                            <span class="input-group-text" id="basic-addon2">@h.Inicio - @h.Fim</span>
+                                            <button class="btn btn-danger" type="button" id="button-addon1" @onclick="() => RemoverHorario(h)">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
-                                        </div>
+                                        </div>                                        
                                     }
                                 </td>
                             }
@@ -157,36 +154,48 @@
                 <button type="button" class="btn btn-outline-primary ms-2" @onclick="@(() => Navigation.NavigateTo("/medico"))">
                     <i class="bi bi-arrow-left-circle me-1"></i> Voltar
                 </button>
-            </div>
+            </div>            
         </EditForm>
     </div>
 }
 @code {
     private bool carregando = true;
+    public string NomeDoMedico { get; set; } = "";
+    private string valorFormatado = "R$ 0,00";
+
+    public bool inicioEstaDesabilitado { get; set; } = true;
+    public bool fimEstaDesabilitado { get; set; } = true;
+
     private List<EspecialidadeModel> Especialidades = [];
     private EditContext? editContext;
-    private MeuCadastroMedicoModel CadastroMedicoModel; 
+    private MeuCadastroMedicoModel CadastroMedicoModel = new(); 
+    private MeuCadastroNovoHorarioModel novoHorario = new();
 
+    private List<string> TodosHorariosDisponiveis => Enumerable.Range(0, 48)
+        .Select(i => TimeSpan.FromMinutes(i * 30).ToString(@"hh\:mm"))
+        .ToList();
+
+    private List<string> HorariosInicioDisponiveis = new();
+    private List<string> HorariosFimDisponiveis = new();    
 
     protected override async Task OnInitializedAsync()
     {
-        carregando = true;
+        carregando = true;        
 
         try
         {
             var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
-
             var id = claims.First(x => x.Key == "nameid").Value;
             var medico = MedicoService.ObterMedico(Convert.ToInt32(id));
-
             var tarefaEspecialidades = EspecialidadeService.ObterEspecialidadesAsync();
 
             await Task.WhenAll(medico, tarefaEspecialidades);
 
+            ObterNomeDoMedico(await medico);
             Especialidades = await tarefaEspecialidades;
             CadastroMedicoModel = await medico;
 
-            editContext = new EditContext(medico);
+            editContext = new EditContext(CadastroMedicoModel);
         }
         finally
         {
@@ -194,14 +203,11 @@
         }
     }
 
-    protected override void OnInitialized()
+    private void ObterNomeDoMedico(MeuCadastroMedicoModel medico)
     {
-        HorariosFimDisponiveis = new List<string>(HorariosDisponiveis);
-    }
-
-    private MeuCadastroNovoHorarioModel novoHorario = new();
-
-    private string valorFormatado = "R$ 0,00";
+        var tokens = medico.Nome.Split(" ");
+        NomeDoMedico = $"{tokens[0]} {tokens[^1]}";
+    }    
 
     private void FormatarValor(ChangeEventArgs e)
     {
@@ -228,78 +234,170 @@
         }
     }
 
-    private List<string> HorariosDisponiveis => Enumerable.Range(0, 48)
-    .Select(i => TimeSpan.FromMinutes(i * 30).ToString(@"hh\:mm"))
-    .ToList();
-
-    private Task OnInicioChanged(string value)
+    private Task OnDiaDaSemanaChanged(int? dia)
     {
-        novoHorario.Inicio = value;
-
-        if (TimeOnly.TryParse(value, out var inicio))
+        if (dia == null)
         {
-            HorariosFimDisponiveis = HorariosDisponiveis
-                .Select(h => TimeOnly.Parse(h))
-                .Where(hora => hora > inicio)
-                .Select(hora => hora.ToString(@"hh\:mm"))
-                .ToList();
-
+            novoHorario.DiaDaSemana = null;
+            novoHorario.Inicio = "";
             novoHorario.Fim = "";
-        }
-        else
-        {
-            HorariosFimDisponiveis = new();
-            novoHorario.Fim = "";
+            HorariosInicioDisponiveis = [];
+            HorariosFimDisponiveis = [];
+            inicioEstaDesabilitado = true;
+            fimEstaDesabilitado = true;
+            return Task.CompletedTask;
         }
 
+        novoHorario.DiaDaSemana = dia;
+        novoHorario.Inicio = "";
+        novoHorario.Fim = "";
+
+        HorariosFimDisponiveis = new();
+        HorariosInicioDisponiveis = new(TodosHorariosDisponiveis);        
+
+        foreach (var horarioSelecionado in CadastroMedicoModel.Horarios.Where(horario => horario.DiaDaSemana == dia))
+        {
+            HorariosInicioDisponiveis = FiltrarHorariosPorPeriodo(
+                HorariosInicioDisponiveis, horarioSelecionado.Inicio, horarioSelecionado.Fim
+            );
+        }
+
+        fimEstaDesabilitado = true;
+        inicioEstaDesabilitado = false;
         StateHasChanged();
         return Task.CompletedTask;
     }
 
-    private List<string> HorariosFimDisponiveis = new();
-
-    private void AtualizarHorariosFim(ChangeEventArgs e)
+    private List<string> FiltrarHorariosPorPeriodo(List<string> horariosDisponiveis, string inicioPeriodo, string fimPeriodo)
     {
-        var inicioStr = e.Value?.ToString();
-        novoHorario.Inicio = inicioStr;
-
-        if (TimeOnly.TryParse(inicioStr, out var inicio))
+        if (TimeSpan.TryParse(inicioPeriodo, out TimeSpan inicio) && TimeSpan.TryParse(fimPeriodo, out TimeSpan fim))
         {
-            HorariosFimDisponiveis = HorariosDisponiveis
-                .Select(h => TimeOnly.Parse(h))
-                .Where(hora => hora > inicio)
-                .Select(hora => hora.ToString(@"hh\:mm"))
+            return horariosDisponiveis
+                .Where(horarioStr =>
+                {
+                    if (TimeSpan.TryParse(horarioStr, out TimeSpan horario))
+                    {
+                        return !(horario >= inicio && horario <= fim); // Mantém os horários *fora* do período agendado
+                    }
+                    return true; // Mantém horários com formato inválido (se houver)
+                })
                 .ToList();
-
-            novoHorario.Fim = "";
-        }
-        else
-        {
-            HorariosFimDisponiveis = new();
-            novoHorario.Fim = "";
         }
 
-        StateHasChanged();
+        return horariosDisponiveis; // Retorna a lista original se o período for inválido
     }
 
-    void SalvarCadastro()
+    private Task OnInicioChanged(string value)
     {
-        // enviar para API
+        novoHorario.Inicio = value;
+        novoHorario.Fim = "";
+
+        HorariosFimDisponiveis = new(HorariosInicioDisponiveis);
+        HorariosFimDisponiveis = FiltrarHorariosPorPeriodo(
+            HorariosFimDisponiveis, "00:00", novoHorario.Inicio
+        );
+
+        fimEstaDesabilitado = false;
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 
     void AdicionarHorario()
     {
-        if (!string.IsNullOrEmpty(novoHorario.Inicio) && !string.IsNullOrEmpty(novoHorario.Fim) && novoHorario.DiaDaSemana > 0)
-        {
-            CadastroMedicoModel.Horarios.Add(new MeuCadastroHorarioModel
-            {
-                DiaDaSemana = novoHorario.DiaDaSemana,
-                Inicio =novoHorario.Inicio, //TimeOnly.Parse(novoHorario.Inicio),
-                    Fim = novoHorario.Fim //TimeOnly.Parse(novoHorario.Fim)
-            });
+        if (!HorarioEhValido()) return;
 
-            novoHorario = new(); // limpa inputs
-        }
+        var dia = novoHorario.DiaDaSemana!.Value;
+        var novoPeriodo = CriarPeriodo(novoHorario);
+        var horariosExistentes = ObterHorariosDoDia(dia);
+        var conflitos = EncontrarConflitos(novoPeriodo, horariosExistentes);
+
+        if (conflitos.Any())
+            FundirHorarios(conflitos, novoPeriodo, dia);
+        else
+            AdicionarNovoHorario(novoPeriodo, dia);
+
+        OrdenarHorarios();
+        ResetarCamposNovoHorario();
+    }
+
+    private bool HorarioEhValido()
+    {
+        return novoHorario.DiaDaSemana is >= 1 and <= 7
+            && !string.IsNullOrWhiteSpace(novoHorario.Inicio)
+            && !string.IsNullOrWhiteSpace(novoHorario.Fim);
+    }
+
+    private (TimeSpan Inicio, TimeSpan Fim) CriarPeriodo(MeuCadastroNovoHorarioModel horario)
+    {
+        return (TimeSpan.Parse(horario.Inicio), TimeSpan.Parse(horario.Fim));
+    }
+
+    private List<MeuCadastroHorarioModel> ObterHorariosDoDia(int dia)
+    {
+        return CadastroMedicoModel.Horarios
+            .Where(h => h.DiaDaSemana == dia)
+            .ToList();
+    }
+
+    private List<MeuCadastroHorarioModel> EncontrarConflitos((TimeSpan Inicio, TimeSpan Fim) novoPeriodo, List<MeuCadastroHorarioModel> existentes)
+    {
+        return existentes
+            .Where(h =>
+            {
+                var inicio = TimeSpan.Parse(h.Inicio);
+                var fim = TimeSpan.Parse(h.Fim);
+                return novoPeriodo.Inicio < fim && novoPeriodo.Fim > inicio;
+            })
+            .ToList();
+    }
+
+    private void FundirHorarios(List<MeuCadastroHorarioModel> conflitos, (TimeSpan Inicio, TimeSpan Fim) novoPeriodo, int dia)
+    {
+        var menorInicio = Min(novoPeriodo.Inicio, conflitos.Select(c => TimeSpan.Parse(c.Inicio)));
+        var maiorFim = Max(novoPeriodo.Fim, conflitos.Select(c => TimeSpan.Parse(c.Fim)));
+
+        foreach (var c in conflitos)
+            CadastroMedicoModel.Horarios.Remove(c);
+
+        CadastroMedicoModel.Horarios.Add(new MeuCadastroHorarioModel
+            {
+                DiaDaSemana = dia,
+                Inicio = menorInicio.ToString(@"hh\:mm"),
+                Fim = maiorFim.ToString(@"hh\:mm")
+            });
+    }
+
+    private TimeSpan Min(TimeSpan original, IEnumerable<TimeSpan> outros)
+    => new[] { original }.Concat(outros).Min();
+
+    private TimeSpan Max(TimeSpan original, IEnumerable<TimeSpan> outros)
+        => new[] { original }.Concat(outros).Max();
+
+    private void AdicionarNovoHorario((TimeSpan Inicio, TimeSpan Fim) periodo, int dia)
+    {
+        CadastroMedicoModel.Horarios.Add(new MeuCadastroHorarioModel
+            {
+                DiaDaSemana = dia,
+                Inicio = periodo.Inicio.ToString(@"hh\:mm"),
+                Fim = periodo.Fim.ToString(@"hh\:mm")
+            });
+    }
+
+    private void ResetarCamposNovoHorario()
+    {
+        novoHorario = new();
+        HorariosInicioDisponiveis = [];
+        HorariosFimDisponiveis = [];
+        inicioEstaDesabilitado = true;
+        fimEstaDesabilitado = true;
+    }
+
+    private void OrdenarHorarios()
+    {
+        CadastroMedicoModel.Horarios = CadastroMedicoModel.Horarios
+            .OrderBy(h => h.DiaDaSemana)
+            .ThenBy(h => TimeOnly.Parse(h.Inicio))
+            .ToList();
     }
 
     void RemoverHorario(MeuCadastroHorarioModel horario)
@@ -321,4 +419,10 @@
             _ => "Desconhecido"
         };
     }
+
+    void SalvarCadastro()
+    {
+        // enviar para API
+    }    
+    
 }
