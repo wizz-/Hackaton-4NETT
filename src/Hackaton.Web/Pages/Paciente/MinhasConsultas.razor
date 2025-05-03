@@ -37,6 +37,7 @@
                     <th><i class="bi bi-clock"></i> Hora</th>
                     <th><i class="bi bi-person-vcard"></i> Médico</th>
                     <th><i class="bi bi-heart-pulse"></i> Especialidade</th>
+                    <th><i class="bi bi-x-circle"></i> Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +47,12 @@
                         <td>@consulta.Dia.ToString("dd/MM/yyyy")</td>
                         <td>@consulta.HoraInicial.ToString("HH:mm")</td>
                         <td>@consulta.NomeDoMedico</td>
-                        <td>@consulta.Especialidade</td>                        
+                        <td>@consulta.Especialidade</td>
+                        <td>
+                            <button class="btn btn-sm btn-danger" @onclick="() => AbrirModalCancelamento(consulta.Id)">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -62,9 +68,22 @@
     </button>
 </div>
 
+<Modal Title="Cancelar Consulta"
+       Show="@MostrarModal"
+       OnConfirm="@ConfirmarCancelamento"
+       OnClose="@(() => MostrarModal = false)">
+    <div class="form-group">
+        <label for="motivo">Motivo do cancelamento</label>
+        <textarea id="motivo" class="form-control" @bind="MotivoCancelamento"></textarea>
+    </div>
+</Modal>
+
 @code {
     public string NomeDoPaciente { get; set; } = "";
     private IList<ConsultaPacienteModel> consultas;
+    bool MostrarModal = false;
+    string MotivoCancelamento;
+    int IdConsultaSelecionada;
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,8 +94,18 @@
         var id = claims["nameid"];
 
         consultas = await ConsultaService.ObterConsultasFuturasDoPaciente(Convert.ToInt32(id));
+    }
 
+    void AbrirModalCancelamento(int id)
+    {
+        IdConsultaSelecionada = id;
+        MostrarModal = true;
+    }
 
+    async Task ConfirmarCancelamento()
+    {
+        await ConsultaService.CancelarConsulta(IdConsultaSelecionada, MotivoCancelamento);
+        MostrarModal = false;
     }
 
     private void Voltar()
