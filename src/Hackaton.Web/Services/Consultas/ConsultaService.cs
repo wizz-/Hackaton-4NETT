@@ -1,6 +1,7 @@
 ﻿using Hackaton.Web.Exceptions;
 using Hackaton.Web.Infra;
 using Hackaton.Web.Models.Erros;
+using Hackaton.Web.Models.Medico;
 using Hackaton.Web.Models.Paciente;
 using Hackaton.Web.Services.Consultas.Interfaces;
 using System.Net.Http.Json;
@@ -15,7 +16,13 @@ namespace Hackaton.Web.Services.Consultas
             var response = await http.GetFromJsonAsync<IList<ConsultaPacienteModel>>($"consultas/futuras/paciente/{pacienteId}");
 
             return response ?? [];
+        }
 
+        public async Task<IList<ConsultaMedicoModel>> ObterConsultasFuturasDoMedicoAsync(int medicoId)
+        {
+            var response = await http.GetFromJsonAsync<IList<ConsultaMedicoModel>>($"consultas/futuras/medicos/{medicoId}");
+
+            return response ?? [];
         }
 
         public async Task CriarConsulta(CriarConsultaRequest consultaRequest)

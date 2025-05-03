@@ -13,7 +13,7 @@ namespace Hackaton.Web.Services.Medicos
     public class MedicoService(HttpClient http) : IMedicoService
     {
 
-        public async Task<MeuCadastroMedicoModel> ObterMedico(int id)
+        public async Task<MeuCadastroMedicoModel> ObterMedicoAsync(int id)
         {
             try
             {

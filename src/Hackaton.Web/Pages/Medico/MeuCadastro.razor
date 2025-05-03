@@ -222,7 +222,7 @@
         {
             var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
             var id = claims.First(x => x.Key == "nameid").Value;
-            var medico = MedicoService.ObterMedico(Convert.ToInt32(id));
+            var medico = MedicoService.ObterMedicoAsync(Convert.ToInt32(id));
             var tarefaEspecialidades = EspecialidadeService.ObterEspecialidadesAsync();
 
             await Task.WhenAll(medico, tarefaEspecialidades);

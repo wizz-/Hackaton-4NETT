@@ -1,5 +1,14 @@
 ﻿@page "/medico/agenda"
 
+@using Hackaton.Web.Models.Medico
+@using Hackaton.Web.Services.Autenticacao
+@using Hackaton.Web.Services.Autenticacao.Interfaces
+@using Hackaton.Web.Services.Consultas.Interfaces
+@using Hackaton.Web.Services.Medicos.Interfaces
+
+@inject IUsuarioLogadoService UsuarioLogadoService
+@inject IMedicoService MedicoService
+@inject IConsultaService ConsultaService
 @inject NavigationManager Navigation
 
 <PageTitle>Agenda - Próximas Consultas</PageTitle>
@@ -15,7 +24,7 @@
 
     <div class="ms-auto d-flex align-items-center">
         <i class="bi bi-person-circle user-icon me-2 icone-usuario-logado"></i>
-        <span class="user-name">Thiago Rosa</span>
+        <span class="user-name">@NomeDoMedico</span>
     </div>
 </div>
 
@@ -32,7 +41,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var consulta in consultasFiltradas)
+                @if (!consultas.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-4">
+                            <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
+                            Nenhuma consulta futura encontrada.
+                        </td>
+                    </tr>
+                }
+
+                @foreach (var consulta in consultas)
                 {
                     <tr>
                         <td>@consulta.Data.ToString("dd/MM/yyyy")</td>
@@ -61,30 +80,31 @@
 </div>
 
 @code {
-    private List<ConsultaModel> consultas = new()
+    public string NomeDoMedico { get; set; } = "";
+    private IList<ConsultaMedicoModel> consultas = new List<ConsultaMedicoModel>();
+
+    protected override async Task OnInitializedAsync()
     {
-        new() { Data = DateTime.Today.AddDays(1), Horario = "08:00", NomePaciente = "Maria Silva", Status = "Pendente" },
-        new() { Data = DateTime.Today.AddDays(2), Horario = "10:30", NomePaciente = "João Souza", Status = "Pendente" },
-        new() { Data = DateTime.Today.AddDays(3), Horario = "14:00", NomePaciente = "Ana Lima", Status = "Aceita" },
-    };
+        var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
+        var id = claims.First(x => x.Key == "nameid").Value;
+        var medico = await MedicoService.ObterMedicoAsync(Convert.ToInt32(id));
+        consultas = await ConsultaService.ObterConsultasFuturasDoMedicoAsync(medico.Id);
+        ObterNomeDoMedico(medico);
+    }    
 
-    private List<ConsultaModel> consultasFiltradas => consultas;
+    private void ObterNomeDoMedico(MeuCadastroMedicoModel medico)
+    {
+        var tokens = medico.Nome.Split(" ");
+        NomeDoMedico = $"{tokens[0]} {tokens[^1]}";
+    }
 
-    private void AceitarConsulta(ConsultaModel consulta)
+    private void AceitarConsulta(ConsultaMedicoModel consulta)
     {
         consulta.Status = "Aceita";
     }
 
-    private void RejeitarConsulta(ConsultaModel consulta)
+    private void RejeitarConsulta(ConsultaMedicoModel consulta)
     {
         consulta.Status = "Rejeitada";
-    }
-
-    private class ConsultaModel
-    {
-        public DateTime Data { get; set; }
-        public string Horario { get; set; }
-        public string NomePaciente { get; set; }
-        public string Status { get; set; }
-    }
+    }    
 }
