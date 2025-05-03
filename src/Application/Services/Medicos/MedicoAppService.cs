@@ -21,5 +21,12 @@ namespace Application.Services.Medicos
 
             return mapper.Map(medicos);
         }
+
+        public IList<MedicoParaConsultaDto> ObterTodosMedicos()
+        {
+            var medicos = unitOfWork.MedicoRepository.ObterTodos().ToList();
+
+            return mapper.Map(medicos);
+        }
     }
 }

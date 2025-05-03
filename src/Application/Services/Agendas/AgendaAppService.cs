@@ -9,9 +9,9 @@ namespace Application.Services.Agendas
 {
     public class AgendaAppService(IUnitOfWork unitOfWork) : IAgendaAppService
     {
-        public IList<MedicoDisponivelDto> ObterAgenda(DateOnly dia, int especialidadeId)
+        public IList<MedicoDisponivelDto> ObterAgendaPorEspecialidade(DateOnly dia, int especialidadeId)
         {
-            var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId);
+            var medicosDiponiveis = unitOfWork.MedicoRepository.ObterPorDisponibilidadePorMeEspecialidade(dia.DayOfWeek, especialidadeId);
             if (medicosDiponiveis == null || medicosDiponiveis.Count == 0)
                 throw new NotFoundException("Médico disponível");
 
@@ -20,6 +20,37 @@ namespace Application.Services.Agendas
                 throw new NotFoundException("Consultas para o dia");
 
             return CruzarDisponibilidadesComConsultas(dia, medicosDiponiveis, consultasDoDia);
+        }
+
+        public IList<AgendaAppDto> ObterAgendaPorMedico(DateOnly diaInicial, int quantidadeDeDias, int medicoId)
+        {
+            var dataFinal = diaInicial.AddDays(quantidadeDeDias);
+            var medico = unitOfWork.MedicoRepository.ObterPorId(medicoId);
+            if (medico == null) throw new NotFoundException($"Médico com id '{medicoId}' não existe.");
+
+            var consultasDosDias = unitOfWork.ConsultaRepository.ObterConsultasNaoCanceladasNoPeriodo(diaInicial, dataFinal, medico);
+
+
+            return CruzarDisponibilidadesComConsultas(diaInicial, dataFinal, medico, consultasDosDias);
+        }
+
+        private IList<AgendaAppDto> CruzarDisponibilidadesComConsultas(DateOnly diaInicial, DateOnly dataFinal, Medico medico, IList<Consulta> consultasDosDias)
+        {
+            var retorno = new List<AgendaAppDto>();
+            for (var dataIterada = diaInicial; diaInicial == dataFinal; dataIterada.AddDays(1))
+            {
+                var horariosOcupados = consultasDosDias.Where(x => x.Dia == dataIterada).Select(x => x.Horario).ToList();
+
+                var agenda = new AgendaAppDto()
+                {
+                    Dia = diaInicial,
+                    Horarios = medico.ObterHorasDiponiveis(dataIterada.DayOfWeek, horariosOcupados)
+                };
+
+                retorno.Add(agenda);
+            }
+
+            return retorno;
         }
 
         private IList<MedicoDisponivelDto> CruzarDisponibilidadesComConsultas(DateOnly dia, IList<Medico> medicosDiponiveis, IList<Consulta> consultasDoDia)

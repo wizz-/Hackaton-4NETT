@@ -6,6 +6,6 @@ namespace Hackaton.Web.Services.Medicos.Interfaces
     {
         Task CadastrarMedicoAsync(PrimeiroAcessoMedicoModel medico);
         Task<MeuCadastroMedicoModel> ObterMedico(int id);
-        Task AlterarCadastro(MeuCadastroMedicoModel medico);
+        Task<IList<MedicoParaConsultaModel>> ObterTodosMedicos();
     }
 }

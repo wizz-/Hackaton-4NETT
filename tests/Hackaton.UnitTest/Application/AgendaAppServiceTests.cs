@@ -82,13 +82,13 @@ namespace Hackaton.UnitTest.Application
             const int especialidadeId = 1;
             var mockUow = new Mock<IUnitOfWork>();
             mockUow
-                .Setup(u => u.MedicoRepository.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId))
+                .Setup(u => u.MedicoRepository.ObterPorDisponibilidadePorMeEspecialidade(dia.DayOfWeek, especialidadeId))
                 .Returns(new List<Medico>()); // sem médicos
 
             var service = new AgendaAppService(mockUow.Object);
 
             // Act & Assert
-            var ex = Assert.Throws<NotFoundException>(() => service.ObterAgenda(dia, especialidadeId));
+            var ex = Assert.Throws<NotFoundException>(() => service.ObterAgendaPorEspecialidade(dia, especialidadeId));
             string message = "Não foi encontrado: {0}";
             Assert.Equal(string.Format(message, "Médico disponível"), ex.Message);
         }
@@ -105,7 +105,7 @@ namespace Hackaton.UnitTest.Application
 
             var mockMedRepo = new Mock<IMedicoRepository>();
             mockMedRepo
-                .Setup(r => r.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId))
+                .Setup(r => r.ObterPorDisponibilidadePorMeEspecialidade(dia.DayOfWeek, especialidadeId))
                 .Returns(medicos);
 
             var mockConsRepo = new Mock<IConsultaRepository>();
@@ -121,7 +121,7 @@ namespace Hackaton.UnitTest.Application
 
             // Act & Assert
             var ex = Assert.Throws<NotFoundException>(() =>
-                service.ObterAgenda(dia, especialidadeId));
+                service.ObterAgendaPorEspecialidade(dia, especialidadeId));
             string message = "Não foi encontrado: {0}";
             Assert.Equal(string.Format(message, "Consultas para o dia"), ex.Message);
         }
@@ -143,7 +143,7 @@ namespace Hackaton.UnitTest.Application
 
             var mockMedRepo = new Mock<IMedicoRepository>();
             mockMedRepo
-                .Setup(r => r.ObterPorDisponibilidade(dia.DayOfWeek, especialidadeId))
+                .Setup(r => r.ObterPorDisponibilidadePorMeEspecialidade(dia.DayOfWeek, especialidadeId))
                 .Returns(medicos);
 
             var mockConsRepo = new Mock<IConsultaRepository>();
@@ -158,7 +158,7 @@ namespace Hackaton.UnitTest.Application
             var service = new AgendaAppService(mockUow.Object);
 
             // Act
-            var result = service.ObterAgenda(dia, especialidadeId);
+            var result = service.ObterAgendaPorEspecialidade(dia, especialidadeId);
 
             // Assert
             Assert.Single(result);

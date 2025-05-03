@@ -24,6 +24,7 @@ namespace Application.Services.Consultas.Mappers
             {
                 Id = item.Id,
                 Dia = item.Dia,
+                NomeDoMedico = item.Medico.Nome,
                 NomeDoPaciente = item.Paciente.Nome,
                 Especialidade = item.Especialidade.Nome,
                 HoraInicial = item.Horario.Inicio,

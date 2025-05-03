@@ -1,19 +1,20 @@
-using Hackaton.Web.Services.Autenticacao.Interfaces;
+using Blazored.LocalStorage;
 using Hackaton.Web.Services.Autenticacao;
-using Hackaton.Web.Services.Especialidades.Interfaces;
+using Hackaton.Web.Services.Autenticacao.Interfaces;
+using Hackaton.Web.Services.Consultas;
+using Hackaton.Web.Services.Consultas.Interfaces;
 using Hackaton.Web.Services.Especialidades;
-using Hackaton.Web.Services.Medicos.Interfaces;
+using Hackaton.Web.Services.Especialidades.Interfaces;
 using Hackaton.Web.Services.Medicos;
-using Hackaton.Web.Services.Pacientes.Interfaces;
+using Hackaton.Web.Services.Medicos.Interfaces;
 using Hackaton.Web.Services.Pacientes;
-using Hackaton.Web.Services.Ufs.Interfaces;
+using Hackaton.Web.Services.Pacientes.Interfaces;
 using Hackaton.Web.Services.Ufs;
+using Hackaton.Web.Services.Ufs.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Radzen;
-using Blazored.LocalStorage;
 
 namespace Hackaton.Web
 {
@@ -55,6 +56,7 @@ namespace Hackaton.Web
             builder.Services.AddScoped<IEspecialidadeService, EspecialidadeService>();
             builder.Services.AddScoped<IMedicoService, MedicoService>();
             builder.Services.AddScoped<IPacienteService, PacienteService>();
+            builder.Services.AddScoped<IConsultaService, ConsultaService>();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

@@ -17,9 +17,13 @@ namespace Hackaton.Api.Controllers.Consultas
                 .WithSummary("Grava uma nova consulta")
                 .WithDescription("Grava uma nova consulta no banco de dados");
 
-            grupo.MapPost("futuras/{medicoId}", ObterConsultasFuturasPorMedico)
+            grupo.MapGet("futuras/medicos/{medicoId}", ObterConsultasFuturasPorMedico)
                 .WithSummary("Obtém consultas do médico")
                 .WithDescription("Obtém consultas futuras do médico");
+
+            grupo.MapGet("futuras/paciente/{pacienteId}", ObterConsultasFuturasPorPaciente)
+                .WithSummary("Obtém consultas do paciente")
+                .WithDescription("Obtém consultas futuras do paciente");
 
             grupo.MapPost("confirmar/{id}", Confirmar)
                 .WithSummary("Confimar consulta")
@@ -53,6 +57,13 @@ namespace Hackaton.Api.Controllers.Consultas
         private Ok<IList<ConsultaDto>> ObterConsultasFuturasPorMedico(int medicoId, IConsultaAppService service)
         {
             var retorno = service.ObterConsultasDoMedico(medicoId);
+
+            return TypedResults.Ok(retorno);
+        }
+
+        private Ok<IList<ConsultaDto>> ObterConsultasFuturasPorPaciente(int pacienteId, IConsultaAppService service)
+        {
+            var retorno = service.ObterConsultasDoPaciente(pacienteId);
 
             return TypedResults.Ok(retorno);
         }

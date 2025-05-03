@@ -16,7 +16,14 @@ namespace Infra.Data.DAL.Repositories
                     .SingleOrDefault(x => x.Crm.Numero == crm && x.Crm.Uf == uf);
         }
 
-        public IList<Medico> ObterPorDisponibilidade(DayOfWeek dayOfWeek, int especialidadeId)
+        public IList<Medico> ObterPorDisponibilidadePorMedico(DayOfWeek dayOfWeek, int medicoId)
+        {
+            return ObterQueryable()
+                .Where(x => x.HorariosDisponiveis.Any(x => x.DiaDaSemana == dayOfWeek && x.Id == medicoId))
+                .ToList();
+        }
+
+        public IList<Medico> ObterPorDisponibilidadePorMeEspecialidade(DayOfWeek dayOfWeek, int especialidadeId)
         {
             return ObterQueryable()
                 .Where(x => x.HorariosDisponiveis.Any(x => x.DiaDaSemana == dayOfWeek && x.Especialidade.Id == especialidadeId))
