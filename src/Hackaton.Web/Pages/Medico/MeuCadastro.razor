@@ -50,127 +50,151 @@
             </div>
         </div>
 
-        <EditForm Model="@CadastroMedicoModel" OnValidSubmit="SalvarCadastro">
-            <DataAnnotationsValidator />
+        @if(!gravado)
+        {
+            <EditForm Model="@CadastroMedicoModel" OnValidSubmit="SalvarCadastro">
+                <DataAnnotationsValidator />
 
-            <div class="row mb-4">
-                <div class="col-md-6">
-                    <label class="form-label">Especialidade</label>
-                    <InputSelect class="form-select" @bind-Value="CadastroMedicoModel.EspecialidadeId">
-                        <option value="">Selecione...</option>
-                        @foreach (var esp in Especialidades)
-                        {
-                            <option value="@esp.Id">@esp.Nome</option>
-                        }
-                    </InputSelect>
-                </div>            
-                <div class="col-md-6">
-                    <label class="form-label">Valor da Consulta (R$)</label>
-                    <InputText @bind-Value="valorFormatado" class="form-control" @oninput="FormatarValor" />
-                </div>            
-            </div>
-
-            <hr />
-            <h5 class="mb-3">Disponibilidade Semanal</h5>
-
-            <div class="row g-3 align-items-end mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">Dia da Semana</label>
-                    <InputSelect TValue="int?" 
-                    class="form-select"
-                    Value="@novoHorario.DiaDaSemana"
-                    ValueChanged="EventCallback.Factory.Create<int?>(this, OnDiaDaSemanaChanged)"
-                    ValueExpression="() => novoHorario.DiaDaSemana">
-                        <option value="">Selecione...</option>
-                        @foreach (var dia in Enumerable.Range(1, 7))
-                        {
-                            <option value="@dia">@ObterNomeDoDia(dia)</option>
-                        }
-                    </InputSelect>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Início</label>
-                    <InputSelect class="form-select" TValue="string" Value="@novoHorario.Inicio" ValueChanged="@OnInicioChanged" ValueExpression="() => novoHorario.Inicio" disabled="@inicioEstaDesabilitado">
-                        <option value="">Selecione...</option>
-                        @foreach (var h in HorariosInicioDisponiveis)
-                        {
-                            <option value="@h">@h</option>
-                        }
-                    </InputSelect>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Especialidade</label>
+                        <InputSelect class="form-select" @bind-Value="CadastroMedicoModel.EspecialidadeId">
+                            <option value="">Selecione...</option>
+                            @foreach (var esp in Especialidades)
+                            {
+                                <option value="@esp.Id">@esp.Nome</option>
+                            }
+                        </InputSelect>
+                    </div>            
+                    <div class="col-md-6">
+                        <label class="form-label">Valor da Consulta (R$)</label>
+                        <InputText @bind-Value="valorFormatado" class="form-control" @oninput="FormatarValor" />
+                    </div>            
                 </div>
 
-                <div class="col-md-3">
-                    <label class="form-label">Fim</label>
-                    <InputSelect class="form-select" @bind-Value="novoHorario.Fim" disabled="@fimEstaDesabilitado">
-                        <option value="">Selecione...</option>
-                        @foreach (var h in HorariosFimDisponiveis)
-                        {
-                            <option value="@h">@h</option>
-                        }
-                    </InputSelect>
+                <hr />
+                <h5 class="mb-3">Disponibilidade Semanal</h5>
+
+                <div class="row g-3 align-items-end mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Dia da Semana</label>
+                        <InputSelect TValue="int?" 
+                        class="form-select"
+                        Value="@novoHorario.DiaDaSemana"
+                        ValueChanged="EventCallback.Factory.Create<int?>(this, OnDiaDaSemanaChanged)"
+                        ValueExpression="() => novoHorario.DiaDaSemana">
+                            <option value="">Selecione...</option>
+                            @foreach (var dia in Enumerable.Range(1, 7))
+                            {
+                                <option value="@dia">@ObterNomeDoDia(dia)</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Início</label>
+                        <InputSelect class="form-select" TValue="string" Value="@novoHorario.Inicio" ValueChanged="@OnInicioChanged" ValueExpression="() => novoHorario.Inicio" disabled="@inicioEstaDesabilitado">
+                            <option value="">Selecione...</option>
+                            @foreach (var h in HorariosInicioDisponiveis)
+                            {
+                                <option value="@h">@h</option>
+                            }
+                        </InputSelect>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Fim</label>
+                        <InputSelect class="form-select" @bind-Value="novoHorario.Fim" disabled="@fimEstaDesabilitado">
+                            <option value="">Selecione...</option>
+                            @foreach (var h in HorariosFimDisponiveis)
+                            {
+                                <option value="@h">@h</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-outline-primary w-100" @onclick="AdicionarHorario">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-outline-primary w-100" @onclick="AdicionarHorario">
-                        <i class="bi bi-plus-circle"></i>
+
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mt-3 tabela-horarios">
+                        <thead class="table-light">
+                            <tr>
+                                @foreach (var dia in Enumerable.Range(1, 7))
+                                {
+                                    <th class="text-center"><i class="bi bi-calendar-check"></i>@ObterNomeDoDia(dia)</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach (var dia in Enumerable.Range(1, 7))
+                                {
+                                    <td>
+                                        @foreach (var horarioAtual in CadastroMedicoModel.Horarios.Where(h => h.DiaDaSemana == dia))
+                                        {
+                                            <div class="input-group input-group-sm horario-badge">
+                                            
+                                                @* <span class="input-group-text" id="basic-addon2">@horarioAtual.Inicio - @horarioAtual.Fim</span> *@
+
+                                                @if (string.IsNullOrWhiteSpace(horarioAtual.Inicio) || string.IsNullOrWhiteSpace(horarioAtual.Fim))
+                                                {
+                                                    <span class="input-group-text bg-danger text-white">⚠ Horário inválido</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="input-group-text" id="basic-addon2">@horarioAtual.Inicio - @horarioAtual.Fim</span>
+                                                }
+                                            
+                                                <button class="btn btn-danger" type="button" id="button-addon1" @onclick="() => RemoverHorario(horarioAtual)">
+                                                    <i class="bi bi-x-lg"></i>
+                                                </button>
+
+                                            </div>                                        
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-floppy me-1"></i> Salvar Cadastro
+                    </button>
+                    <button type="button" class="btn btn-outline-primary ms-2" @onclick="@(() => Navigation.NavigateTo("/medico"))">
+                        <i class="bi bi-arrow-left-circle me-1"></i> Voltar
                     </button>
                 </div>
+
+                @if (!string.IsNullOrWhiteSpace(mensagemDeErro))
+                {
+                    <div class="alert alert-danger mt-4" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i> @mensagemDeErro
+                    </div>
+                }
+
+            </EditForm>
+        }
+        else
+        {
+            <div class="alert alert-success mt-4" role="alert">
+                <i class="bi bi-check-circle"></i> Cadastro salvo com sucesso!
             </div>
 
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered mt-3 tabela-horarios">
-                    <thead class="table-light">
-                        <tr>
-                            @foreach (var dia in Enumerable.Range(1, 7))
-                            {
-                                <th class="text-center"><i class="bi bi-calendar-check"></i>@ObterNomeDoDia(dia)</th>
-                            }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            @foreach (var dia in Enumerable.Range(1, 7))
-                            {
-                                <td>
-                                    @foreach (var horarioAtual in CadastroMedicoModel.Horarios.Where(h => h.DiaDaSemana == dia))
-                                    {
-                                        <div class="input-group input-group-sm horario-badge">
-                                            
-                                            @* <span class="input-group-text" id="basic-addon2">@horarioAtual.Inicio - @horarioAtual.Fim</span> *@
-
-                                            @if (string.IsNullOrWhiteSpace(horarioAtual.Inicio) || string.IsNullOrWhiteSpace(horarioAtual.Fim))
-                                            {
-                                                <span class="input-group-text bg-danger text-white">⚠ Horário inválido</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="input-group-text" id="basic-addon2">@horarioAtual.Inicio - @horarioAtual.Fim</span>
-                                            }
-                                            
-                                            <button class="btn btn-danger" type="button" id="button-addon1" @onclick="() => RemoverHorario(horarioAtual)">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-
-                                        </div>                                        
-                                    }
-                                </td>
-                            }
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-4">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-floppy me-1"></i> Salvar Cadastro
-                </button>
-                <button type="button" class="btn btn-outline-primary ms-2" @onclick="@(() => Navigation.NavigateTo("/medico"))">
-                    <i class="bi bi-arrow-left-circle me-1"></i> Voltar
-                </button>
-            </div>            
-        </EditForm>
+            <button type="button" class="btn btn-outline-primary ms-2" @onclick="@(() => Navigation.NavigateTo("/medico"))">
+                <i class="bi bi-arrow-left-circle me-1"></i> Voltar
+            </button>
+        }
     </div>
 }
 @code {
+    private bool gravado = false;
+    private string mensagemDeErro = "";
+
     private bool carregando = true;
     public string NomeDoMedico { get; set; } = "";
     private string valorFormatado = "R$ 0,00";
@@ -427,10 +451,23 @@
     private async Task SalvarCadastro()
     {
         if (editContext is null || !editContext.Validate())
+        {
             return;
+        }
 
-        var requestModel = CriarModelDeRequest();
-        await MedicoService.AtualizarCadastroAsync(requestModel);
+        try
+        {
+            gravado = false;
+            mensagemDeErro = "";
+            var requestModel = CriarModelDeRequest();
+            await MedicoService.AtualizarCadastroAsync(requestModel);
+            gravado = true;
+        }
+        catch (Exception ex)
+        {
+            gravado = false;
+            mensagemDeErro = ex.Message;
+        }        
     }    
 
     private MedicoMeuCadastroRequest CriarModelDeRequest()
