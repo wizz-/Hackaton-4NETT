@@ -31,6 +31,11 @@ namespace Domain.Entities.Cadastros
             ValidarHorariosDisponiveis(horarios);
             ValidarEspecialidade(especialidade);
 
+            if (HorariosDisponiveis != null)
+            {
+                HorariosDisponiveis.Clear();
+            }
+
             Especialidade = especialidade;
             ValorDaConsulta = valorDaConsulta;
             HorariosDisponiveis = horarios;
