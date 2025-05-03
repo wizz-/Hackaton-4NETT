@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Auth\**" />
+    <Content Remove="Auth\**" />
+    <EmbeddedResource Remove="Auth\**" />
+    <None Remove="Auth\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Services\Autenticacao\CustomAuthStateProvider.cs" />
   </ItemGroup>
 
@@ -22,10 +29,6 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.4" />
     <PackageReference Include="Radzen.Blazor" Version="6.5.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />    
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Auth\Blazor\" />
   </ItemGroup>
 
 </Project>

@@ -6,5 +6,6 @@ namespace Hackaton.Web.Services.Consultas.Interfaces
     {
         Task<IList<ConsultaPacienteModel>> ObterConsultasFuturasDoPaciente(int pacienteId);
         Task CancelarConsulta(int consultaId, string motivo);
+        Task CriarConsulta(CriarConsultaRequest consultaRequest);
     }
 }

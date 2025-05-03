@@ -37,13 +37,13 @@ namespace Application.Services.Agendas
         private IList<AgendaAppDto> CruzarDisponibilidadesComConsultas(DateOnly diaInicial, DateOnly dataFinal, Medico medico, IList<Consulta> consultasDosDias)
         {
             var retorno = new List<AgendaAppDto>();
-            for (var dataIterada = diaInicial; diaInicial == dataFinal; dataIterada.AddDays(1))
+            for (var dataIterada = diaInicial; dataIterada < dataFinal; dataIterada = dataIterada.AddDays(1))
             {
                 var horariosOcupados = consultasDosDias.Where(x => x.Dia == dataIterada).Select(x => x.Horario).ToList();
 
                 var agenda = new AgendaAppDto()
                 {
-                    Dia = diaInicial,
+                    Dia = dataIterada,
                     Horarios = medico.ObterHorasDiponiveis(dataIterada.DayOfWeek, horariosOcupados)
                 };
 

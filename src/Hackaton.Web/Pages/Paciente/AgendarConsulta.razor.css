@@ -1,3 +1,10 @@
 ﻿.z-index-3 {
     z-index: 1050;
 }
+
+.tabela-horarios {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-color: #c0c0c0 transparent;
+}
+

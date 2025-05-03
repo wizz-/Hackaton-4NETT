@@ -6,6 +6,7 @@
 @using Hackaton.Web.Models.Paciente
 @using Hackaton.Web.Services.Agendas.Interfaces
 @using Hackaton.Web.Services.Autenticacao.Interfaces
+@using Hackaton.Web.Services.Consultas.Interfaces
 @using Hackaton.Web.Services.Especialidades.Interfaces
 @using Hackaton.Web.Services.Medicos.Interfaces
 
@@ -14,6 +15,7 @@
 @inject IEspecialidadeService EspecialidadeService
 @inject IMedicoService MedicoService;
 @inject IAgendaService AgendaService;
+@inject IConsultaService ConsultaService;
 
 <PageTitle>Agendar Consulta - Health&Med</PageTitle>
 
@@ -110,7 +112,7 @@
 
     @if (agendaAgrupada?.Any() == true)
     {
-        <div class="table-responsive">
+        <div class="tabela-horarios" >
             <table class="table table-sm table-bordered text-center align-middle">
                 <thead class="table-light">
                     <tr>
@@ -130,18 +132,18 @@
                                 bool disponivel = model.Horarios.Contains(horario);
 
                                 <td> 
-                                     @if (disponivel) 
-                                     { 
-                                         <button class="btn btn-sm btn-outline-primary" 
-                                         @onclick="@(() => SelecionarHorario(horarioCompleto))"> 
-                                             @horarioCompleto.ToString("HH:mm") 
-                                         </button> 
-                                     } 
-                                     else 
-                                     { 
-                                         <span class="text-muted">—</span> 
-                                     } 
-                                 </td>
+                                    @if (disponivel) 
+                                    { 
+                                        <button class="btn btn-sm btn-outline-primary" 
+                                        @onclick="@(() => SelecionarHorario(horarioCompleto))"> 
+                                            @horarioCompleto.ToString("HH:mm") 
+                                        </button> 
+                                    } 
+                                    else 
+                                    { 
+                                        <span class="text-muted">—</span> 
+                                    } 
+                                </td>
                             }
                         </tr>
                     }
@@ -187,7 +189,7 @@
     private bool focoEspecialidade = false;
     private bool focoMedico = false;
     public string NomeDoPaciente { get; set; } = "";
-    // private IList<AgendaHorarioModel> agenda = [];
+    public int PacienteId { get; set; }
     private IList<AgendaHorarioModel> agendaAgrupada = [];
     private IList<EspecialidadeModel> Especialidades = [];
     private IList<MedicoParaConsultaModel> TodosMedicos = [];
@@ -212,6 +214,7 @@
         Especialidades = await tarefaEspecialidades;
         var tokens = claims["unique_name"].Split(" ");
         NomeDoPaciente = $"{tokens[0]} {tokens[^1]}";
+        PacienteId = Convert.ToInt32(claims["nameid"]);
     }
 
     private void OnInputEspecialidade(ChangeEventArgs e)
@@ -296,6 +299,7 @@
         agendaCarregada = false;
         agendaAgrupada.Clear();
         horarioSelecionado = null;
+        horariosPorDia.Clear();
     }
 
     private void DesfazerSelecaoMedico()
@@ -304,6 +308,7 @@
         agendaCarregada = false;
         filtro.NomeMedico = string.Empty;
         dataInicio = DateTime.Today;
+        horariosPorDia.Clear();
     }
 
     private async Task BuscarAgenda()
@@ -334,6 +339,7 @@
         {
             horariosPorDia.Add(primeiroHorario);
             primeiroHorario = primeiroHorario.AddMinutes(30);
+            if (primeiroHorario == TimeOnly.MinValue) break;
         }
     }
 
@@ -346,8 +352,20 @@
     {
         if (medicoSelecionado is null || horarioSelecionado is null) return;
 
-        await Task.Delay(400);
-        Navigation.NavigateTo("/paciente/consultas");
+        var requestDto = new CriarConsultaRequest()
+        {
+                Id = 0,
+                MedicoId = medicoSelecionado.Id,
+                Especialidade = medicoSelecionado.Especialidade,
+                DataHorario = horarioSelecionado.Value,
+                PacienteId = PacienteId,
+        };
+
+        await ConsultaService.CriarConsulta(requestDto);
+
+        horariosPorDia.Clear();
+
+        Navigation.NavigateTo("/paciente/minhas-consultas");
     }
 
     private class FiltroBuscaMedico

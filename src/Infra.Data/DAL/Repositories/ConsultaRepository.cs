@@ -32,7 +32,7 @@ namespace Infra.Data.DAL.Repositories
             var hora = TimeOnly.FromDateTime(diaAtual);
 
             return ObterQueryable()
-                .Where(x => x.Paciente.Id == pacienteId && x.Dia == dia && x.Horario.Inicio >= hora)
+                .Where(x => x.Paciente.Id == pacienteId && x.Dia >= dia && x.Horario.Inicio >= hora)
                 .ToList();
         }
 

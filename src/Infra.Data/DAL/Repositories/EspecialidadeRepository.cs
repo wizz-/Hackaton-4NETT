@@ -9,5 +9,11 @@ namespace Infra.Data.DAL.Repositories
         public EspecialidadeRepository(Contexto context) : base(context)
         {
         }
+
+        public Especialidade? ObterPorNome(string especialidade)
+        {
+            return ObterQueryable()
+                .SingleOrDefault(x => x.Nome == especialidade);
+        }
     }
 }

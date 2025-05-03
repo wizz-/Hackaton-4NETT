@@ -79,7 +79,7 @@ namespace Hackaton.Api.Controllers.Consultas
 
         private IResult Cancelar(CancelamentoDto cancelamento, IConsultaAppService service, HttpContext context)
         {
-            var usuario = context.User.FindFirst("usuario")?.Value;
+            var usuario = context.User.FindFirst("identificador")?.Value;
 
             service.CancelarConsulta(cancelamento.ConsultaId, usuario, cancelamento.Motivo);
 
