@@ -131,13 +131,25 @@
                             @foreach (var dia in Enumerable.Range(1, 7))
                             {
                                 <td>
-                                    @foreach (var h in CadastroMedicoModel.Horarios.Where(h => h.DiaDaSemana == dia))
+                                    @foreach (var horarioAtual in CadastroMedicoModel.Horarios.Where(h => h.DiaDaSemana == dia))
                                     {
                                         <div class="input-group input-group-sm horario-badge">
-                                            <span class="input-group-text" id="basic-addon2">@h.Inicio - @h.Fim</span>
-                                            <button class="btn btn-danger" type="button" id="button-addon1" @onclick="() => RemoverHorario(h)">
+                                            
+                                            @* <span class="input-group-text" id="basic-addon2">@horarioAtual.Inicio - @horarioAtual.Fim</span> *@
+
+                                            @if (string.IsNullOrWhiteSpace(horarioAtual.Inicio) || string.IsNullOrWhiteSpace(horarioAtual.Fim))
+                                            {
+                                                <span class="input-group-text bg-danger text-white">⚠ Horário inválido</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="input-group-text" id="basic-addon2">@horarioAtual.Inicio - @horarioAtual.Fim</span>
+                                            }
+                                            
+                                            <button class="btn btn-danger" type="button" id="button-addon1" @onclick="() => RemoverHorario(horarioAtual)">
                                                 <i class="bi bi-x-lg"></i>
                                             </button>
+
                                         </div>                                        
                                     }
                                 </td>
@@ -194,6 +206,7 @@
             ObterNomeDoMedico(await medico);
             Especialidades = await tarefaEspecialidades;
             CadastroMedicoModel = await medico;
+            valorFormatado = CadastroMedicoModel.ValorDaConsulta?.ToString("C", new CultureInfo("pt-BR")) ?? "R$ 0,00";
 
             editContext = new EditContext(CadastroMedicoModel);
         }
@@ -238,20 +251,13 @@
     {
         if (dia == null)
         {
-            novoHorario.DiaDaSemana = null;
-            novoHorario.Inicio = "";
-            novoHorario.Fim = "";
-            HorariosInicioDisponiveis = [];
-            HorariosFimDisponiveis = [];
-            inicioEstaDesabilitado = true;
-            fimEstaDesabilitado = true;
+            ResetarCamposNovoHorario();            
             return Task.CompletedTask;
         }
 
         novoHorario.DiaDaSemana = dia;
         novoHorario.Inicio = "";
         novoHorario.Fim = "";
-
         HorariosFimDisponiveis = new();
         HorariosInicioDisponiveis = new(TodosHorariosDisponiveis);        
 
@@ -272,19 +278,17 @@
     {
         if (TimeSpan.TryParse(inicioPeriodo, out TimeSpan inicio) && TimeSpan.TryParse(fimPeriodo, out TimeSpan fim))
         {
-            return horariosDisponiveis
-                .Where(horarioStr =>
+            return horariosDisponiveis.Where(horarioStr =>
+            {
+                if (TimeSpan.TryParse(horarioStr, out TimeSpan horario))
                 {
-                    if (TimeSpan.TryParse(horarioStr, out TimeSpan horario))
-                    {
-                        return !(horario >= inicio && horario <= fim); // Mantém os horários *fora* do período agendado
-                    }
-                    return true; // Mantém horários com formato inválido (se houver)
-                })
-                .ToList();
+                    return !(horario >= inicio && horario <= fim); 
+                }
+                return true; 
+            }).ToList();
         }
 
-        return horariosDisponiveis; // Retorna a lista original se o período for inválido
+        return horariosDisponiveis;
     }
 
     private Task OnInicioChanged(string value)
@@ -420,9 +424,30 @@
         };
     }
 
-    void SalvarCadastro()
+    private async Task SalvarCadastro()
     {
-        // enviar para API
+        if (editContext is null || !editContext.Validate())
+            return;
+
+        var requestModel = CriarModelDeRequest();
+        await MedicoService.AtualizarCadastroAsync(requestModel);
     }    
-    
+
+    private MedicoMeuCadastroRequest CriarModelDeRequest()
+    {
+        if (CadastroMedicoModel.ValorDaConsulta is null)
+            throw new InvalidOperationException("Valor da consulta não pode ser nulo.");
+
+        return new MedicoMeuCadastroRequest
+        {
+            Id = CadastroMedicoModel.Id,
+            Especialidade = new EspecialidadeDto
+            {
+                Id = CadastroMedicoModel.EspecialidadeId,
+                Nome = ""
+            },
+            ValorDaConsulta = CadastroMedicoModel.ValorDaConsulta.Value,
+            Horarios = CadastroMedicoModel.Horarios
+        };
+    }
 }

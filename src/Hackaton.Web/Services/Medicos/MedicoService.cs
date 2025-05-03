@@ -87,9 +87,28 @@ namespace Hackaton.Web.Services.Medicos
             };
         }
 
-        public Task AlterarCadastro(MeuCadastroMedicoModel medico)
+        public async Task AtualizarCadastroAsync(MedicoMeuCadastroRequest medico)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(medico);
+            
+            var response = await http.PatchAsJsonAsync($"medicos/{medico.Id}", medico);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                try
+                {
+                    var erro = JsonSerializer.Deserialize<ErroResponse>(content, JsonOptionsDefaults.Web);
+
+                    if (erro is not null)
+                        throw new ApiException(erro.Mensagem, erro.Detalhes);
+                }
+                catch (JsonException)
+                {
+                    throw new ApiException("Erro inesperado ao processar resposta da API.");
+                }
+            }
         }
     }
 }

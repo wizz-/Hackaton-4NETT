@@ -1,6 +1,7 @@
 ﻿using Application.Services.Medicos.Dtos;
 using Application.Services.Medicos.Mappers.Interfaces;
 using Domain.Entities.Cadastros;
+using System.Globalization;
 
 namespace Application.Services.Medicos.Mappers
 {
@@ -67,8 +68,8 @@ namespace Application.Services.Medicos.Mappers
             {
                 Id = item.Id,
                 DiaDaSemana = (int)item.DiaDaSemana,
-                Inicio = "",// item.Periodo.Inicio,
-                Fim = "" // item.Periodo.Fim,
+                Inicio = item.Periodo.Inicio.ToString("HH:mm", CultureInfo.InvariantCulture),
+                Fim = item.Periodo.Fim.ToString("HH:mm", CultureInfo.InvariantCulture),
             };
 
             return newItem;
