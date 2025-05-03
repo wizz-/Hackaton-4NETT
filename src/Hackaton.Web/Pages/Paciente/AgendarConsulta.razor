@@ -111,7 +111,7 @@
     @if (agendaAgrupada?.Any() == true)
     {
         <div class="table-responsive">
-            <table class="table table-bordered text-center align-middle">
+            <table class="table table-sm table-bordered text-center align-middle">
                 <thead class="table-light">
                     <tr>
                         @foreach (var dia in agendaAgrupada.Select(x => x.Dia).Order())
@@ -124,24 +124,24 @@
                     @foreach (var horario in horariosPorDia)
                     {
                         <tr>
-                            @foreach (var dia in agendaAgrupada.Select(x => x.Dia).Order())
+                            @foreach (var model in agendaAgrupada.OrderBy(x => x.Dia))
                             {
-                                @* var horarioCompleto = dia.Add(horario); *@
-                                @* bool disponivel = dia.Contains(horarioCompleto); *@
+                                var horarioCompleto = model.Dia.ToDateTime(horario);
+                                bool disponivel = model.Horarios.Contains(horario);
 
-                                @* <td> *@
-                                @*     @if (disponivel) *@
-                                @*     { *@
-                                @*         <button class="btn btn-sm btn-outline-primary" *@
-                                @*         @onclick="@(() => SelecionarHorario(horarioCompleto))"> *@
-                                @*             @horarioCompleto.ToString("HH:mm") *@
-                                @*         </button> *@
-                                @*     } *@
-                                @*     else *@
-                                @*     { *@
-                                @*         <span class="text-muted">—</span> *@
-                                @*     } *@
-                                @* </td> *@
+                                <td> 
+                                     @if (disponivel) 
+                                     { 
+                                         <button class="btn btn-sm btn-outline-primary" 
+                                         @onclick="@(() => SelecionarHorario(horarioCompleto))"> 
+                                             @horarioCompleto.ToString("HH:mm") 
+                                         </button> 
+                                     } 
+                                     else 
+                                     { 
+                                         <span class="text-muted">—</span> 
+                                     } 
+                                 </td>
                             }
                         </tr>
                     }
@@ -192,12 +192,7 @@
     private IList<EspecialidadeModel> Especialidades = [];
     private IList<MedicoParaConsultaModel> TodosMedicos = [];
 
-    private List<TimeSpan> horariosPorDia = new()
-    {
-        new TimeSpan(9, 0, 0),
-        new TimeSpan(10, 0, 0),
-        new TimeSpan(11, 0, 0)
-    };
+    private List<TimeOnly> horariosPorDia = new();
 
     private List<string> sugestoesEspecialidade = new();
 
@@ -316,19 +311,30 @@
         if (medicoSelecionado is null)
             return;
 
-        await Task.Delay(300); // simulação
-
         agendaAgrupada = await AgendaService.ObterAgendaDoMedico(DateOnly.FromDateTime(dataInicio), medicoSelecionado.Id, 7);
-        // Enumerable.Range(0, 7)
-        //     .SelectMany(d => horariosPorDia.Select(h => dataInicio.AddDays(d).Add(h)))
-        //     .ToList();
 
-        // agendaAgrupada = agenda
-        //     .GroupBy(a => a.Date)
-        //     .ToDictionary(g => g.Key, g => g.ToList());
+        var todosHorarios = agendaAgrupada
+            .Where(x => x.Horarios != null)
+            .SelectMany(x => x.Horarios)
+            .ToList()
+            .OrderBy(x => x);
+
+        var primeiroHorario = todosHorarios.FirstOrDefault();
+        var ultimoHorario = todosHorarios.LastOrDefault();
+
+        CriarHorariosDisponiveisNoDia(primeiroHorario, ultimoHorario);
 
         horarioSelecionado = null;
         agendaCarregada = true;
+    }
+
+    private void CriarHorariosDisponiveisNoDia(TimeOnly primeiroHorario, TimeOnly ultimoHorario)
+    {
+        while (primeiroHorario <= ultimoHorario)
+        {
+            horariosPorDia.Add(primeiroHorario);
+            primeiroHorario = primeiroHorario.AddMinutes(30);
+        }
     }
 
     private void SelecionarHorario(DateTime horario)

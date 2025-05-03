@@ -1,4 +1,6 @@
 using Blazored.LocalStorage;
+using Hackaton.Web.Services.Agendas;
+using Hackaton.Web.Services.Agendas.Interfaces;
 using Hackaton.Web.Services.Autenticacao;
 using Hackaton.Web.Services.Autenticacao.Interfaces;
 using Hackaton.Web.Services.Consultas;
@@ -57,6 +59,7 @@ namespace Hackaton.Web
             builder.Services.AddScoped<IMedicoService, MedicoService>();
             builder.Services.AddScoped<IPacienteService, PacienteService>();
             builder.Services.AddScoped<IConsultaService, ConsultaService>();
+            builder.Services.AddScoped<IAgendaService, AgendaService>();
 
             builder.Services.AddScoped<DialogService>();
             builder.Services.AddScoped<NotificationService>();

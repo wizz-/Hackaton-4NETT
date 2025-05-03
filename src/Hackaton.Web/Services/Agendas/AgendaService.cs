@@ -19,7 +19,7 @@ namespace Hackaton.Web.Services.Agendas
                 QuantidadeDeDias = quantidadeDeDias,
             };
 
-            var response = await http.PostAsJsonAsync("agenda", requestBody);
+            var response = await http.PostAsJsonAsync("agenda/medico", requestBody);
 
             if (!response.IsSuccessStatusCode)
             {
