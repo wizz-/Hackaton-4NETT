@@ -37,7 +37,8 @@
                     <th><i class="bi bi-clock"></i> Hora</th>
                     <th><i class="bi bi-person-vcard"></i> Médico</th>
                     <th><i class="bi bi-heart-pulse"></i> Especialidade</th>
-                    <th><i class="bi bi-x-circle"></i> Ação</th>
+                    <th><i class="bi bi-info-circle"></i> Status</th>
+                    <th><i class="bi bi-gear"></i> Ação</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,10 +49,14 @@
                         <td>@consulta.HoraInicial.ToString("HH:mm")</td>
                         <td>@consulta.NomeDoMedico</td>
                         <td>@consulta.Especialidade</td>
+                        <td>@consulta.Status</td>
                         <td>
-                            <button class="btn btn-sm btn-danger" @onclick="() => AbrirModalCancelamento(consulta.Id)">
-                                <i class="bi bi-x-circle"></i> Cancelar
-                            </button>
+                            @if(consulta.Status != "Cancelada"){
+                                <button class="btn btn-sm btn-danger" @onclick="() => AbrirModalCancelamento(consulta.Id)">
+                                    <i class="bi bi-x-circle"></i> Cancelar
+                                </button>
+                            }
+
                         </td>
                     </tr>
                 }
@@ -106,6 +111,7 @@
     {
         await ConsultaService.CancelarConsulta(IdConsultaSelecionada, MotivoCancelamento);
         MostrarModal = false;
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
     }
 
     private void Voltar()

@@ -1,7 +1,6 @@
-﻿
-namespace Application.Services.Consultas.Dtos
+﻿namespace Hackaton.Web.Models.Paciente
 {
-    public class ConsultaCadastroDto
+    public class CriarConsultaRequest
     {
         public int Id { get; set; }
         public int PacienteId { get; set; }

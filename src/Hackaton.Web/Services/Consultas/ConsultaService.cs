@@ -18,6 +18,28 @@ namespace Hackaton.Web.Services.Consultas
 
         }
 
+        public async Task CriarConsulta(CriarConsultaRequest consultaRequest)
+        {
+            var response = await http.PostAsJsonAsync("consultas", consultaRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                try
+                {
+                    var erro = JsonSerializer.Deserialize<ErroResponse>(content, JsonOptionsDefaults.Web);
+
+                    if (erro is not null)
+                        throw new ApiException(erro.Mensagem, erro.Detalhes);
+                }
+                catch (JsonException)
+                {
+                    throw new ApiException("Erro inesperado ao processar resposta da API.");
+                }
+            }
+        }
+
         public async Task CancelarConsulta(int consultaId, string motivo)
         {
             var parametroDaRequest = PreencherCancelarConsultaRequest(consultaId, motivo);

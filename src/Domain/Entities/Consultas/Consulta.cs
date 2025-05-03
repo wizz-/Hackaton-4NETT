@@ -12,7 +12,7 @@ namespace Domain.Entities.Consultas
         public virtual Especialidade Especialidade { get; private set; }
         public virtual Periodo Horario { get; private set; }
         public StatusConsulta Status { get; private set; }
-        public string MotivoDeCancelamento { get; private set; }
+        public string? MotivoDeCancelamento { get; private set; }
 
         protected Consulta()
         {
@@ -25,6 +25,20 @@ namespace Domain.Entities.Consultas
             Medico = medico;
             Especialidade = especialidade;
             Horario = horario;
+            Status = StatusConsulta.Pendente;
+        }
+
+        public Consulta(DateTime dataHorario, Paciente paciente, Medico medico, Especialidade especialidade)
+        {
+            var horaInicial = TimeOnly.FromDateTime(dataHorario);
+
+            var diaDaConsulta = medico.HorariosDisponiveis.First(x => x.DiaDaSemana == dataHorario.DayOfWeek);
+
+            Dia = DateOnly.FromDateTime(dataHorario);
+            Paciente = paciente;
+            Medico = medico;
+            Especialidade = especialidade;
+            Horario = new Periodo(horaInicial, horaInicial.AddMinutes(diaDaConsulta.TempoDeConsulta));
             Status = StatusConsulta.Pendente;
         }
 
