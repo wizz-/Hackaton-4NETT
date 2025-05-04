@@ -47,9 +47,29 @@ namespace Hackaton.Api.Controllers.Consultas
 
         private IResult Confirmar(int id, IConsultaAppService service, HttpContext context)
         {
-            (string crm, string uf) = ExtrairMedico(context);
+            var usuario = context.User.FindFirst("identificador")?.Value;
+            if (usuario is null) TypedResults.BadRequest();
 
-            service.ConfirmarConsulta(id, crm, uf);
+            service.ConfirmarConsulta(id, usuario[..6], usuario.Substring(6,2));
+
+            return TypedResults.Ok();
+        }
+
+        private IResult Recusar(int id, IConsultaAppService service, HttpContext context)
+        {
+            var usuario = context.User.FindFirst("identificador")?.Value;
+            if (usuario is null) TypedResults.BadRequest();
+
+            service.RejeitarConsulta(id, usuario[..6], usuario.Substring(6, 2));
+
+            return TypedResults.Ok();
+        }
+
+        private IResult Cancelar(CancelamentoDto cancelamento, IConsultaAppService service, HttpContext context)
+        {
+            var usuario = context.User.FindFirst("identificador")?.Value;
+
+            service.CancelarConsulta(cancelamento.ConsultaId, usuario, cancelamento.Motivo);
 
             return TypedResults.Ok();
         }
@@ -66,35 +86,6 @@ namespace Hackaton.Api.Controllers.Consultas
             var retorno = service.ObterConsultasDoPaciente(pacienteId);
 
             return TypedResults.Ok(retorno);
-        }
-
-        private IResult Recusar(int id, IConsultaAppService service, HttpContext context)
-        {
-            (string crm, string uf) = ExtrairMedico(context);
-
-            service.RejeitarConsulta(id, crm, uf);
-
-            return TypedResults.Ok();
-        }
-
-        private IResult Cancelar(CancelamentoDto cancelamento, IConsultaAppService service, HttpContext context)
-        {
-            var usuario = context.User.FindFirst("identificador")?.Value;
-
-            service.CancelarConsulta(cancelamento.ConsultaId, usuario, cancelamento.Motivo);
-
-            return TypedResults.Ok();
-        }
-
-        private (string crm, string uf) ExtrairMedico(HttpContext context)
-        {
-            var usuario = context.User.FindFirst("usuario")?.Value;
-
-            if (string.IsNullOrWhiteSpace(usuario)) throw new InvalidOperationException($"Usuário não está logado.");
-            var crm = usuario.Substring(0, 6);
-            var uf = usuario.Substring(6, 2);
-
-            return (crm, uf);
         }
     }
 }

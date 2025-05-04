@@ -1,5 +1,6 @@
 ﻿@page "/medico/agenda"
 
+@using Hackaton.Web.Components.Shared
 @using Hackaton.Web.Models.Medico
 @using Hackaton.Web.Services.Autenticacao
 @using Hackaton.Web.Services.Autenticacao.Interfaces
@@ -12,6 +13,7 @@
 @inject NavigationManager Navigation
 
 <PageTitle>Agenda - Próximas Consultas</PageTitle>
+
 
 <div class="d-flex align-items-center px-3 py-2 header-bar">
     <div class="me-auto">
@@ -28,68 +30,83 @@
     </div>
 </div>
 
-<div class="container my-4">
-    <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th><i class="bi bi-calendar-event me-1"></i> Data</th>
-                    <th><i class="bi bi-clock me-1"></i> Horário</th>
-                    <th><i class="bi bi-person me-1"></i> Paciente</th>
-                    <th><i class="bi bi-info-circle me-1"></i> Status</th>
-                    <th class="text-center"><i class="bi bi-gear me-1"></i> Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (!consultas.Any())
-                {
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-4">
-                            <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
-                            Nenhuma consulta futura encontrada.
-                        </td>
-                    </tr>
-                }
+<Spinner Exibir="carregando" />
 
-                @foreach (var consulta in consultas)
-                {
+@if (!carregando)
+{
+    <div class="container my-4">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-light">
                     <tr>
-                        <td>@consulta.Data.ToString("dd/MM/yyyy")</td>
-                        <td>@consulta.Horario</td>
-                        <td>@consulta.NomePaciente</td>
-                        <td>@consulta.Status</td>
-                        <td class="text-center">
-                            <button class="btn btn-success btn-sm me-1" @onclick="() => AceitarConsulta(consulta)">
-                                <i class="bi bi-check-lg"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm" @onclick="() => RejeitarConsulta(consulta)">
-                                <i class="bi bi-x-lg"></i>
-                            </button>
-                        </td>
+                        <th><i class="bi bi-calendar-event me-1"></i> Data</th>
+                        <th><i class="bi bi-clock me-1"></i> Horário</th>
+                        <th><i class="bi bi-person me-1"></i> Paciente</th>
+                        <th><i class="bi bi-info-circle me-1"></i> Status</th>
+                        <th class="text-center"><i class="bi bi-gear me-1"></i> Ações</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @if (!consultas.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="bi bi-calendar-x fs-4 d-block mb-2"></i>
+                                Nenhuma consulta futura encontrada.
+                            </td>
+                        </tr>
+                    }
 
-    <div class="mt-4 text-center">
-        <button class="btn btn-outline-primary" @onclick="@(() => Navigation.NavigateTo("/medico"))">
-            <i class="bi bi-arrow-left-circle me-1"></i> Voltar
-        </button>
+                    @foreach (var consulta in consultas)
+                    {
+                        <tr>
+                            <td>@consulta.DataFormatada</td>
+                            <td>@consulta.Horario</td>
+                            <td>@consulta.NomeDoPaciente</td>
+                            <td>@consulta.Status</td>
+                            <td class="text-center">
+                                @if (consulta.Status == "Pendente")
+                                {
+                                    <button class="btn btn-success btn-sm me-1" @onclick="() => AceitarConsulta(consulta)">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" @onclick="() => RejeitarConsulta(consulta)">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button class="btn btn-outline-primary" @onclick="@(() => Navigation.NavigateTo("/medico"))">
+                <i class="bi bi-arrow-left-circle me-1"></i> Voltar
+            </button>
+        </div>
     </div>
-</div>
+}
 
 @code {
+    public bool carregando = true;
     public string NomeDoMedico { get; set; } = "";
     private IList<ConsultaMedicoModel> consultas = new List<ConsultaMedicoModel>();
 
     protected override async Task OnInitializedAsync()
     {
+        carregando = true;
         var claims = await UsuarioLogadoService.ObterTodasAsClaimsAsync();
         var id = claims.First(x => x.Key == "nameid").Value;
         var medico = await MedicoService.ObterMedicoAsync(Convert.ToInt32(id));
         consultas = await ConsultaService.ObterConsultasFuturasDoMedicoAsync(medico.Id);
         ObterNomeDoMedico(medico);
+        carregando = false;
     }    
 
     private void ObterNomeDoMedico(MeuCadastroMedicoModel medico)
@@ -98,13 +115,15 @@
         NomeDoMedico = $"{tokens[0]} {tokens[^1]}";
     }
 
-    private void AceitarConsulta(ConsultaMedicoModel consulta)
+    private async Task AceitarConsulta(ConsultaMedicoModel consulta)
     {
+        await ConsultaService.ConfirmarConsultaAsync(consulta.Id);
         consulta.Status = "Aceita";
     }
 
-    private void RejeitarConsulta(ConsultaMedicoModel consulta)
+    private async Task RejeitarConsulta(ConsultaMedicoModel consulta)
     {
+        await ConsultaService.RejeitarConsultaAsync(consulta.Id);
         consulta.Status = "Rejeitada";
-    }    
+    }
 }

@@ -6,6 +6,7 @@ using Hackaton.Web.Models.Paciente;
 using Hackaton.Web.Services.Consultas.Interfaces;
 using System.Net.Http.Json;
 using System.Text.Json;
+using static System.Net.WebRequestMethods;
 
 namespace Hackaton.Web.Services.Consultas
 {
@@ -79,5 +80,18 @@ namespace Hackaton.Web.Services.Consultas
                 Motivo = motivo
             };
         }
+
+        public async Task ConfirmarConsultaAsync(int consultaId)
+        {
+            var response = await http.PostAsync($"consultas/confirmar/{consultaId}", null);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task RejeitarConsultaAsync(int consultaId)
+        {
+            var response = await http.PostAsync($"consultas/recusar/{consultaId}", null);
+            response.EnsureSuccessStatusCode();
+        }
+
     }
 }
