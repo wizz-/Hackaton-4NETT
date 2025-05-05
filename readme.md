@@ -67,6 +67,8 @@ Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
 
 https://localhost:7272/swagger/index.html
 
+(FOTO SWAGGER FINAL)
+
 ---
 ### 🔄 Rodando Todo o Projeto em Containers
 Se quiser rodar **todo o projeto no Docker**, incluindo a API, utilize:
@@ -89,12 +91,14 @@ Durante esse processo incluimos a execução de testes unitários.
 
 ## Imagens publicadas no Container
 
+Além disso nossa pipe de CI/CD realiza a publicação da imagem do Container via Docker Hub:
+
+(LINK DOCKER)
+
+Além disso é realizado o monitoramento dos dados
+
 ---
 
-## Modelagem dos dados
-
-
----
 ## 📜 Descrição do Sistema
 
 O **Health&Med** é um sistema de gerenciamento de consultas médicas, projetado para modernizar o acesso aos serviços de saúde. Seu objetivo principal é oferecer uma solução eficiente e intuitiva que permita:
