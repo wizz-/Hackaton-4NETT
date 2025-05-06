@@ -1,0 +1,49 @@
+﻿name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main  # Roda sempre que houver push na branch main
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout do código 
+        uses: actions/checkout@v3
+
+      - name: Configurar .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      # 🔹 RESTAURAÇÃO E COMPILAÇÃO DOS PROJETOS .NET
+
+      - name: Restaurar pacotes NuGet - API
+        run: dotnet restore src/Hackaton.Api/Hackaton.Api.csproj
+
+      - name: Restaurar pacotes NuGet - Testes Unitários
+        run: dotnet restore tests/Hackaton.UnitTest/Hackaton.UnitTest.csproj
+
+      - name: Build do projeto - API
+        run: dotnet build src/Hackaton.Api/Hackaton.Api.csproj --configuration Release --no-restore
+
+      - name: Build do projeto - Testes Unitários
+        run: dotnet build tests/Hackaton.UnitTest/Hackaton.UnitTest.csproj --configuration Release --no-restore
+      
+      - name: Publicar aplicação - API
+        run: dotnet publish src/Hackaton.Api/Hackaton.Api.csproj -c Release -o src/Hackaton.Api/publish
+
+      - name: Executar testes unitários
+        run: dotnet test tests/Hackaton.UnitTest/Hackaton.UnitTest.csproj --configuration Release --no-restore --logger "trx;LogFileName=test_results.trx"
+
+      - name: Restaurar pacotes NuGet - Web
+        run: dotnet restore src/Hackaton.Web/Hackaton.Web.csproj
+
+      - name: Build do projeto - Web
+        run: dotnet build src/Hackaton.Web/Hackaton.Web.csproj --configuration Release --no-restore
+      
+      - name: Publicar aplicação - Web
+        run: dotnet publish src/Hackaton.Web/Hackaton.Web.csproj -c Release -o src/Hackaton.Web/publish
+        

@@ -7,9 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		deploy.bat = deploy.bat
-		deploy.ps1 = deploy.ps1
-		leia.me = leia.me
 		limpar-bin-obj.bat = limpar-bin-obj.bat
 		readme.md = readme.md
 	EndProjectSection
@@ -47,14 +44,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hackaton.UnitTest", "tests\Hackaton.UnitTest\Hackaton.UnitTest.csproj", "{ACC05544-A23B-4093-AF80-9F253CE7AD12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6 - Docker", "6 - Docker", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		Dockerfile.Api = Dockerfile.Api
-		Dockerfile.Web = Dockerfile.Web
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7 - k8s", "7 - k8s", "{F682EBBC-E8C0-4A32-B426-64673718DA19}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8 - CI_CD", "8 - CI_CD", "{1761A78C-1C1F-45E3-B968-60F07741FFE1}"
 	ProjectSection(SolutionItems) = preProject
-		deploy.yaml = deploy.yaml
+		.github\workflows\ci_cd.yml = .github\workflows\ci_cd.yml
 	EndProjectSection
 EndProject
 Global
