@@ -85,7 +85,13 @@ A API desenvolvida para a Health&Med conta com uma pipeline CI/CD a qual criamos
 sejam mais otimizados, facilitando a integração do código feito pela equipe CI e garantir que a entrega eficiente ao time de (CD).
 Durante esse processo incluimos a execução de testes unitários.
 
-(IMAGEM)
+![image](https://github.com/user-attachments/assets/cbe4445c-8fd3-44dd-9d48-14975f4d4a5a)
+
+Com maior detalhes é possivel visualizar os testes unitários e a publicação das imagens no container:
+
+![image](https://github.com/user-attachments/assets/a2da70fd-d395-407d-93c0-f72c62a8860e)
+
+
 
 ---
 
