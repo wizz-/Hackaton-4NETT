@@ -1,7 +1,7 @@
-﻿# 🎯 Hackaton-4NETT
+﻿# 🎯 Hackaton-5NETT
 ---
 ## 📌 Sobre o Projeto
-Este repositório contém o **Hackaton-4NETT**, um projeto desenvolvido como parte do **Tech Challenge** para a quinta e última fase do curso de pós-graduação **Arquitetura de Sistemas .NET com Azure**.
+Este repositório contém o **Hackaton-5NETT**, um projeto desenvolvido como parte do **Tech Challenge** para a quinta e última fase do curso de pós-graduação **Arquitetura de Sistemas .NET com Azure**.
 
 O projeto consiste em um sistema de **Telemedicina** utilizando **Minimal API** com **.NET 8** no backend e **Blazor WebAssembly** no frontend, garantindo escalabilidade e alta disponibilidade.
 ---
