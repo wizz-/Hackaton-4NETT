@@ -1,4 +1,4 @@
-﻿name: Docker Build and Push
+﻿name: Docker Build and Deploy
 
 on:
   push:
@@ -46,4 +46,14 @@ jobs:
       
       - name: Publicar aplicação - Web
         run: dotnet publish src/Hackaton.Web/Hackaton.Web.csproj -c Release -o src/Hackaton.Web/publish
-        
+
+      # 🔹 BUILD DAS IMAGENS DOCKER
+
+      - name: Executar script PowerShell para build das imagens Docker
+        run: powershell.exe -ExecutionPolicy Bypass -File ./deploy.ps1
+        shell: cmd
+
+      # 🔹 DEPLOY NO KUBERNETES
+
+      - name: Aplicar manifestos no Kubernetes
+        run: kubectl apply -f deploy.yaml
