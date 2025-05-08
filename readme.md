@@ -35,7 +35,7 @@ Principais funcionalidades:
 A solução está organizada da seguinte forma:
 ---
 ```
-📂 Hackaton-4NETT
+📂 Hackaton-5NETT
  ├── 📂 1- Dominio           # Camada de domínio
  ├── 📂 2- Infra             # Infraestrutura e persistência
  ├── 📂 3- Aplicacao         # Regras de negócio
