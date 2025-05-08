@@ -52,6 +52,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8 - CI_CD", "8 - CI_CD", "{
 		.github\workflows\ci_cd.yml = .github\workflows\ci_cd.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "9 - Grafana", "9 - Grafana", "{98713A6A-BCB8-4BD2-8659-91C13B1F6E0C}"
+	ProjectSection(SolutionItems) = preProject
+		Dashboard Model Grafana.json = Dashboard Model Grafana.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
