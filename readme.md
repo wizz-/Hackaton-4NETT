@@ -39,7 +39,7 @@ A solução está organizada da seguinte forma:
 ```
 📂 Hackaton-5NETT
 ├── 📁 1- Dominio
-│   └── 📄 Domain.csproj               # Entidades e interfaces de domínio
+│   └── 📄 Domain.csproj               # Entidades, interfaces de domínio, regras de negócio 
 │
 ├── 📁 2- Infra
 │   ├── 📁 Data
@@ -50,7 +50,7 @@ A solução está organizada da seguinte forma:
 │       └── 📄 Infra.IoC.csproj        # Injeção de dependência
 │
 ├── 📁 3- Aplicacao
-│   └── 📄 Application.csproj          # Casos de uso e regras de negócio
+│   └── 📄 Application.csproj          # Intermediação entre camadas de aplicação e backend da aplicação
 │
 ├── 📁 4- Apresentacao
 │   ├── 📁 Hackaton.Api
