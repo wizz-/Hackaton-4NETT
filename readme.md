@@ -167,6 +167,9 @@ A tela de agendamento a nível do paciente deve seguir o padrão abaixo exibido
 
 #### Cadastro/Edição de horários Disponíveis
 
+![Diagrama](https://github.com/user-attachments/assets/e595453b-4dfa-4a33-a81d-4162633c513f)
+
+
 
 
 
