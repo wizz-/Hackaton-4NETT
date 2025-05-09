@@ -151,7 +151,7 @@ A plataforma atende às necessidades específicas do setor da saúde, com uma es
 
 Abaixo exemplificamos como a plataforma vai ser utilizada:
 
----
+
 
 ## Visão geral
 
@@ -183,7 +183,12 @@ A tela de agendamento a nível do paciente deve seguir o padrão abaixo exibido
 
 #### Cadastro/Edição de horários Disponíveis
 
-![Diagrama](https://github.com/user-attachments/assets/e595453b-4dfa-4a33-a81d-4162633c513f)
+Na tela de cadastro e edição dos horários da plataforma Health&Med, nessa tela os médicos conseguem otimizar e organizar sua agenda de atendimentos.
+
+Com essa funcionalidade o Médico tem a liberadade de definir seus horários além de editar os horários já definidos, além disso o sistema permite que sejam feitas edições e remoções de horários a qual foram previamente cadastrados. 
+
+![image](https://github.com/user-attachments/assets/dd85963a-8486-47ad-87af-5096937702a8)
+
 
 
 
