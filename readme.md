@@ -214,9 +214,9 @@ A tela de agendamento a nível do paciente deve seguir o padrão abaixo exibido
 
 #### - Cadastro/Edição de horários Disponíveis
 
-Na tela de cadastro e edição dos horários da plataforma Health&Med, nessa tela os médicos conseguem otimizar e organizar sua agenda de atendimentos.
+Na tela de cadastro e edição dos horários da plataforma Health&Med, os médicos conseguem otimizar e organizar sua agenda de atendimentos.
 
-Com essa funcionalidade o Médico tem a liberadade de definir seus horários além de editar os horários já definidos, além disso o sistema permite que sejam feitas edições e remoções de horários a qual foram previamente cadastrados. 
+Com essa funcionalidade, o médico pode definir, editar e remover seus horários de disponibilidade, garantindo flexibilidade na gestão da própria agenda.
 
 ![image](https://github.com/user-attachments/assets/dd85963a-8486-47ad-87af-5096937702a8)
 
