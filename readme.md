@@ -131,7 +131,7 @@ http://localhost:30880/swagger/index.html
 
 ![Captura de tela_8-5-2025_21319_localhost](https://github.com/user-attachments/assets/6664d154-5f1e-420d-8a98-9775239f9ac3)
 
-E pela Api via link:
+E o front-end da nossa aplicação pelo link:
 
 http://localhost:30881/
 
