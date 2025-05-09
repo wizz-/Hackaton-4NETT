@@ -69,7 +69,7 @@ Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
 
 https://localhost:7272/swagger/index.html
 
-![image](https://github.com/user-attachments/assets/1ea5c3c6-c614-4a9f-8ab5-cfa4c09cdbde)
+![image](![Captura de tela_8-5-2025_21319_localhost](https://github.com/user-attachments/assets/6664d154-5f1e-420d-8a98-9775239f9ac3)
 
 
 
