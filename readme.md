@@ -44,8 +44,8 @@ A solução está organizada da seguinte forma:
 ├── 📁 2- Infra
 │   ├── 📁 Data
 │   │   └── 📄 Infra.Data.csproj       # Repositórios, EF Core
-│   ├── 📁 DatabaseInitializers
-│   │   └── 📄 Infra.DatabaseInitializers.csproj
+│   ├── 📁 DatabaseInitializers       # Cria o banco de dados caso ele não exista
+│   │   └── 📄 Infra.DatabaseInitializers.csproj 
 │   └── 📁 IoC
 │       └── 📄 Infra.IoC.csproj        # Injeção de dependência
 │
