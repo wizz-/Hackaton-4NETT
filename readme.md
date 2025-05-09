@@ -55,7 +55,7 @@ A solução está organizada da seguinte forma:
 - 🐳 **Docker & Docker Compose**
 
 ---
-## Modelagem de dados
+## 🗂️ Modelagem de dados
 
 Para facilitar o entendimento dos armazenamentos dos dados na plataforma Health&Med, abaixo temos nossa tabela explicativa com a definição de cada entidade. Descrevendo como estruturamos e armazenamos os dados no nosso sistema.
 
@@ -99,7 +99,7 @@ Esse comando iniciará tanto o **SQL Server 2022** quanto a **Minimal API** em c
 
 ---
 
-## CI/CD Pipeline
+## 🔄 CI/CD Pipeline
 
 A API desenvolvida para a Health&Med conta com uma pipeline CI/CD a qual criamos para que os processos de automação
 sejam mais otimizados, facilitando a integração do código feito pela equipe CI e garantir que a entrega eficiente ao time de (CD).
@@ -115,7 +115,7 @@ Com maior detalhes é possivel visualizar os testes unitários e a publicação 
 
 ---
 
-## Imagens publicadas no Container
+## 📦 Imagens publicadas no Container
 
 Além disso nossa pipe de CI/CD realiza a publicação da imagem do Container via Docker Hub, foi criado uma .bat onde as imagens do Container após a exexucução são publicadas automaticamente.
 
@@ -147,12 +147,9 @@ O **Health&Med** é um sistema de gerenciamento de consultas médicas, projetado
 A plataforma atende às necessidades específicas do setor da saúde, com uma estrutura escalável, segura e pronta para integração com funcionalidades futuras, como telemedicina e notificações automatizadas.
 
 ---
-## Arquitetura
-
+## 🏛️ Arquitetura
 
 Abaixo exemplificamos como a plataforma vai ser utilizada:
-
-
 
 ## Visão geral
 
