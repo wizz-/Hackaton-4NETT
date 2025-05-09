@@ -22,6 +22,9 @@ docker build -f "Dockerfile.Web" -t healthmed-web .
 Write-Host "Aplicando arquivos do Kubernetes..."
 kubectl apply -f deploy.yaml
 
+Write-Host "Aplicando autoscaler (HPA)..."
+kubectl apply -f hpa.yaml
+
 Write-Host "Aguardando pod do Blazor ficar pronto..."
 do {
     Start-Sleep -Seconds 2

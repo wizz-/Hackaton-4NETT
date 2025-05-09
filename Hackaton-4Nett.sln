@@ -55,6 +55,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "7 - k8s", "7 - k8s", "{F682EBBC-E8C0-4A32-B426-64673718DA19}"
 	ProjectSection(SolutionItems) = preProject
 		deploy.yaml = deploy.yaml
+		hpa.yaml = hpa.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "8 - CI_CD", "8 - CI_CD", "{1761A78C-1C1F-45E3-B968-60F07741FFE1}"

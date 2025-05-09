@@ -91,7 +91,7 @@ metadata:
   name: api
   namespace: healthmed
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: api
@@ -136,7 +136,7 @@ metadata:
   name: web
   namespace: healthmed
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: web
