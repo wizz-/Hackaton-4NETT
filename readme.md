@@ -1,9 +1,11 @@
 ﻿# 🎯 Hackaton-5NETT
 ---
 ## 📌 Sobre o Projeto
+
 Este repositório contém o **Hackaton-5NETT**, um projeto desenvolvido como parte do **Tech Challenge** para a quinta e última fase do curso de pós-graduação **Arquitetura de Sistemas .NET com Azure**.
 
 O projeto consiste em um sistema de **Telemedicina** utilizando **Minimal API** com **.NET 8** no backend e **Blazor WebAssembly** no frontend, garantindo escalabilidade e alta disponibilidade.
+
 ---
 ## 📄Problema
 
@@ -67,7 +69,9 @@ Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
 
 https://localhost:7272/swagger/index.html
 
-(FOTO SWAGGER FINAL)
+![image](https://github.com/user-attachments/assets/1ea5c3c6-c614-4a9f-8ab5-cfa4c09cdbde)
+
+
 
 ---
 ### 🔄 Rodando Todo o Projeto em Containers
@@ -97,11 +101,22 @@ Com maior detalhes é possivel visualizar os testes unitários e a publicação 
 
 ## Imagens publicadas no Container
 
-Além disso nossa pipe de CI/CD realiza a publicação da imagem do Container via Docker Hub:
+Além disso nossa pipe de CI/CD realiza a publicação da imagem do Container via Docker Hub, foi criado uma .bat onde as imagens do Container após a exexucução são publicadas automaticamente.
 
-(LINK DOCKER)
+Além disso é realizado o monitoramento dos dados, onde o Monitoramento foi realizado de duas formas.
 
-Além disso é realizado o monitoramento dos dados
+
+- **Prometheus, onde é gerado as métricas da aplicação:**
+
+http://localhost:31197/targets
+
+![image](https://github.com/user-attachments/assets/392f7d60-5fcd-4e64-803e-0ddadece94be)
+
+- **Grafana , gerando os gráfico e organizando as métricas enviadas pelo prometheus**
+
+http://localhost:31824/
+
+![image](https://github.com/user-attachments/assets/a4fd7ca6-54b7-4ba3-b118-9bce9df0c3e1)
 
 ---
 
