@@ -31,8 +31,6 @@ Principais funcionalidades:
 - 🌍 **Escalabilidade** para clínicas, consultórios e hospitais  
 
 ---
-
----
 ## 🏛️ Arquitetura do projeto
 
 A solução foi desenvolvida seguindo o padrão DDD (Domain-Driven Design), utilizando uma arquitetura em camadas. Ela foi organizada da seguinte forma:
