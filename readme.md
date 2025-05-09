@@ -74,7 +74,7 @@ Para facilitar o entendimento dos armazenamentos dos dados na plataforma Health&
 ---
 ## 🚀 Como Executar o Projeto
 
-### 🛠️ Rodando Apenas o SQL Server (Modo Desenvolvimento)
+#### 🛠️ Rodando Apenas o SQL Server (Modo Desenvolvimento)
 Para rodar apenas o banco de dados em um container, permitindo o desenvolvimento local da API no Visual Studio, utilize o comando:
 ```sh
 docker-compose -f 5- Docker/docker-compose.dev.yml up -d
@@ -151,7 +151,7 @@ A plataforma atende às necessidades específicas do setor da saúde, com uma es
 
 Abaixo exemplificamos como a plataforma vai ser utilizada:
 
-## Visão geral
+### Visão geral
 
 #### Tela de Login 
 
