@@ -151,11 +151,9 @@ A API desenvolvida conta com a pipeline CI/CD, facilitando a integração do có
 
 ---
 
-## 📦 Imagens publicadas no Container
+## 📦 Monitoramento
 
-Além disso nossa pipe de CI/CD realiza a publicação da imagem do Container via Docker Hub, foi criado uma .bat onde as imagens do Container após a exexucução são publicadas automaticamente.
-
-Além disso é realizado o monitoramento dos dados, onde o Monitoramento foi realizado de duas formas.
+ É realizado monitoramento da aplicação, onde o Monitoramento foi realizado de duas formas.
 
 
 - **Prometheus, onde é gerado as métricas da aplicação:**
