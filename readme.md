@@ -111,7 +111,6 @@ Para proporcionar uma melhor compreensão sobre a forma como os dados são estru
 ---
 ## 🚀 Como Executar o Projeto
 
-#### 🛠️ Rodando Apenas o SQL Server (Modo Desenvolvimento)
 Para realizar o deploy completo do projeto — incluindo a publicação, criação dos containers e aplicação no Kubernetes — utilize o seguinte comando:
 
 ```sh
