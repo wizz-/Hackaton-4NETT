@@ -66,10 +66,10 @@ Para proporcionar uma melhor compreensão sobre a forma como os dados são estru
 | Tabela            | Descrição                                                                                                                                                     |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Usuário           | Tabela que contém os dados referentes aos usuários (médicos e pacientes cadastrados na plataforma).                                                           |
-| Paciente          | Tabela que contém os dados referentes aos pacientes, contendo os dados dos mesmos.                                                                            |
-| Médico            | Tabela que contém os dados referentes aos médicos, contendo os dados dos mesmos.                                                                              |
+| Paciente          | Tabela que contém os dados referentes aos pacientes.                                                                        |
+| Médico            | Tabela que contém os dados referentes aos médicos.                                                                              |
 | Consulta          | Tabela que contém os dados referentes às consultas, incluindo dia, horário de início e fim, além de onde é armazenado o status caso a consulta seja cancelada. |
-| Especialidade     | Tabela onde ficam registradas as especialidades de cada médico.                                                                                               |
+| Especialidade     | Tabela onde ficam registradas as especialidades da medicina.                                                                                               |
 | Horário Disponível| Tabela onde é possível validar os horários disponíveis de cada médico, os quais ficam armazenados para controle e gerenciamento.                              |
 
 
