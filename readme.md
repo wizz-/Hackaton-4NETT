@@ -221,6 +221,26 @@ Com essa funcionalidade, o médico pode definir, editar e remover seus horários
 ![image](https://github.com/user-attachments/assets/dd85963a-8486-47ad-87af-5096937702a8)
 
 
+#### - Aceite e Recusa 
+
+Na tela de aceite e recusa da plataforma Health&Med, tanto médicos quanto pacientes conseguem gerenciar suas consultas de forma prática e eficiente.
+
+Com essa funcionalidade, é possível aceitar ou recusar atendimentos agendados, promovendo mais controle e flexibilidade na organização das agendas de ambos os lados.
+
+A tela de aceite e recusa a nível do médico deve seguir o padrão abaixo exibido.
+
+![image](https://github.com/user-attachments/assets/a39bdbd4-a9b7-4e75-8fdf-70182a427515)
+
+A tela nível paciente deve seguir o padrão abaixo.
+
+![image](https://github.com/user-attachments/assets/2aefa8f2-30ba-4051-8a3f-11e15227d078)
+
+
+#### - Buscar Médico
+
+Na tela de busca por profissionais da plataforma Health&Med, os pacientes encontram facilidade para localizar médicos conforme suas necessidades.
+
+Com essa funcionalidade, é possível buscar médicos por especialidade, permitindo que o paciente encontre o profissional ideal para o seu atendimento com mais agilidade e precisão.
 
 
 
