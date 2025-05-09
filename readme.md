@@ -125,12 +125,17 @@ Esse script executa as seguintes etapas automaticamente:
 - Aplica o HPA (Horizontal Pod Autoscaler);
 - Aguarda o container do Blazor ficar pronto para uso.
 
-Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
+Após rodar o projeto a iteração pode ser feita via Swagger via web pelo link abaixo.:
 
-https://localhost:7272/swagger/index.html
+http://localhost:30881/
 
 ![Captura de tela_8-5-2025_21319_localhost](https://github.com/user-attachments/assets/6664d154-5f1e-420d-8a98-9775239f9ac3)
 
+E pela Api via link:
+
+http://localhost:30880/swagger/index.html
+
+![image](https://github.com/user-attachments/assets/c0053758-df18-4704-a0da-6a397a3f3dd4)
 
 
 ### 🔄 Rodando Todo o Projeto em Containers
