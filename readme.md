@@ -155,7 +155,7 @@ Abaixo exemplificamos como a plataforma vai ser utilizada:
 
 ### Visão geral
 
-#### Tela de Login 
+#### - Tela de Login 
 
 Para dar início à utilização da plataforma Health&Med API, desenvolvemos uma tela de login intuitiva e funcional.
 Nessa etapa inicial, tanto pacientes quanto médicos interessados em aderir à plataforma deverão realizar um cadastro prévio, fornecendo as informações necessárias para criar um perfil no sistema.
@@ -169,7 +169,7 @@ A tela de login a nível do médico deve seguir o padrão abaixo exibido.
 A tela nível paciente deve seguir o padrão abaixo.
 ![image](https://github.com/user-attachments/assets/9cbf37a2-31fc-447a-a316-7eea8897c318)
 
-#### Tela de Agendamento Paciente
+#### - Tela de Agendamento Paciente
 
 Na tela de agendamento da plataforma Health&Med API, os usuários contam com uma interface prática e acessível, pensada para facilitar o gerenciamento de suas consultas médicas.
 Através dessa funcionalidade, os pacientes tem as opções de agendamento de forma rápida e prática.
@@ -181,7 +181,7 @@ A tela de agendamento a nível do paciente deve seguir o padrão abaixo exibido
 ![image](https://github.com/user-attachments/assets/b03fd1e1-d7bb-46a9-8978-9e18e4e5df06)
 
 
-#### Cadastro/Edição de horários Disponíveis
+#### - Cadastro/Edição de horários Disponíveis
 
 Na tela de cadastro e edição dos horários da plataforma Health&Med, nessa tela os médicos conseguem otimizar e organizar sua agenda de atendimentos.
 
