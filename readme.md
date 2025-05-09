@@ -33,8 +33,17 @@ Principais funcionalidades:
 ---
 
 ---
-## 🏗️ Estrutura do Projeto
-A solução está organizada da seguinte forma:
+## 🏛️ Arquitetura do projeto
+
+A solução foi desenvolvida seguindo o padrão DDD (Domain-Driven Design), utilizando uma arquitetura em camadas. Ela foi organizada da seguinte forma:
+
+- **Domain**: contém as regras de negócio e entidades do sistema;
+- **Application**: responsável pela lógica da aplicação e orquestração dos serviços;
+- **Infrastructure**: lida com persistência de dados, integração com serviços externos e repositórios;
+- **Presentation**: camada responsável pela interface com o usuário, como APIs ou interfaces web.
+
+Essa estrutura facilita a manutenção, escalabilidade e organização do código.
+
 ---
 ```
 📂 Hackaton-5NETT
@@ -171,17 +180,7 @@ http://localhost:31824/
 
 ---
 
-## 📜 Descrição do Sistema
-
-O **Health&Med** é um sistema de gerenciamento de consultas médicas, projetado para modernizar o acesso aos serviços de saúde. Seu objetivo principal é oferecer uma solução eficiente e intuitiva que permita:
-
-- 🧑‍⚕️ **Pacientes localizarem médicos** com facilidade e agendarem atendimentos sem burocracia  
-- 🩺 **Médicos organizarem suas agendas** de forma prática e centralizada  
-
-A plataforma atende às necessidades específicas do setor da saúde, com uma estrutura escalável, segura e pronta para integração com funcionalidades futuras, como telemedicina e notificações automatizadas.
-
----
-## 🏛️ Arquitetura
+## 🏛️ Caso de uso
 
 Abaixo exemplificamos como a plataforma vai ser utilizada:
 
