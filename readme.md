@@ -151,10 +151,9 @@ A API desenvolvida conta com a pipeline CI/CD, facilitando a integração do có
 
 ---
 
-## 📦 Monitoramento
+## 📈 Monitoramento
 
- É realizado monitoramento da aplicação, onde o Monitoramento foi realizado de duas formas.
-
+Para o monitoramento da aplicação, foram utilizadas as seguintes ferramentas:
 
 - **Prometheus, onde é gerado as métricas da aplicação:**
 
