@@ -112,11 +112,19 @@ Para proporcionar uma melhor compreensão sobre a forma como os dados são estru
 ## 🚀 Como Executar o Projeto
 
 #### 🛠️ Rodando Apenas o SQL Server (Modo Desenvolvimento)
-Para rodar apenas o banco de dados em um container, permitindo o desenvolvimento local da API no Visual Studio, utilize o comando:
+Para realizar o deploy completo do projeto — incluindo a publicação, criação dos containers e aplicação no Kubernetes — utilize o seguinte comando:
+
 ```sh
-docker-compose -f 5- Docker/docker-compose.dev.yml up -d
+deploy.bat
 ```
-Isso iniciará um container com o **SQL Server 2022**, e você poderá rodar a API manualmente no Visual Studio.
+Esse script executa as seguintes etapas automaticamente:
+
+- Concede permissões e executa o arquivo PowerShell deploy.ps1;
+- Publica os projetos Web e API;
+- Realiza o build dos Dockerfiles da Web e da API;
+- Aplica as configurações no Kubernetes;
+- Aplica o HPA (Horizontal Pod Autoscaler);
+- Aguarda o container do Blazor ficar pronto para uso.
 
 Após rodar o projeto a iteração pode ser feita via Swagger pelo link abaixo.:
 
@@ -126,7 +134,6 @@ https://localhost:7272/swagger/index.html
 
 
 
----
 ### 🔄 Rodando Todo o Projeto em Containers
 Se quiser rodar **todo o projeto no Docker**, incluindo a API, utilize:
 ```sh
