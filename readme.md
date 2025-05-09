@@ -87,7 +87,7 @@ A solução está organizada da seguinte forma:
 ## 🔧 Tecnologias Utilizadas
 - ⚡ **.NET 8** (Minimal API + Blazor WebAssembly)
 - 🛢 **SQL Server 2022**
-- 🐳 **Docker e Kubernets**
+- 🐳 **Docker e Kubernetes**
 - 📊 **Grafana**
 - ⏱️ **Prometheus**
 
