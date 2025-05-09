@@ -44,7 +44,7 @@ A solução foi desenvolvida seguindo o padrão DDD (Domain-Driven Design), util
 
 Essa estrutura facilita a manutenção, escalabilidade e organização do código.
 
----
+
 ```
 📂 Hackaton-5NETT
 ├── 📁 1- Dominio
