@@ -7,5 +7,6 @@
         public string CrmNumero { get; set; }
         public string CrmUf { get; set; }
         public string Especialidade { get; set; }
+        public decimal? ValorDaConsulta { get; set; }
     }
 }
