@@ -73,7 +73,7 @@ Para facilitar o entendimento dos armazenamentos dos dados na plataforma Health&
 
 ---
 ## 🚀 Como Executar o Projeto
----
+
 ### 🛠️ Rodando Apenas o SQL Server (Modo Desenvolvimento)
 Para rodar apenas o banco de dados em um container, permitindo o desenvolvimento local da API no Visual Studio, utilize o comando:
 ```sh
