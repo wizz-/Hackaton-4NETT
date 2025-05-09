@@ -137,14 +137,6 @@ http://localhost:30881/
 
 ![image](https://github.com/user-attachments/assets/c0053758-df18-4704-a0da-6a397a3f3dd4)
 
-
-### 🔄 Rodando Todo o Projeto em Containers
-Se quiser rodar **todo o projeto no Docker**, incluindo a API, utilize:
-```sh
-docker-compose -f 5- Docker/docker-compose.full.yml up -d
-```
-Esse comando iniciará tanto o **SQL Server 2022** quanto a **Minimal API** em containers.
-
 ---
 
 ## 🔄 CI/CD Pipeline
