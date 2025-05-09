@@ -45,12 +45,12 @@ A solução está organizada da seguinte forma:
 │   ├── 📁 Data
 │   │   └── 📄 Infra.Data.csproj       # Repositórios, EF Core
 │   ├── 📁 DatabaseInitializers       
-│   │   └── 📄 Infra.DatabaseInitializers.csproj # Cria o banco de dados caso ele não exista
+│   │   └── 📄 Infra.DatabaseInitializers.csproj # Cria o banco de dados, caso ele não exista
 │   └── 📁 IoC
 │       └── 📄 Infra.IoC.csproj        # Injeção de dependência
 │
 ├── 📁 3- Aplicacao
-│   └── 📄 Application.csproj          # Intermediação entre camadas de aplicação e backend da aplicação
+│   └── 📄 Application.csproj          # Intermediação entre camadas de apresentação e backend da aplicação
 │
 ├── 📁 4- Apresentacao
 │   ├── 📁 Hackaton.Api
