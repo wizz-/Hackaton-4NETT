@@ -141,8 +141,7 @@ http://localhost:30881/
 
 ## 🔄 CI/CD Pipeline
 
-A API desenvolvida para a Health&Med conta com uma pipeline CI/CD a qual criamos para que os processos de automação
-sejam mais otimizados, facilitando a integração do código feito pela equipe CI e garantir que a entrega eficiente ao time de (CD).
+A API desenvolvida conta com pipeline CI/CD a qual foi criada para que os processos de automação sejam mais otimizados, facilitando a integração do código feito pela equipe CI e garantir que a entrega eficiente ao time de (CD).
 Durante esse processo incluimos a execução de testes unitários.
 
 ![image](https://github.com/user-attachments/assets/cbe4445c-8fd3-44dd-9d48-14975f4d4a5a)
