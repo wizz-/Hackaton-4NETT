@@ -9,6 +9,7 @@
 @using Hackaton.Web.Services.Consultas.Interfaces
 @using Hackaton.Web.Services.Especialidades.Interfaces
 @using Hackaton.Web.Services.Medicos.Interfaces
+@using System.Globalization
 
 @inject NavigationManager Navigation
 @inject IUsuarioLogadoService UsuarioLogadoService
@@ -167,7 +168,8 @@
 {
     <div class="mt-4 text-center">
         <h5>Confirmar agendamento</h5>
-        <p>Você está agendando com <strong>@medicoSelecionado?.Nome</strong> em <strong>@horarioSelecionado?.ToString("dd/MM/yyyy HH:mm")</strong></p>
+        <p>Você está agendando com <strong>@medicoSelecionado?.Nome</strong> em <strong>@horarioSelecionado?.ToString("dd/MM/yyyy HH:mm")</strong>.</p>
+        <p>O valor da consulta é de <strong>@medicoSelecionado?.ValorDaConsulta.Value.ToString("C2", new CultureInfo("pt-BR"))</strong>.</p>
         <button class="btn btn-success" @onclick="ConfirmarAgendamento">
             <i class="bi bi-check-circle me-1"></i> Confirmar Consulta
         </button>

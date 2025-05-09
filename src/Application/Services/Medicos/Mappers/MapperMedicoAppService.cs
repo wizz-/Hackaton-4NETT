@@ -45,6 +45,7 @@ namespace Application.Services.Medicos.Mappers
                 CrmNumero = item.Crm.Numero,
                 CrmUf = item.Crm.Uf.ToString(),
                 Especialidade = item.Especialidade.Nome,
+                ValorDaConsulta = item.ValorDaConsulta,
             };
 
             return newItem;
