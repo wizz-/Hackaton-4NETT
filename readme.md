@@ -38,15 +38,51 @@ A solução está organizada da seguinte forma:
 ---
 ```
 📂 Hackaton-5NETT
- ├── 📂 1- Dominio           # Camada de domínio
- ├── 📂 2- Infra             # Infraestrutura e persistência
- ├── 📂 3- Aplicacao         # Regras de negócio
- ├── 📂 4- Apresentacao      # Camada de apresentação
- │   ├── 📂 Hackaton.Api  # Minimal API (.NET 8)
- │   ├── 📂 Hackaton.Web  # Blazor WebAssembly
- ├── 📂 5- Docker         # Arquivos Docker Compose
- │   ├── 📄 docker-compose.dev.yml   # Apenas SQL Server (para desenvolvimento)
- │   ├── 📄 docker-compose.full.yml  # API + SQL Server (ambiente completo)
+├── 📁 1- Dominio
+│   └── 📄 Domain.csproj               # Entidades e interfaces de domínio
+│
+├── 📁 2- Infra
+│   ├── 📁 Data
+│   │   └── 📄 Infra.Data.csproj       # Repositórios, EF Core
+│   ├── 📁 DatabaseInitializers
+│   │   └── 📄 Infra.DatabaseInitializers.csproj
+│   └── 📁 IoC
+│       └── 📄 Infra.IoC.csproj        # Injeção de dependência
+│
+├── 📁 3- Aplicacao
+│   └── 📄 Application.csproj          # Casos de uso e regras de negócio
+│
+├── 📁 4- Apresentacao
+│   ├── 📁 Hackaton.Api
+│   │   └── 📄 Hackaton.Api.csproj     # Minimal API (.NET 8)
+│   └── 📁 Hackaton.Web
+│       └── 📄 Hackaton.Web.csproj     # Blazor WebAssembly (frontend)
+│
+├── 📁 5 - Teste
+│   └── 📁 Hackaton.UnitTest
+│       └── 📄 Hackaton.UnitTest.csproj  # Testes unitários
+│
+├── 📁 6 - Docker
+│   ├── 📄 Dockerfile.Api
+│   └── 📄 Dockerfile.Web              # Dockerfiles das aplicações
+│
+├── 📁 7 - k8s
+│   ├── 📄 deploy.yaml
+│   └── 📄 hpa.yaml                    # Arquivos de orquestração Kubernetes
+│
+├── 📁 8 - CI_CD
+│   └── 📄 ci_cd.yml                   # Workflow GitHub Actions
+│
+├── 📁 9 - Grafana
+│   └── 📄 Dashboard Model Grafana.json # Modelo de dashboard para observabilidade
+│
+├── 📄 deploy.bat
+├── 📄 deploy.ps1
+├── 📄 limpar-bin-obj.bat
+├── 📄 readme.md
+├── 📄 leia.me
+├── 📄 .gitignore
+└── 📄 .gitattributes
 ```
 ---
 ## 🔧 Tecnologias Utilizadas
