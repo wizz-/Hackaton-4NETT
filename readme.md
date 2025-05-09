@@ -55,6 +55,22 @@ A solução está organizada da seguinte forma:
 - 🐳 **Docker & Docker Compose**
 
 ---
+## Modelagem de dados
+
+Para facilitar o entendimento dos armazenamentos dos dados na plataforma Health&Med, abaixo temos nossa tabela explicativa com a definição de cada entidade. Descrevendo como estruturamos e armazenamos os dados no nosso sistema.
+
+![Diagrama](https://github.com/user-attachments/assets/e595453b-4dfa-4a33-a81d-4162633c513f)
+
+| Tabela            | Descrição                                                                                                                                                     |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| usuario           | Tabela que contém os dados referentes aos usuários (médicos e pacientes cadastrados na plataforma).                                                           |
+| paciente          | Tabela que contém os dados referentes aos pacientes, contendo os dados dos mesmos.                                                                            |
+| medico            | Tabela que contém os dados referentes aos médicos, contendo os dados dos mesmos.                                                                              |
+| consulta          | Tabela que contém os dados referentes às consultas, incluindo dia, horário de início e fim, além de onde é armazenado o status caso a consulta seja cancelada. |
+| especialidade     | Tabela onde ficam registradas as especialidades de cada médico.                                                                                               |
+| horario disponivel| Tabela onde é possível validar os horários disponíveis de cada médico, os quais ficam armazenados para controle e gerenciamento.                              |
+
+
 ---
 ## 🚀 Como Executar o Projeto
 ---
