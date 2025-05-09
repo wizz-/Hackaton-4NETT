@@ -53,6 +53,8 @@ A solução está organizada da seguinte forma:
 - ⚡ **.NET 8** (Minimal API + Blazor WebAssembly)
 - 🛢 **SQL Server 2022**
 - 🐳 **Docker & Docker Compose**
+- 📊 **Grafana**
+- ⏱️ **Prometheus**
 
 ---
 ## 🗂️ Modelagem de dados
