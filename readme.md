@@ -165,7 +165,8 @@ http://localhost:31197/targets
 
 http://localhost:31824/
 
-![image](https://github.com/user-attachments/assets/14738250-c85e-4dba-9ae1-8fae2a171c6a)
+![Grafana](https://github.com/user-attachments/assets/abca9f48-bbfb-406d-87a1-704fefdb9996)
+
 
 
 ---
