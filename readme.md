@@ -59,7 +59,7 @@ A solução está organizada da seguinte forma:
 ---
 ## 🗂️ Modelagem de dados
 
-Para facilitar o entendimento dos armazenamentos dos dados na plataforma Health&Med, abaixo temos nosso diagramas de tabelas explicativa com a definição de cada entidade. Descrevendo como estruturamos e armazenamos os dados no nosso sistema.
+Para proporcionar uma melhor compreensão sobre a forma como os dados são estruturados e armazenados na plataforma Health&Med, apresentamos a seguir o diagrama de entidades acompanhado de uma tabela explicativa. Nela, cada entidade é descrita com sua respectiva função no sistema, evidenciando a organização do modelo de dados adotado.
 
 ![Diagrama](https://github.com/user-attachments/assets/e595453b-4dfa-4a33-a81d-4162633c513f)
 
