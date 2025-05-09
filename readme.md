@@ -80,7 +80,6 @@ A solução está organizada da seguinte forma:
 ├── 📄 deploy.ps1
 ├── 📄 limpar-bin-obj.bat
 ├── 📄 readme.md
-├── 📄 leia.me
 ├── 📄 .gitignore
 └── 📄 .gitattributes
 ```
