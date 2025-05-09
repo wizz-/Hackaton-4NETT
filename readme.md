@@ -186,7 +186,7 @@ Abaixo exemplificamos como a plataforma vai ser utilizada:
 
 #### - Tela de Login 
 
-Para dar início à utilização da plataforma Health&Med API, desenvolvemos uma tela de login intuitiva e funcional.
+Para dar início à utilização da plataforma Health&Med, foi desenvolvida a tela de login intuitiva e funcional.
 Nessa etapa inicial, tanto pacientes quanto médicos interessados em aderir à plataforma deverão realizar um cadastro prévio, fornecendo as informações necessárias para criar um perfil no sistema.
 
 Após o cadastro, os usuários poderão acessar normalmente suas respectivas áreas — seja como paciente ou como profissional da saúde — por meio da opção de login. Já aqueles que já possuem um registro ativo no sistema poderão simplesmente inserir suas credenciais para entrar diretamente na plataforma e usufruir de todos os recursos disponíveis.
@@ -196,6 +196,7 @@ A tela de login a nível do médico deve seguir o padrão abaixo exibido.
 ![image](https://github.com/user-attachments/assets/89a3e979-bf48-44cd-8012-a97dbe1156ec)
 
 A tela nível paciente deve seguir o padrão abaixo.
+
 ![image](https://github.com/user-attachments/assets/9cbf37a2-31fc-447a-a316-7eea8897c318)
 
 #### - Tela de Agendamento Paciente
