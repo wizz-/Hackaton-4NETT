@@ -4,7 +4,7 @@ Para executar o projeto
 Para matar o kubernetes
 	kubectl delete -f deploy.yaml
 
-Qdo o container fica pause e n„o aparece nada no log dele
+Qdo o container fica pause e n√£o aparece nada no log dele
 	kubectl get pods -n healthmed
 	kubectl describe pod <nome-do-pod> -n healthmed
 	kubectl logs -f api-xxxx -n healthmed
@@ -15,5 +15,6 @@ Para entrar no container web
 	listar o conteudo do nginx
 	ls -l /usr/share/nginx/html
 
-Para descobrir o IP da aplicaÁ„o
+Para descobrir o IP da aplica√ß√£o
 	kubectl get svc -n healthmed
+ 
