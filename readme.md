@@ -242,6 +242,7 @@ Na tela de busca por profissionais da plataforma Health&Med, os pacientes encont
 
 Com essa funcionalidade, é possível buscar médicos por especialidade, permitindo que o paciente encontre o profissional ideal para o seu atendimento com mais agilidade e precisão.
 
+![image](https://github.com/user-attachments/assets/86b36faa-7b19-4566-9eee-042b6d2e3b96)
 
 
 
